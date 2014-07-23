@@ -32,7 +32,7 @@
 			{
 				"name": "admin",
 				"ask": {
-					"en": "Choose the default user (must be an existing YunoHost user)"
+					"en": "Choose the default user (must be an existing YunoHost user)",
 					"fr": "Choisissez l'utilisateur par defaut (doit être un utiliser YunoHost existant)"
 				},
 				"example": "homer"
