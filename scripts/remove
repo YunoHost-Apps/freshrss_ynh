@@ -1,0 +1,12 @@
+#!/bin/bash
+
+db_user=freshrss
+db_name=freshrss
+root_pwd=$(sudo cat /etc/yunohost/mysql)
+domain=$(sudo yunohost app setting roundcube domain)
+
+mysql -u root -p$root_pwd -e "DROP DATABASE $db_name ; DROP USER $db_user@localhost ;"
+sudo rm -rf /var/www/freshrss
+sudo rm -f /etc/nginx/conf.d/$domain.d/freshrss.conf
+
+sudo service nginx reload

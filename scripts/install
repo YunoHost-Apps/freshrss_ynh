@@ -1,0 +1,81 @@
+#!/bin/bash
+
+# Retrieve arguments
+domain=$1
+path=$2
+admin_user=$3
+
+# Check domain/path availability
+sudo yunohost app checkurl $domain$path
+if [[ ! $? -eq 0 ]]; then
+    exit 1
+fi
+
+# Generate random DES key & password
+deskey=$(dd if=/dev/urandom bs=1 count=200 2> /dev/null | tr -c -d 'A-Za-z0-9' | sed -n 's/\(.\{24\}\).*/\1/p')
+db_pwd=$(dd if=/dev/urandom bs=1 count=200 2> /dev/null | tr -c -d 'A-Za-z0-9' | sed -n 's/\(.\{24\}\).*/\1/p')
+app_salt=$(dd if=/dev/urandom bs=1 count=200 2> /dev/null | tr -c -d 'A-Za-z0-9' | sed -n 's/\(.\{40\}\).*/\1/p')
+# Use 'freshrss' as database name and user
+db_user=freshrss
+
+# Initialize database and store mysql password for upgrade
+sudo yunohost app initdb $db_user -p $db_pwd
+sudo yunohost app setting freshrss mysqlpwd -v $db_pwd
+
+# Copy files to the right place
+final_path=/var/www/freshrss
+sudo mkdir -p $final_path
+sudo cp -a ../sources/* $final_path
+sudo cp -a ../conf/config.php $final_path/data
+
+# Change variables in freshrss configuration
+sudo sed -i "s/yunouser/$db_user/g" $final_path/data/config.php
+sudo sed -i "s/yunopass/$db_pwd/g" $final_path/data/config.php
+sudo sed -i "s/yunobase/$db_user/g" $final_path/data/config.php
+sudo sed -i "s/yunosalt/$app_salt/g" $final_path/data/config.php
+sudo sed -i "s/yunopath/$path/g" $final_path/data/config.php
+sudo sed -i "s/yunoadminuser/$admin_user/g" $final_path/data/config.php
+
+# Add users
+freshrss_users=$(ldapsearch -h localhost -b ou=users,dc=yunohost,dc=org -x objectClass=mailAccount uid | grep uid: | sed 's/uid: //' | xargs)
+for myuser in $freshrss_users
+do
+	#copy sql
+	sudo cp ../sources/app/SQL/install_ynh.sql /tmp/$myuser-install.sql
+	#change username in sql
+	sudo sed -i "s/YnoUser/$myuser/g" /tmp/$myuser-install.sql
+	#create tables
+	mysql -u $db_user -p$db_pwd $db_user < /tmp/$myuser-install.sql
+	#remove temp sql
+	sudo rm /tmp/$myuser-install.sql
+	#copy default conf
+	sudo cp ../conf/dist_user.conf $final_path/data/$myuser\_user.php
+	#change email
+	user_email=$(ldapsearch -h localhost -b uid=$myuser,ou=users,dc=yunohost,dc=org -x objectClass=mailAccount mail | grep mail: | grep $myuser| sed 's/mail: //')
+	sudo sed -i "s/ynoUserEmail/$user_email/g" $final_path/data/$myuser\_user.php
+	#change username
+	sudo sed -i "s/YnoUser/$myuser/g" $final_path/data/$myuser\_user.php
+done
+
+# Delete install directive
+sudo rm $final_path/data/do-install.txt
+
+# Modify Nginx configuration file and copy it to Nginx conf directory
+sed -i "s@PATHTOCHANGE@$path@g" ../conf/nginx.conf
+sed -i "s@ALIASTOCHANGE@$final_path/@g" ../conf/nginx.conf
+sudo cp ../conf/nginx.conf /etc/nginx/conf.d/$domain.d/freshrss.conf
+
+#install php5-cli
+sudo apt-get update
+sudo apt-get install -y php5-cli
+#install update cron
+echo "*/10 * * * * www-data /usr/bin/php $final_path/app/actualize_script.php >/tmp/FreshRSS.log 2>&1" > /tmp/cronfreshrss
+sudo mv /tmp/cronttrss /etc/cron.d/freshrss
+sudo chown root /etc/cron.d/freshrss
+
+# Set permissions to freshrss directory
+sudo chown -R www-data: $final_path
+
+# Reload Nginx and regenerate SSOwat conf
+sudo service nginx reload
+sudo yunohost app ssowatconf

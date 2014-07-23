@@ -1,0 +1,42 @@
+{
+    "name": "FreshRSS",
+    "id": "freshrss",
+    "description": {
+        "en": "FreshRSS is a selfhostable RSS reader",
+        "fr": "FreshRSS est un agrégateur de flux RSS à auto-héberger"
+    },
+    "developer": {
+        "name": "plopoyop",
+        "email": "plopoyop@gmail.com"
+    },
+    "multi_instance": "true",
+    "arguments": {
+        "install" : [
+            {
+                "name": "domain",
+                "ask": {
+                    "en": "Choose a domain for FreshRSS",
+                    "fr": "Choisissez un domaine pour FreshRSS"
+                },
+                "example": "domain.org"
+            },
+            {
+                "name": "path",
+                "ask": {
+                    "en": "Choose a path for FreshRSS",
+                    "fr": "Choisissez un chemin pour FreshRSS"
+                },
+                "example": "/rss",
+                "default": "/rss"
+            }
+			{
+				"name": "admin",
+				"ask": {
+					"en": "Choose the default user (must be an existing YunoHost user)"
+					"fr": "Choisissez l'utilisateur par defaut (doit être un utiliser YunoHost existant)"
+				},
+				"example": "homer"
+			}
+        ]
+    }
+}
