@@ -33,7 +33,7 @@ sudo sed -i "s/yunouser/$db_user/g" $final_path/data/config.php
 sudo sed -i "s/yunopass/$db_pwd/g" $final_path/data/config.php
 sudo sed -i "s/yunobase/$db_user/g" $final_path/data/config.php
 sudo sed -i "s/yunosalt/$app_salt/g" $final_path/data/config.php
-sudo sed -i "s/yunopath/$path/g" $final_path/data/config.php
+sudo sed -i "s@yunopath@$path@g" $final_path/data/config.php
 sudo sed -i "s/yunoadminuser/$admin_user/g" $final_path/data/config.php
 
 # Add users
@@ -70,7 +70,7 @@ sudo apt-get update
 sudo apt-get install -y php5-cli
 #install update cron
 echo "*/10 * * * * www-data /usr/bin/php $final_path/app/actualize_script.php >/tmp/FreshRSS.log 2>&1" > /tmp/cronfreshrss
-sudo mv /tmp/cronttrss /etc/cron.d/freshrss
+sudo mv /tmp/cronfreshrss /etc/cron.d/freshrss
 sudo chown root /etc/cron.d/freshrss
 
 # Set permissions to freshrss directory
