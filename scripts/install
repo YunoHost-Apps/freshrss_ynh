@@ -6,7 +6,7 @@ path=$2
 admin_user=$3
 
 # Check domain/path availability
-sudo yunohost app checkurl $domain$path
+sudo yunohost app checkurl $domain$path -a freshrss
 if [[ ! $? -eq 0 ]]; then
     exit 1
 fi
