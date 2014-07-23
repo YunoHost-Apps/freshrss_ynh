@@ -28,7 +28,7 @@
                 },
                 "example": "/rss",
                 "default": "/rss"
-            }
+			},
 			{
 				"name": "admin",
 				"ask": {
