@@ -56,6 +56,8 @@ do
 	#change username
 	sudo sed -i "s/YnoUser/$myuser/g" $final_path/data/$myuser\_user.php
 done
+#copy defaut user conf for futur users
+sudo cp ../conf/dist_user.conf $final_path/data/user.php.dist
 
 # Delete install directive
 sudo rm $final_path/data/do-install.txt
