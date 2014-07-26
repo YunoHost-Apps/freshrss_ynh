@@ -77,6 +77,8 @@ sudo chown root /etc/cron.d/freshrss
 
 # Set permissions to freshrss directory
 sudo chown -R www-data: $final_path
+#skip api directory 
+yunohost app setting freshrss skipped_uris -v /api/greader.php
 
 # Reload Nginx and regenerate SSOwat conf
 sudo service nginx reload
