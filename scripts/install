@@ -51,7 +51,7 @@ do
 	#copy default conf
 	sudo cp ../conf/dist_user.conf $final_path/data/$myuser\_user.php
 	#change email
-	user_email=$(ldapsearch -h localhost -b uid=$myuser,ou=users,dc=yunohost,dc=org -x objectClass=mailAccount mail | grep mail: | grep $myuser| sed 's/mail: //')
+	user_email=$(ldapsearch -h localhost -b uid=$myuser,ou=users,dc=yunohost,dc=org -x objectClass=mailAccount mail | grep mail: | head -n 1| sed 's/mail: //')
 	sudo sed -i "s/ynoUserEmail/$user_email/g" $final_path/data/$myuser\_user.php
 	#change username
 	sudo sed -i "s/YnoUser/$myuser/g" $final_path/data/$myuser\_user.php
