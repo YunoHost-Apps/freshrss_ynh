@@ -37,6 +37,15 @@ sudo sed -i "s@yunopath@$path@g" $final_path/data/config.php
 sudo sed -i "s/yunoadminuser/$admin_user/g" $final_path/data/config.php
 
 # Add users
+
+#check wallabag
+if [[ $(sudo yunohost app list -f wallabag | /bin/grep -q "installed: True") -eq 0 ]]; then
+    echo "Detected wallabag"
+	$wallabagPath=$(sudo yunohost app setting wallabag path)
+	$wallabagUrl=$domain$wallabagPath
+	$sharingWallabag="array('type' => 'wallabag','name' => 'Wallabag','url' => 'https://$wallabagUrl',),"
+fi
+
 freshrss_users=$(ldapsearch -h localhost -b ou=users,dc=yunohost,dc=org -x objectClass=mailAccount uid | grep uid: | sed 's/uid: //' | xargs)
 for myuser in $freshrss_users
 do
@@ -50,11 +59,12 @@ do
 	sudo rm /tmp/$myuser-install.sql
 	#copy default conf
 	sudo cp ../conf/dist_user.conf $final_path/data/$myuser\_user.php
-	#change email
-	user_email=$(ldapsearch -h localhost -b uid=$myuser,ou=users,dc=yunohost,dc=org -x objectClass=mailAccount mail | grep mail: | head -n 1| sed 's/mail: //')
+	#change email - utilise seulement par persona - non necessaire pour ynh
+	#user_email=$(ldapsearch -h localhost -b uid=$myuser,ou=users,dc=yunohost,dc=org -x objectClass=mailAccount mail | grep mail: | head -n 1| sed 's/mail: //')
 	sudo sed -i "s/ynoUserEmail/$user_email/g" $final_path/data/$myuser\_user.php
 	#change username
 	sudo sed -i "s/YnoUser/$myuser/g" $final_path/data/$myuser\_user.php
+	sudo sed -i "s/sharingArrayYnh/$sharingWallabag/g" $final_path/data/$myuser\_user.php
 done
 #copy defaut user conf for futur users
 sudo cp ../conf/dist_user.conf $final_path/data/user.php.dist

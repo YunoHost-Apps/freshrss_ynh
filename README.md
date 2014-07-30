@@ -6,8 +6,5 @@ FreshRSS for YunoHost
 
 
 TODO:
-* Default users
-* If wallabag is installed add it to users default settings
-* User email doesn't is the username
 * Finish Yunohost theme
 * update scripts
