@@ -64,7 +64,7 @@ do
 	sudo sed -i "s/ynoUserEmail/$user_email/g" $final_path/data/$myuser\_user.php
 	#change username
 	sudo sed -i "s/YnoUser/$myuser/g" $final_path/data/$myuser\_user.php
-	sudo sed -i "s/sharingArrayYnh/$sharingWallabag/g" $final_path/data/$myuser\_user.php
+	sudo sed -i "s@sharingArrayYnh@$sharingWallabag@g" $final_path/data/$myuser\_user.php
 done
 #copy defaut user conf for futur users
 sudo cp ../conf/dist_user.conf $final_path/data/user.php.dist
