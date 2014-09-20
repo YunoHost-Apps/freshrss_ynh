@@ -2,6 +2,7 @@
 
 app=$1
 new_users=$2
+app_path=/var/www/freshrss
 
 
 if [[ "freshrss" = "$app" ]];
@@ -21,7 +22,7 @@ then
 	for myuser in $(echo "$new_users" | sed "s/,/ /g")
 	do
 		#copy sql
-		sudo cp /var/www/freshrss/app/SQL/install_ynh.sql /tmp/$myuser-install.sql
+		sudo cp $app_path/app/SQL/install_ynh.sql /tmp/$myuser-install.sql
 
 		#change username in sql
 		sudo sed -i "s/YnoUser/$myuser/g" /tmp/$myuser-install.sql
@@ -30,11 +31,11 @@ then
 		#remove temp sql
 		sudo rm /tmp/$myuser-install.sql
 		#copy default conf
-		sudo cp /var/www/freshrss/data/user.php.dist /var/www/freshrss/data/$myuser\_user.php
+		sudo cp $app_path/data/user.php.dist $app_path/data/$myuser\_user.php
 		#change username
-		sudo sed -i "s/YnoUser/$myuser/g" $final_path/data/$myuser\_user.php
+		sudo sed -i "s/YnoUser/$myuser/g" $app_path/data/$myuser\_user.php
 		#add wallabag sharing	
-		sudo sed -i "s@sharingArrayYnh@$sharingWallabag@g" $final_path/data/$myuser\_user.php
+		sudo sed -i "s@sharingArrayYnh@$sharingWallabag@g" $app_path/data/$myuser\_user.php
 		
 	done
 fi
