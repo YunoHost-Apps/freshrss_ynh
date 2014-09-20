@@ -1,7 +1,7 @@
 #!/bin/bash
 
 app=$1
-new_users=$2
+deleted_users=$2
 
 
 if [[ "freshrss" = "$app" ]];
@@ -10,31 +10,10 @@ then
 	db_name=freshrss
 	db_pwd=$(sudo yunohost app setting freshrss mysqlpwd)	
 	
-	#check wallabag
-	if [[ $(sudo yunohost app list -f wallabag | /bin/grep -q "installed: True") -eq 0 ]]; then
-	    echo "Detected wallabag"
-		wallabagPath=$(sudo yunohost app setting wallabag path)
-		wallabagUrl=$domain$wallabagPath
-		sharingWallabag="array('type' => 'wallabag','name' => 'Wallabag','url' => 'https://$wallabagUrl',),"
-	fi
-	
-	for myuser in $(echo "$new_users" | sed "s/,/ /g")
+	#for each deleted users
+	for myuser in $(echo "$deleted_users" | sed "s/,/ /g")
 	do
-		#copy sql
-		sudo cp /var/www/freshrss/app/SQL/install_ynh.sql /tmp/$myuser-install.sql
-
-		#change username in sql
-		sudo sed -i "s/YnoUser/$myuser/g" /tmp/$myuser-install.sql
-		#create tables
-		mysql -u $db_user -p$db_pwd $db_user < /tmp/$myuser-install.sql
-		#remove temp sql
-		sudo rm /tmp/$myuser-install.sql
-		#copy default conf
-		sudo cp /var/www/freshrss/data/user.php.dist /var/www/freshrss/data/$myuser\_user.php
-		#change username
-		sudo sed -i "s/YnoUser/$myuser/g" $final_path/data/$myuser\_user.php
-		#add wallabag sharing	
-		sudo sed -i "s@sharingArrayYnh@$sharingWallabag@g" $final_path/data/$myuser\_user.php
-		
+		#drop all 3 tables
+		mysql -u root -p$root_pwd -e "DROP TABLE  $myuser\_entry; DROP TABLE  $myuser\_feed; DROP TABLE  $myuser\_catefory;" $db_name
 	done
-fi
+fi	
