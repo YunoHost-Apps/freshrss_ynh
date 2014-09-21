@@ -1,7 +1,0 @@
-{
-  "name": "YunoHost design",
-  "author": "PlopoYop",
-  "description": "Thème YunoHost pour FreshRSS",
-  "version": 0.0,
-  "files": ["template.css", "yunohost.css"]
-}
