@@ -1,0 +1,12 @@
+#!/bin/bash
+
+# Copy files to the right place
+final_path=/var/www/freshrss
+sudo mkdir -p $final_path
+sudo cp -a ../sources/* $final_path
+
+# Delete install directive
+sudo rm $final_path/data/do-install.txt
+
+# Set permissions to freshrss directory
+sudo chown -R www-data: $final_path
