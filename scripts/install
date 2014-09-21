@@ -5,6 +5,15 @@ domain=$1
 path=$2
 admin_user=$3
 
+
+# Check user parameter
+sudo yunohost user list --json | grep -q "\"username\": \"$admin_user\""
+if [[ ! $? -eq 0 ]]; then
+    echo "Wrong user"
+    exit 1
+fi
+sudo yunohost app setting freshrss admin_user -v $admin_user
+
 # Check domain/path availability
 sudo yunohost app checkurl $domain$path -a freshrss
 if [[ ! $? -eq 0 ]]; then
