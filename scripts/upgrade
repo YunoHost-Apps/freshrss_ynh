@@ -1,12 +1,17 @@
 #!/bin/bash
 
-# Copy files to the right place
+
+#backup data folder
 final_path=/var/www/freshrss
+sudo cp -a $final_path/data /tmp/freshrss-data.bak
+#delete old folder
+sudo rm $final_path
+# Copy files to the right place
 sudo mkdir -p $final_path
 sudo cp -a ../sources/* $final_path
-
-# Delete install directive
-sudo rm $final_path/data/do-install.txt
-
+#remove data folder
+sudo rm -r $final_path/data
+#copy back data folder
+sudo mv /tmp/freshrss-data.bak $final_path/data
 # Set permissions to freshrss directory
 sudo chown -R www-data: $final_path
