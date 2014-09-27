@@ -5,7 +5,7 @@
 final_path=/var/www/freshrss
 sudo cp -a $final_path/data /tmp/freshrss-data.bak
 #delete old folder
-sudo rm $final_path
+sudo rm -r $final_path
 # Copy files to the right place
 sudo mkdir -p $final_path
 sudo cp -a ../sources/* $final_path
