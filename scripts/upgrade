@@ -1,6 +1,5 @@
 #!/bin/bash
 
-
 #backup data folder
 final_path=/var/www/freshrss
 sudo cp -a $final_path/data /tmp/freshrss-data.bak
