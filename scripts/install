@@ -7,7 +7,7 @@ admin_user=$3
 
 
 # Check user parameter
-sudo yunohost user list --json | grep -q "\"username\": \"$admin_user\""
+sudo yunohost user list --json | grep -qi "\"username\": \"$admin_user\""
 if [[ ! $? -eq 0 ]]; then
     echo "Wrong user"
     exit 1
