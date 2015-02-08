@@ -6,10 +6,10 @@ if [[ -f $final_path/data/dist_user.conf ]]; then
 	rm $final_path/data/dist_user.conf
 fi
 #copy update script into freshrss path
-cp update-ynh.php $final_path/
+sudo cp update-ynh.php $final_path/
 #execute update
 sudo php $final_path/update-ynh.php
 
-cp ../conf/dist_user.conf $final_path/data
+sudo cp ../conf/dist_user.conf $final_path/data
 # Set permissions to freshrss directory
 sudo chown -R www-data: $final_path/data
