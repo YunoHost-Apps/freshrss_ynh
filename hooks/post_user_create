@@ -26,11 +26,11 @@ mysql -u $db_user -p$db_pwd $db_user < /tmp/$myuser-install.sql
 sudo rm /tmp/$myuser-install.sql
 #copy default conf
 #copy default conf
-sudo mkdir $app_path/data/$myuser/
-sudo cp $app_path/data/user.php.dist $app_path/data/$myuser/config.php
+sudo mkdir $app_path/data/users/$myuser/
+sudo cp $app_path/data/user.php.dist $app_path/data/users/$myuser/config.php
 #change username
-sudo sed -i "s/YnoUser/$myuser/g" $app_path/data/$myuser/config.php
+sudo sed -i "s/YnoUser/$myuser/g" $app_path/data/users/$myuser/config.php
 #add wallabag sharing
 sudo sed -i "s/sharingArrayYnh/$sharingWallabag/g" $app_path/data/users/$myuser/config.php
-touch $app_path/data/users/$myuser/log.txt
+touch $app_path/data/users/users/$myuser/log.txt
 chown www-data: $app_path/data/users/$myuser -R
