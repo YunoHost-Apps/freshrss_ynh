@@ -74,7 +74,7 @@ do
 	sudo rm /tmp/$myuser-install.sql
 	sudo mkdir $final_path/data/$myuser/
 	#copy default conf
-	sudo cp ../conf/dist_user.conf $final_path/data/$myuser/config.php
+	sudo cp ../conf/dist_user.conf $final_path/data/users/$myuser/config.php
 	touch $final_path/data/$myuser/log.txt
 	#change username
 	sudo sed -i "s/YnoUser/$myuser/g" $final_path/data/$myuser\_user.php
