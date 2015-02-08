@@ -101,6 +101,7 @@ sudo chown root /etc/cron.d/freshrss
 
 # Set permissions to freshrss directory
 sudo chown -R www-data: $final_path/data/
+sudo chown -R www-data: $final_path/extensions/
 #skip api directory 
 sudo yunohost app setting freshrss skipped_uris -v /api/greader.php
 
