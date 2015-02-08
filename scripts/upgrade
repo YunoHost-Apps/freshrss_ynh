@@ -1,16 +1,15 @@
 #!/bin/bash
-
 #backup data folder
 final_path=/var/www/freshrss
-sudo cp -a $final_path/data /tmp/freshrss-data.bak
-#delete old folder
-sudo rm -r $final_path
-# Copy files to the right place
-sudo mkdir -p $final_path
-sudo cp -a ../sources/* $final_path
-#remove data folder
-sudo rm -r $final_path/data
-#copy back data folder
-sudo mv /tmp/freshrss-data.bak $final_path/data
+#
+if [[ -f $final_path/data/dist_user.conf ]]; then
+	rm $final_path/data/dist_user.conf
+fi
+#copy update script into freshrss path
+cp update-ynh.php $final_path/
+#execute update
+sudo php $final_path/update-ynh.php
+
+cp ../conf/dist_user.conf $final_path/data
 # Set permissions to freshrss directory
-sudo chown -R www-data: $final_path
+sudo chown -R www-data: $final_path/data

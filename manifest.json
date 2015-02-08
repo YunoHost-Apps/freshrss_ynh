@@ -32,8 +32,8 @@
 			{
 				"name": "admin",
 				"ask": {
-					"en": "Choose the default user (must be an existing YunoHost user)",
-					"fr": "Choisissez l'utilisateur par defaut (doit être un utiliser YunoHost existant)"
+					"en": "Choose the default user (leave empty if none)",
+					"fr": "Choisissez l'utilisateur par defaut (laissez vide si aucun)"
 				},
 				"example": "homer"
 			}

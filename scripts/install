@@ -6,13 +6,15 @@ path=$2
 admin_user=$3
 
 
-# Check user parameter
-sudo yunohost user list --json | grep -qi "\"username\": \"$admin_user\""
-if [[ ! $? -eq 0 ]]; then
-    echo "Wrong user"
-    exit 1
+# Check user parameter if not empty
+if [[ $admin_user -ne '' ]]; then
+	sudo yunohost user list --json | grep -qi "\"username\": \"$admin_user\""
+	if [[ ! $? -eq 0 ]]; then
+		echo "Wrong user"
+		exit 1
+	fi
+	sudo yunohost app setting freshrss admin_user -v $admin_user
 fi
-sudo yunohost app setting freshrss admin_user -v $admin_user
 
 # Check domain/path availability
 sudo yunohost app checkurl $domain$path -a freshrss
@@ -43,7 +45,11 @@ sudo sed -i "s/yunopass/$db_pwd/g" $final_path/data/config.php
 sudo sed -i "s/yunobase/$db_user/g" $final_path/data/config.php
 sudo sed -i "s/yunosalt/$app_salt/g" $final_path/data/config.php
 sudo sed -i "s@yunopath@$path@g" $final_path/data/config.php
-sudo sed -i "s/yunoadminuser/$admin_user/g" $final_path/data/config.php
+if [[ $admin_user -ne '' ]]; then
+	sudo sed -i "s/yunoadminuser/$admin_user/g" $final_path/data/config.php
+else
+	sudo sed '/yunoadminuser/d' $final_path/data/config.php
+fi
 
 # Add users
 
@@ -66,11 +72,10 @@ do
 	mysql -u $db_user -p$db_pwd $db_user < /tmp/$myuser-install.sql
 	#remove temp sql
 	sudo rm /tmp/$myuser-install.sql
+	sudo mkdir $final_path/data/$myuser/
 	#copy default conf
-	sudo cp ../conf/dist_user.conf $final_path/data/$myuser\_user.php
-	#change email - utilise seulement par persona - non necessaire pour ynh
-	#user_email=$(ldapsearch -h localhost -b uid=$myuser,ou=users,dc=yunohost,dc=org -x objectClass=mailAccount mail | grep mail: | head -n 1| sed 's/mail: //')
-	#sudo sed -i "s/ynoUserEmail/$user_email/g" $final_path/data/$myuser\_user.php
+	sudo cp ../conf/dist_user.conf $final_path/data/$myuser/config.php
+	touch $final_path/data/$myuser/log.txt
 	#change username
 	sudo sed -i "s/YnoUser/$myuser/g" $final_path/data/$myuser\_user.php
 	sudo sed -i "s@sharingArrayYnh@$sharingWallabag@g" $final_path/data/$myuser\_user.php
@@ -95,7 +100,7 @@ sudo mv /tmp/cronfreshrss /etc/cron.d/freshrss
 sudo chown root /etc/cron.d/freshrss
 
 # Set permissions to freshrss directory
-sudo chown -R www-data: $final_path
+sudo chown -R www-data: $final_path/data/
 #skip api directory 
 sudo yunohost app setting freshrss skipped_uris -v /api/greader.php
 

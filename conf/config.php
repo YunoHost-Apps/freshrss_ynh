@@ -1,19 +1,11 @@
 <?php
- return array (
-  'general' =>
-  array (
-    'environment' => 'production',
-    'salt' => 'yunosalt',
-    'base_url' => 'yunopath',
-    'title' => 'FreshRSS',
-    'default_user' => 'yunoadminuser',
-    'allow_anonymous' => false,
-    'allow_anonymous_refresh' => false,
-    'auth_type' => 'http_auth',
-    'api_enabled' => true,
-    'unsafe_autologin_enabled' => false,
-  ),
-  'db' =>
+return array (
+  'environment' => 'production',
+  'salt' => 'yunosalt',
+  'title' => 'FreshRSS',
+  'default_user' => 'yunoadminuser',
+  'auth_type' => 'http_auth',
+  'db' => 
   array (
     'type' => 'mysql',
     'host' => 'localhost',
@@ -22,4 +14,8 @@
     'base' => 'yunobase',
     'prefix' => false,
   ),
+  'allow_anonymous' => false,
+  'allow_anonymous_refresh' => false,
+  'unsafe_autologin_enabled' => false,
+  'api_enabled' => true,
 );
