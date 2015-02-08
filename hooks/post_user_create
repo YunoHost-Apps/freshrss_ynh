@@ -33,4 +33,4 @@ sudo sed -i "s/YnoUser/$myuser/g" $app_path/data/users/$myuser/config.php
 #add wallabag sharing
 sudo sed -i "s/sharingArrayYnh/$sharingWallabag/g" $app_path/data/users/$myuser/config.php
 touch $app_path/data/users/users/$myuser/log.txt
-chown www-data: $app_path/data/users/$myuser -R
+chown -R www-data: $app_path/data/users/$myuser/
