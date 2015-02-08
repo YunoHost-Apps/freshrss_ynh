@@ -72,13 +72,13 @@ do
 	mysql -u $db_user -p$db_pwd $db_user < /tmp/$myuser-install.sql
 	#remove temp sql
 	sudo rm /tmp/$myuser-install.sql
-	sudo mkdir $final_path/data/$myuser/
+	sudo mkdir $final_path/data/users/$myuser/
 	#copy default conf
 	sudo cp ../conf/dist_user.conf $final_path/data/users/$myuser/config.php
-	touch $final_path/data/$myuser/log.txt
+	touch $final_path/data/users/$myuser/log.txt
 	#change username
-	sudo sed -i "s/YnoUser/$myuser/g" $final_path/data/$myuser\_user.php
-	sudo sed -i "s@sharingArrayYnh@$sharingWallabag@g" $final_path/data/$myuser\_user.php
+	sudo sed -i "s/YnoUser/$myuser/g" $final_path/data/users/$myuser/config.php
+	sudo sed -i "s@sharingArrayYnh@$sharingWallabag@g" $final_path/data/users/$myuser/config.php
 done
 #copy defaut user conf for futur users
 sudo cp ../conf/dist_user.conf $final_path/data/user.php.dist
