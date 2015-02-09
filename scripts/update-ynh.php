@@ -1,8 +1,10 @@
 <?php
 require('constants.php');
 require(LIB_PATH . '/lib_rss.php');
-require('app/Models/Configuration.php');
-require('app/Models/Entry.php');
+if (FRESHRSS_VERSION === '0.8.1'){
+	require('app/Models/Configuration.php');
+	require('app/Models/Entry.php');
+}
 
 $ch = curl_init(FRESHRSS_UPDATE_WEBSITE);
 $fp = fopen("update.php", "w");
