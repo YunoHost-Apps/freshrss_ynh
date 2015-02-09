@@ -2,17 +2,15 @@
 #backup data folder
 final_path=/var/www/freshrss
 #
-#if [[ -f $final_path/data/dist_user.conf ]]; then
-#	rm $final_path/data/dist_user.conf
-#fi
+if [ -f $final_path/data/dist_user.conf ]; then
+	rm $final_path/data/dist_user.conf
+fi
 #copy update script into freshrss path
 sudo cp update-ynh.php $final_path/
 #execute update
 sudo php $final_path/update-ynh.php
 #remove update script
 sudo rm $final_path/update-ynh.php
-#copy user default config
-sudo cp ../conf/dist_user.conf $final_path/data/
 # Set permissions to freshrss directory
 sudo chown -R www-data: $final_path/data/
 sudo chown -R www-data: $final_path/extensions/
