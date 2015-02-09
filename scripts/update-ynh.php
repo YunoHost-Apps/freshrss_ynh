@@ -16,8 +16,8 @@ curl_exec($ch);
 curl_close($ch);
 fclose($fp);
 
-
-require('update.php');
-
-apply_update();
+if (!strstr(file_get_contents('update.php'), 'NO_UPDATE')){
+        require('update.php');
+        apply_update();
+}
 ?>
