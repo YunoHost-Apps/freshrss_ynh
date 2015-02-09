@@ -48,7 +48,7 @@ sudo sed -i "s@yunopath@$path@g" $final_path/data/config.php
 if [[ $admin_user -ne '' ]]; then
 	sudo sed -i "s/yunoadminuser/$admin_user/g" $final_path/data/config.php
 else
-	sudo sed '/yunoadminuser/d' $final_path/data/config.php
+	sudo sed -i '/yunoadminuser/d' $final_path/data/config.php
 fi
 
 # Add users
