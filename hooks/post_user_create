@@ -10,10 +10,10 @@ myuser=$1
 #check wallabag
 if [[ $(sudo yunohost app list -f wallabag | /bin/grep -q "installed: True") -eq 0 ]]; then
     echo "Detected wallabag"
-	$wallabagPath=$(sudo yunohost app setting wallabag path)
-	$wallabagUrl=$domain$wallabagPath
-	$sharingWallabag="'sharing' => \n\tarray( \n\t\t0 => \n\t\tarray(\n\t\t\t'type' => 'wallabag',\n\t\t\t'name' => 'Wallabag',\n\t\t\t'url' => 'https://$wallabagUrl',\n\t\t),"
-	$sharingEnable=1
+	wallabagPath=$(sudo yunohost app setting wallabag path)
+	wallabagUrl=$domain$wallabagPath
+	sharingWallabag="'sharing' => \n\tarray( \n\t\t0 => \n\t\tarray(\n\t\t\t'type' => 'wallabag',\n\t\t\t'name' => 'Wallabag',\n\t\t\t'url' => 'https://$wallabagUrl',\n\t\t),"
+	sharingEnable=1
 fi
 
 
