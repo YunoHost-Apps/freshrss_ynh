@@ -76,7 +76,7 @@ do
 	sudo mkdir $final_path/data/users/$myuser/
 	#copy default conf
 	#sudo cp ../conf/dist_user.conf $final_path/data/users/$myuser/config.php
-	sudo cp -r $final_path/data/users/_ $final_path/data/users/$myuser
+	sudo cp -r $final_path/data/users/_/ $final_path/data/users/$myuser
 	sudo mv $final_path/data/users/$myuser/config.default.php mv $final_path/data/users/$myuser/config.php
 
 	if [[ $sharingWallabag -ne '' ]]; then
