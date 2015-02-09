@@ -2,20 +2,10 @@
 
 db_user=freshrss
 db_name=freshrss
-db_pwd=$(sudo yunohost app setting freshrss mysqlpwd)
+db_pwd=$(sudo cat /etc/yunohost/mysql)
 app_path=/var/www/freshrss
 
 myuser=$1
-
-#check wallabag
-if [[ $(sudo yunohost app list -f wallabag | /bin/grep -q "installed: True") -eq 0 ]]; then
-    echo "Detected wallabag"
-	wallabagPath=$(sudo yunohost app setting wallabag path)
-	wallabagUrl=$domain$wallabagPath
-	sharingWallabag="'sharing' => \n\tarray( \n\t\t0 => \n\t\tarray(\n\t\t\t'type' => 'wallabag',\n\t\t\t'name' => 'Wallabag',\n\t\t\t'url' => 'https://$wallabagUrl',\n\t\t),"
-	sharingEnable=1
-fi
-
 
 #copy sql
 sudo cp $app_path/app/SQL/install_ynh.sql /tmp/$myuser-install.sql
@@ -28,8 +18,4 @@ sudo rm /tmp/$myuser-install.sql
 #copy default conf
 sudo cp -r $app_path/data/users/_ $app_path/data/users/$myuser/
 sudo mv $app_path/data/users/$myuser/config.default.php $app_path/data/users/$myuser/config.php
-#add wallabag sharing
-if [[ $sharingEnable -eq 1 ]]; then
-	sudo sed -i "s@'sharing'\ =>\ array\ (@$sharingWallabag@g" $app_path/data/users/$myuser/config.php
-fi
 sudo chown -R www-data: $app_path/data/users/$myuser/
