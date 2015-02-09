@@ -1,4 +1,5 @@
 <?php
+
 return array (
   'environment' => 'production',
   'salt' => 'yunosalt',
@@ -18,4 +19,5 @@ return array (
   'allow_anonymous_refresh' => false,
   'unsafe_autologin_enabled' => false,
   'api_enabled' => true,
+  'extensions_enabled' => array(),
 );

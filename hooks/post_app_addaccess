@@ -16,7 +16,8 @@ then
 	    echo "Detected wallabag"
 		wallabagPath=$(sudo yunohost app setting wallabag path)
 		wallabagUrl=$domain$wallabagPath
-		sharingWallabag="array('type' => 'wallabag','name' => 'Wallabag','url' => 'https://$wallabagUrl',),"
+		sharingWallabag="'sharing' => \n\tarray( \n\t\t0 => \n\t\tarray(\n\t\t\t'type' => 'wallabag',\n\t\t\t'name' => 'Wallabag',\n\t\t\t'url' => 'https://$wallabagUrl',\n\t\t),"
+		sharingEnable=1
 	fi
 	
 	for myuser in $(echo "$new_users" | sed "s/,/ /g")
@@ -30,14 +31,14 @@ then
 		mysql -u $db_user -p$db_pwd $db_user < /tmp/$myuser-install.sql
 		#remove temp sql
 		sudo rm /tmp/$myuser-install.sql
+		
 		#copy default conf
-		sudo mkdir $app_path/data/$myuser/
-		sudo cp $app_path/data/user.php.dist $app_path/data/users/$myuser/config.php
-		#change username
-		sudo sed -i "s/YnoUser/$myuser/g" $app_path/data/users/$myuser/config.php
-		#add wallabag sharing	
-		sudo sed -i "s@sharingArrayYnh@$sharingWallabag@g" $app_path/data/users/$myuser/config.php
-		touch $app_path/data/users/$myuser/log.txt
-		chown www-data: $app_path/data/users/$myuser -R
+		sudo cp -r $app_path/data/users/_ $app_path/data/users/$myuser/
+		sudo mv $app_path/data/users/$myuser/config.default.php $app_path/data/users/$myuser/config.php
+		#add wallabag sharing
+		if [[ $sharingEnable -eq 1 ]]; then
+			sudo sed -i "s@'sharing'\ =>\ array\ (@$sharingWallabag@g" $app_path/data/users/$myuser/config.php
+		fi
+		sudo chown -R www-data: $app_path/data/users/$myuser/
 	done
 fi
