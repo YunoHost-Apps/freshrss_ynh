@@ -80,7 +80,7 @@ do
 	sudo cp -r $final_path/data/users/_/ $final_path/data/users/$myuser
 	sudo mv $final_path/data/users/$myuser/config.default.php $final_path/data/users/$myuser/config.php
 
-	if [[ $sharingEnable -e '1' ]]; then
+	if [[ $sharingEnable -eq 1 ]]; then
 		sudo sed -i "s@'sharing'\ =>\ array\ (@$sharingWallabag@g" $final_path/data/users/$myuser/config.php
 	fi
 done
