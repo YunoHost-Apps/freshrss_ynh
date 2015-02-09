@@ -3,7 +3,7 @@
 final_path=/var/www/freshrss
 #
 if [ -f $final_path/data/dist_user.conf ]; then
-	rm $final_path/data/dist_user.conf
+	sudo rm $final_path/data/dist_user.conf
 fi
 #copy update script into freshrss path
 sudo cp update-ynh.php $final_path/
