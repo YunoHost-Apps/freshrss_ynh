@@ -58,7 +58,8 @@ if [[ $(sudo yunohost app list -f wallabag | /bin/grep -q "installed: True") -eq
     echo "Detected wallabag"
 	wallabagPath=$(sudo yunohost app setting wallabag path)
 	wallabagUrl=$domain$wallabagPath
-	sharingWallabag="array('type' => 'wallabag','name' => 'Wallabag','url' => 'https://$wallabagUrl',),"
+	# sharingWallabag="'sharing' => array( 0 => array('type' => 'wallabag','name' => 'Wallabag','url' => 'https://$wallabagUrl',),"
+	sharingWallabag="'sharing' => \n\tarray( \n\t\t0 => \n\t\tarray(\n\t\t\t'type' => 'wallabag',\n\t\t\t'name' => 'Wallabag',\n\t\t\t'url' => 'https://$wallabagUrl',\n\t\t),"
 fi
 
 freshrss_users=$(ldapsearch -h localhost -b ou=users,dc=yunohost,dc=org -x objectClass=mailAccount uid | grep uid: | sed 's/uid: //' | xargs)
@@ -74,11 +75,13 @@ do
 	sudo rm /tmp/$myuser-install.sql
 	sudo mkdir $final_path/data/users/$myuser/
 	#copy default conf
-	sudo cp ../conf/dist_user.conf $final_path/data/users/$myuser/config.php
-	touch $final_path/data/users/$myuser/log.txt
-	#change username
-	sudo sed -i "s/YnoUser/$myuser/g" $final_path/data/users/$myuser/config.php
-	sudo sed -i "s@sharingArrayYnh@$sharingWallabag@g" $final_path/data/users/$myuser/config.php
+	#sudo cp ../conf/dist_user.conf $final_path/data/users/$myuser/config.php
+	sudo cp -r $final_path/data/users/_ $final_path/data/users/$myuser/
+	sudo mv $final_path/data/users/$myuser/config.default.php mv $final_path/data/users/$myuser/config.php
+
+	if [[ $sharingWallabag -ne '' ]]; then
+		sudo sed -i "s@'sharing'\ =>\ array\ (@$sharingWallabag@g" $final_path/data/users/$myuser/config.php
+	fi
 done
 #copy defaut user conf for futur users
 sudo cp ../conf/dist_user.conf $final_path/data/user.php.dist
