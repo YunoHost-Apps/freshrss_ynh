@@ -60,6 +60,7 @@ if [[ $(sudo yunohost app list -f wallabag | /bin/grep -q "installed: True") -eq
 	wallabagUrl=$domain$wallabagPath
 	# sharingWallabag="'sharing' => array( 0 => array('type' => 'wallabag','name' => 'Wallabag','url' => 'https://$wallabagUrl',),"
 	sharingWallabag="'sharing' => \n\tarray( \n\t\t0 => \n\t\tarray(\n\t\t\t'type' => 'wallabag',\n\t\t\t'name' => 'Wallabag',\n\t\t\t'url' => 'https://$wallabagUrl',\n\t\t),"
+	sharingEnable = 1
 fi
 
 freshrss_users=$(ldapsearch -h localhost -b ou=users,dc=yunohost,dc=org -x objectClass=mailAccount uid | grep uid: | sed 's/uid: //' | xargs)
@@ -79,7 +80,7 @@ do
 	sudo cp -r $final_path/data/users/_/ $final_path/data/users/$myuser
 	sudo mv $final_path/data/users/$myuser/config.default.php $final_path/data/users/$myuser/config.php
 
-	if [[ "$sharingWallabag" -ne '' ]]; then
+	if [[ sharingEnable -e '1' ]]; then
 		sudo sed -i "s@'sharing'\ =>\ array\ (@$sharingWallabag@g" $final_path/data/users/$myuser/config.php
 	fi
 done
