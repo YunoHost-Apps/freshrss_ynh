@@ -7,7 +7,7 @@ admin_user=$3
 
 
 # Check user parameter if not empty
-if [[ $admin_user -ne '' ]]; then
+if [[ $admin_user != '' ]]; then
 	sudo yunohost user list --json | grep -qi "\"username\": \"$admin_user\""
 	if [[ ! $? -eq 0 ]]; then
 		echo "Wrong user"
@@ -45,7 +45,7 @@ sudo sed -i "s/yunopass/$db_pwd/g" $final_path/data/config.php
 sudo sed -i "s/yunobase/$db_user/g" $final_path/data/config.php
 sudo sed -i "s/yunosalt/$app_salt/g" $final_path/data/config.php
 sudo sed -i "s@yunopath@$path@g" $final_path/data/config.php
-if [[ $admin_user -ne '' ]]; then
+if [[ $admin_user != '' ]]; then
 	sudo sed -i "s/yunoadminuser/$admin_user/g" $final_path/data/config.php
 else
 	sudo sed -i '/yunoadminuser/d' $final_path/data/config.php
