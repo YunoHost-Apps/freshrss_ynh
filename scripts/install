@@ -91,7 +91,7 @@ sudo cp ../conf/nginx.conf /etc/nginx/conf.d/$domain.d/freshrss.conf
 
 #install php5-cli
 sudo apt-get update
-sudo apt-get install -y php5-cli
+sudo apt-get install -y php5-cli php5-gmp
 #install update cron
 echo "*/10 * * * * www-data /usr/bin/php $final_path/app/actualize_script.php >/tmp/FreshRSS.log 2>&1" > /tmp/cronfreshrss
 sudo mv /tmp/cronfreshrss /etc/cron.d/freshrss
@@ -100,7 +100,7 @@ sudo chown root /etc/cron.d/freshrss
 # Set permissions to freshrss directory
 sudo chown -R www-data: $final_path/data/
 sudo chown -R www-data: $final_path/extensions/
-#skip api directory 
+#skip api directory
 sudo yunohost app setting freshrss skipped_uris -v /api/greader.php
 
 # Reload Nginx and regenerate SSOwat conf
