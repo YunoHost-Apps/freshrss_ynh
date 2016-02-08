@@ -1,0 +1,27 @@
+#!/bin/bash
+
+set -e
+
+# The parameter $1 is the backup directory location dedicated to the app
+BACKUP_DIR=$1
+
+# The parameter $2 is the id of the app instance ex: strut__2
+APP=$2
+
+# retrieve useful param
+domain=$(sudo yunohost app setting ${APP} domain)
+db_pwd=$(sudo yunohost app setting ${APP} mysqlpwd)
+
+# Backup app files
+sudo mkdir -p "${BACKUP_DIR}/www"
+sudo cp -a /var/www/${APP}/. "${BACKUP_DIR}/www"
+
+# Backup conf files
+sudo mkdir -p "${BACKUP_DIR}/conf"
+sudo cp -a /etc/nginx/conf.d/$domain.d/${APP}.conf "${BACKUP_DIR}/conf/${APP}.conf"
+sudo cp -a /etc/cron.d/${APP} "${BACKUP_DIR}/conf/${APP}"
+
+# Backup mysql
+mysqldump -u ${APP} -p$db_pwd ${APP} | sudo dd of=${BACKUP_DIR}/${APP}.dmp
+
+exit 0
