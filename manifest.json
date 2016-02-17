@@ -5,13 +5,20 @@
         "en": "FreshRSS is a selfhostable RSS reader",
         "fr": "FreshRSS est un agrégateur de flux RSS à auto-héberger"
     },
-    "developer": {
+    "url": "http://freshrss.org/",
+    "license": "free",
+    "maintainer": {
         "name": "plopoyop",
         "email": "plopoyop@gmail.com"
     },
     "multi_instance": "true",
+    "services": [
+        "nginx",
+        "php5-fpm",
+        "mysql"
+    ],
     "arguments": {
-        "install" : [
+        "install": [
             {
                 "name": "domain",
                 "ask": {
