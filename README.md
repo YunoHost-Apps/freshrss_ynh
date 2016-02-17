@@ -1,7 +1,7 @@
-FreshRSS for YunoHost
-----------------------
+# FreshRSS package for YunoHost
 
-* Site officiel : http://freshrss.org
+* [FreshRSS website](http://freshrss.org)
+* [YunoHost website](https://yunohost.org)
 
 Changelog:
 * Update to FreshRSS 1.2
