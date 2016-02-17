@@ -28,15 +28,15 @@
                 },
                 "example": "/rss",
                 "default": "/rss"
-			},
-			{
-				"name": "admin",
-				"ask": {
-					"en": "Choose the default user (leave empty if none)",
-					"fr": "Choisissez l'utilisateur par defaut (laissez vide si aucun)"
-				},
-				"example": "homer"
-			}
+            },
+            {
+                "name": "admin",
+                "ask": {
+                    "en": "Choose the default user (leave empty if none)",
+                    "fr": "Choisissez l'utilisateur par defaut (laissez vide si aucun)"
+                },
+                "example": "homer"
+            }
         ]
     }
 }
