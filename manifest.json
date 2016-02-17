@@ -21,6 +21,7 @@
         "install": [
             {
                 "name": "domain",
+                "type": "domain",
                 "ask": {
                     "en": "Choose a domain for FreshRSS",
                     "fr": "Choisissez un domaine pour FreshRSS"
@@ -29,6 +30,7 @@
             },
             {
                 "name": "path",
+                "type": "path",
                 "ask": {
                     "en": "Choose a path for FreshRSS",
                     "fr": "Choisissez un chemin pour FreshRSS"
@@ -38,6 +40,7 @@
             },
             {
                 "name": "admin",
+                "type": "user",
                 "ask": {
                     "en": "Choose the default user (leave empty if none)",
                     "fr": "Choisissez l'utilisateur par defaut (laissez vide si aucun)"
