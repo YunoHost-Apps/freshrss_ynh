@@ -1,0 +1,41 @@
+#!/bin/bash
+
+set -e
+
+# The parameter $1 is the backup directory location dedicated to the app
+BACKUP_DIR=$1
+
+# The parameter $2 is the id of the app instance ex: strut__2
+APP=$2
+
+# retrieve useful param
+domain=$(sudo yunohost app setting ${APP} domain)
+db_pwd=$(sudo yunohost app setting ${APP} mysqlpwd)
+path=$(sudo yunohost app setting ${APP} path)
+
+# Check domain/path availability
+sudo yunohost app checkurl $domain$path -a ${APP}  \
+    || (echo "Path not available: $domain$path" && exit 1)
+
+# Restore sources & data
+final_path=/var/www/${APP}
+sudo mkdir $final_path
+sudo cp -a ${BACKUP_DIR}/www/. $final_path
+
+# Restore permissions
+sudo chown -R root:root $final_path
+sudo chown -R www-data: $final_path/data/
+sudo chown -R www-data: $final_path/extensions/
+
+# Restore conf files
+sudo cp -a "${BACKUP_DIR}/conf/${APP}.conf" /etc/nginx/conf.d/$domain.d/${APP}.conf
+sudo cp -a "${BACKUP_DIR}/conf/${APP}" /etc/cron.d/${APP}
+
+# Restore mysql dump
+sudo su -c "mysql -u ${APP} -p$db_pwd ${APP} < ${BACKUP_DIR}/${APP}.dmp"
+
+# Reload Nginx, and regenerate SSOwat conf
+sudo service nginx reload
+sudo yunohost app ssowatconf
+
+exit 0
