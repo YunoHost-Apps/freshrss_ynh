@@ -23,5 +23,3 @@ sudo cp -a /etc/cron.d/${APP} "${BACKUP_DIR}/conf/${APP}"
 
 # Backup mysql
 mysqldump -u ${APP} -p$db_pwd ${APP} | sudo dd of=${BACKUP_DIR}/${APP}.dmp
-
-exit 0
