@@ -11,7 +11,7 @@
         "name": "plopoyop",
         "email": "plopoyop@gmail.com"
     },
-    "multi_instance": "true",
+    "multi_instance": "false",
     "services": [
         "nginx",
         "php5-fpm",
