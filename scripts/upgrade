@@ -1,19 +1,41 @@
 #!/bin/bash
-#backup data folder
-final_path=/var/www/freshrss
-#
-if [ -f $final_path/data/user.php.dist ]; then
-	sudo rm $final_path/data/user.php.dist
-fi
-#copy update script into freshrss path
-sudo cp update-ynh.php $final_path/
-#execute update
-sudo php $final_path/update-ynh.php
-#remove update script
-sudo rm $final_path/update-ynh.php
-# Set permissions to freshrss directory
-sudo chown -R www-data: $final_path/data/
-sudo chown -R www-data: $final_path/extensions/
+# Exit on command errors and treat unset variables as an error
+set -eu
 
+# Load common variables and helpers
+. ./_common.sh
+
+# Source app helpers
+. /usr/share/yunohost/helpers
+
+#old version cleanup
+if [ -f $FINAL_PATH/data/user.php.dist ]; then
+	sudo rm $FINAL_PATH/data/user.php.dist
+fi
+
+# Check destination directory
+[[ ! -d $FINAL_PATH ]] && ynh_die \
+"The destination directory '$FINAL_PATH' does not exist.\
+The app is not correctly installed, you should remove it first."
+
+# Create tmp directory and install app inside
+TMPDIR=$(ynh_mkdir_tmp)
+extract_freshrss "$TMPDIR"
+
+# Restore config
+sudo rm $TMPDIR/data/do-install.txt
+sudo cp $FINAL_PATH/data/config.php $TMPDIR/data/config.php
+sudo cp -r $FINAL_PATH/data/users/. $TMPDIR/data/users/
+
+# Set permissions to freshrss directory
+sudo chown -R www-data: $TMPDIR/data/
+sudo chown -R www-data: $TMPDIR/extensions/
+
+# Clean up existing files and copy new files to the right place
+sudo rm -rf "$FINAL_PATH"
+sudo cp -r "$TMPDIR" "$FINAL_PATH"
+
+
+#install extention for api
 sudo apt-get update
 sudo apt-get install -y php5-gmp
