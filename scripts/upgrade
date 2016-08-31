@@ -1,4 +1,13 @@
 #!/bin/bash
+# Exit on command errors and treat unset variables as an error
+set -eu
+
+# Load common variables and helpers
+. ./_common.sh
+
+# Source app helpers
+. /usr/share/yunohost/helpers
+
 #old version cleanup
 if [ -f $FINAL_PATH/data/user.php.dist ]; then
 	sudo rm $FINAL_PATH/data/user.php.dist
