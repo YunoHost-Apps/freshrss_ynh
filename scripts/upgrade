@@ -23,7 +23,7 @@ TMPDIR=$(ynh_mkdir_tmp)
 extract_freshrss "$TMPDIR"
 
 # Restore config
-sudo $FINAL_PATH/data/config.php $TMPDIR/data/config.php
+sudo cp $FINAL_PATH/data/config.php $TMPDIR/data/config.php
 sudo cp -r $FINAL_PATH/data/users/. $TMPDIR/data/users/
 
 # Set permissions to freshrss directory
