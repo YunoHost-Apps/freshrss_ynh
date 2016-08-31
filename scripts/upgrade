@@ -23,6 +23,7 @@ TMPDIR=$(ynh_mkdir_tmp)
 extract_freshrss "$TMPDIR"
 
 # Restore config
+sudo rm $final_path/data/do-install.txt
 sudo cp $FINAL_PATH/data/config.php $TMPDIR/data/config.php
 sudo cp -r $FINAL_PATH/data/users/. $TMPDIR/data/users/
 
