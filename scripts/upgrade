@@ -31,8 +31,8 @@ sudo chown -R www-data: $TMPDIR/data/
 sudo chown -R www-data: $TMPDIR/extensions/
 
 # Clean up existing files and copy new files to the right place
-sudo rm -rf "$DESTDIR"
-sudo cp -r "$TMPDIR" "$DESTDIR"
+sudo rm -rf "$FINAL_PATH"
+sudo cp -r "$TMPDIR" "$FINAL_PATH"
 
 
 #install extention for api
