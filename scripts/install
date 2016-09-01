@@ -1,9 +1,18 @@
 #!/bin/bash
 
+# Exit on command errors and treat unset variables as an error
+set -eu
+
 # Retrieve arguments
 domain=$1
 path=$2
 admin_user=$3
+
+# Load common variables and helpers
+. ./_common.sh
+
+# Source app helpers
+. /usr/share/yunohost/helpers
 
 
 # Check user parameter if not empty
@@ -34,21 +43,21 @@ sudo yunohost app initdb $db_user -p $db_pwd
 sudo yunohost app setting freshrss mysqlpwd -v $db_pwd
 
 # Copy files to the right place
-final_path=/var/www/freshrss
-sudo mkdir -p $final_path
-sudo cp -a ../sources/* $final_path
-sudo cp -a ../conf/config.php $final_path/data
+sudo mkdir -p $FINAL_PATH
+extract_freshrss "$FINAL_PATH"
+sudo cp -a ../conf/config.php $FINAL_PATH/data
+sudo cp ../sources/install_ynh.sql $FINAL_PATH/app/SQL/install_ynh.sql
 
 # Change variables in freshrss configuration
-sudo sed -i "s/yunouser/$db_user/g" $final_path/data/config.php
-sudo sed -i "s/yunopass/$db_pwd/g" $final_path/data/config.php
-sudo sed -i "s/yunobase/$db_user/g" $final_path/data/config.php
-sudo sed -i "s/yunosalt/$app_salt/g" $final_path/data/config.php
-sudo sed -i "s@yunopath@$path@g" $final_path/data/config.php
+sudo sed -i "s/yunouser/$db_user/g" $FINAL_PATH/data/config.php
+sudo sed -i "s/yunopass/$db_pwd/g" $FINAL_PATH/data/config.php
+sudo sed -i "s/yunobase/$db_user/g" $FINAL_PATH/data/config.php
+sudo sed -i "s/yunosalt/$app_salt/g" $FINAL_PATH/data/config.php
+sudo sed -i "s@yunopath@$path@g" $FINAL_PATH/data/config.php
 if [[ $admin_user != '' ]]; then
-	sudo sed -i "s/yunoadminuser/$admin_user/g" $final_path/data/config.php
+	sudo sed -i "s/yunoadminuser/$admin_user/g" $FINAL_PATH/data/config.php
 else
-	sudo sed -i '/yunoadminuser/d' $final_path/data/config.php
+	sudo sed -i '/yunoadminuser/d' $FINAL_PATH/data/config.php
 fi
 
 # Add users
@@ -66,7 +75,7 @@ freshrss_users=$(ldapsearch -h localhost -b ou=users,dc=yunohost,dc=org -x objec
 for myuser in $freshrss_users
 do
 	#copy sql
-	sudo cp ../sources/app/SQL/install_ynh.sql /tmp/$myuser-install.sql
+	sudo cp ../sources/install_ynh.sql /tmp/$myuser-install.sql
 	#change username in sql
 	sudo sed -i "s/YnoUser/$myuser/g" /tmp/$myuser-install.sql
 	#create tables
@@ -74,32 +83,32 @@ do
 	#remove temp sql
 	sudo rm /tmp/$myuser-install.sql
 	#copy default conf
-	sudo cp -r $final_path/data/users/_/ $final_path/data/users/$myuser
-	sudo mv $final_path/data/users/$myuser/config.default.php $final_path/data/users/$myuser/config.php
+	sudo cp -r $FINAL_PATH/data/users/_/ $FINAL_PATH/data/users/$myuser
+	sudo mv $FINAL_PATH/data/users/$myuser/config.default.php $FINAL_PATH/data/users/$myuser/config.php
 
 	if [[ $sharingEnable -eq 1 ]]; then
-		sudo sed -i "s@'sharing'\ =>\ array\ (@$sharingWallabag@g" $final_path/data/users/$myuser/config.php
+		sudo sed -i "s@'sharing'\ =>\ array\ (@$sharingWallabag@g" $FINAL_PATH/data/users/$myuser/config.php
 	fi
 done
 # Delete install directive
-sudo rm $final_path/data/do-install.txt
+sudo rm $FINAL_PATH/data/do-install.txt
 
 # Modify Nginx configuration file and copy it to Nginx conf directory
 sed -i "s@PATHTOCHANGE@$path@g" ../conf/nginx.conf
-sed -i "s@ALIASTOCHANGE@$final_path/@g" ../conf/nginx.conf
+sed -i "s@ALIASTOCHANGE@$FINAL_PATH/@g" ../conf/nginx.conf
 sudo cp ../conf/nginx.conf /etc/nginx/conf.d/$domain.d/freshrss.conf
 
 #install php5-cli
 sudo apt-get update
 sudo apt-get install -y php5-cli php5-gmp
 #install update cron
-echo "*/10 * * * * www-data /usr/bin/php $final_path/app/actualize_script.php >/tmp/FreshRSS.log 2>&1" > /tmp/cronfreshrss
+echo "*/10 * * * * www-data /usr/bin/php $FINAL_PATH/app/actualize_script.php >/tmp/FreshRSS.log 2>&1" > /tmp/cronfreshrss
 sudo mv /tmp/cronfreshrss /etc/cron.d/freshrss
 sudo chown root /etc/cron.d/freshrss
 
 # Set permissions to freshrss directory
-sudo chown -R www-data: $final_path/data/
-sudo chown -R www-data: $final_path/extensions/
+sudo chown -R www-data: $FINAL_PATH/data/
+sudo chown -R www-data: $FINAL_PATH/extensions/
 #skip api directory
 sudo yunohost app setting freshrss skipped_uris -v /api/greader.php
 
