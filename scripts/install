@@ -44,7 +44,7 @@ sudo yunohost app setting freshrss mysqlpwd -v $db_pwd
 
 # Copy files to the right place
 TMPDIR=$(ynh_mkdir_tmp)
-sudo extract_freshrss "$TMPDIR"
+extract_freshrss "$TMPDIR"
 sudo cp -a ../conf/config.php $TMPDIR/data
 sudo cp ../sources/install_ynh.sql $TMPDIR/app/SQL/install_ynh.sql
 
