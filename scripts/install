@@ -43,21 +43,21 @@ sudo yunohost app initdb $db_user -p $db_pwd
 sudo yunohost app setting freshrss mysqlpwd -v $db_pwd
 
 # Copy files to the right place
-sudo mkdir -p $FINAL_PATH
-sudo extract_freshrss "$FINAL_PATH"
-sudo cp -a ../conf/config.php $FINAL_PATH/data
-sudo cp ../sources/install_ynh.sql $FINAL_PATH/app/SQL/install_ynh.sql
+TMPDIR=$(ynh_mkdir_tmp)
+sudo extract_freshrss "$TMPDIR"
+sudo cp -a ../conf/config.php $TMPDIR/data
+sudo cp ../sources/install_ynh.sql $TMPDIR/app/SQL/install_ynh.sql
 
 # Change variables in freshrss configuration
-sudo sed -i "s/yunouser/$db_user/g" $FINAL_PATH/data/config.php
-sudo sed -i "s/yunopass/$db_pwd/g" $FINAL_PATH/data/config.php
-sudo sed -i "s/yunobase/$db_user/g" $FINAL_PATH/data/config.php
-sudo sed -i "s/yunosalt/$app_salt/g" $FINAL_PATH/data/config.php
-sudo sed -i "s@yunopath@$path@g" $FINAL_PATH/data/config.php
+sudo sed -i "s/yunouser/$db_user/g" $TMPDIR/data/config.php
+sudo sed -i "s/yunopass/$db_pwd/g" $TMPDIR/data/config.php
+sudo sed -i "s/yunobase/$db_user/g" $TMPDIR/data/config.php
+sudo sed -i "s/yunosalt/$app_salt/g" $TMPDIR/data/config.php
+sudo sed -i "s@yunopath@$path@g" $TMPDIR/data/config.php
 if [[ $admin_user != '' ]]; then
-	sudo sed -i "s/yunoadminuser/$admin_user/g" $FINAL_PATH/data/config.php
+	sudo sed -i "s/yunoadminuser/$admin_user/g" $TMPDIR/data/config.php
 else
-	sudo sed -i '/yunoadminuser/d' $FINAL_PATH/data/config.php
+	sudo sed -i '/yunoadminuser/d' $TMPDIR/data/config.php
 fi
 
 # Add users
@@ -83,16 +83,17 @@ do
 	#remove temp sql
 	sudo rm /tmp/$myuser-install.sql
 	#copy default conf
-	sudo cp -r $FINAL_PATH/data/users/_/ $FINAL_PATH/data/users/$myuser
-	sudo mv $FINAL_PATH/data/users/$myuser/config.default.php $FINAL_PATH/data/users/$myuser/config.php
+	sudo cp -r $TMPDIR/data/users/_/ $TMPDIR/data/users/$myuser
+	sudo mv $TMPDIR/data/users/$myuser/config.default.php $TMPDIR/data/users/$myuser/config.php
 
 	if [[ $sharingEnable -eq 1 ]]; then
-		sudo sed -i "s@'sharing'\ =>\ array\ (@$sharingWallabag@g" $FINAL_PATH/data/users/$myuser/config.php
+		sudo sed -i "s@'sharing'\ =>\ array\ (@$sharingWallabag@g" $TMPDIR/data/users/$myuser/config.php
 	fi
 done
 # Delete install directive
-sudo rm $FINAL_PATH/data/do-install.txt
-
+sudo rm $TMPDIR/data/do-install.txt
+# Move temp dir to final dir
+sudo mv $TMPDIR $FINAL_PATH
 # Modify Nginx configuration file and copy it to Nginx conf directory
 sed -i "s@PATHTOCHANGE@$path@g" ../conf/nginx.conf
 sed -i "s@ALIASTOCHANGE@$FINAL_PATH/@g" ../conf/nginx.conf
