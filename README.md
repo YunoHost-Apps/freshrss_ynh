@@ -4,6 +4,7 @@
 * [YunoHost website](https://yunohost.org)
 
 Changelog:
+* Update to FreshRSS 1.5
 * Refactoring of yunohost scripts
 * Update to FreshRSS 1.4
 * Update to FreshRSS 1.2
