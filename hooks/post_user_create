@@ -2,7 +2,7 @@
 
 db_user=freshrss
 db_name=freshrss
-db_pwd=$(sudo cat /etc/yunohost/mysql)
+db_pwd=$(sudo yunohost app setting freshrss mysqlpwd)
 app_path=/var/www/freshrss
 
 myuser=$1
