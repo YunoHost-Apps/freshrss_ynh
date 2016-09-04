@@ -17,12 +17,12 @@ admin_user=$3
 
 # Check user parameter if not empty
 if [[ $admin_user != '' ]]; then
-	sudo yunohost user list --json | grep -qi "\"username\": \"$admin_user\""
-	if [[ ! $? -eq 0 ]]; then
-		echo "Wrong user"
-		exit 1
-	fi
-	sudo yunohost app setting freshrss admin_user -v $admin_user
+    sudo yunohost user list --json | grep -qi "\"username\": \"$admin_user\""
+    if [[ ! $? -eq 0 ]]; then
+        echo "Wrong user"
+        exit 1
+    fi
+    sudo yunohost app setting freshrss admin_user -v $admin_user
 fi
 
 # Check domain/path availability
@@ -55,21 +55,21 @@ sudo sed -i "s/yunobase/$db_user/g" $TMPDIR/data/config.php
 sudo sed -i "s/yunosalt/$app_salt/g" $TMPDIR/data/config.php
 sudo sed -i "s@yunopath@$path@g" $TMPDIR/data/config.php
 if [[ $admin_user != '' ]]; then
-	sudo sed -i "s/yunoadminuser/$admin_user/g" $TMPDIR/data/config.php
+    sudo sed -i "s/yunoadminuser/$admin_user/g" $TMPDIR/data/config.php
 else
-	sudo sed -i '/yunoadminuser/d' $TMPDIR/data/config.php
+    sudo sed -i '/yunoadminuser/d' $TMPDIR/data/config.php
 fi
 
 # Add users
 
 #check wallabag
-if [[ $(sudo yunohost app list --installed -f wallabag2) -eq 0 ]]; then
+if [[ $(sudo yunohost app list --installed -f wallabag2 | grep -q 'installed: True') -eq 0 ]]; then
     echo "Detected wallabag V2"
     wallabagPath=$(sudo yunohost app setting wallabag2 path)
     wallabagUrl=$domain$wallabagPath
     sharingWallabag="'sharing' => \n\tarray( \n\t\t0 => \n\t\tarray(\n\t\t\t'type' => 'wallabag',\n\t\t\t'name' => 'Wallabag',\n\t\t\t'url' => 'https://$wallabagUrl',\n\t\t),"
     sharingEnable=1
-elif [[ $(sudo yunohost app list --installed -f wallabag) -eq 0 ]]; then
+elif [[ $(sudo yunohost app list --installed -f wallabag | grep -q 'installed: True') -eq 0 ]]; then
     echo "Detected wallabag"
     wallabagPath=$(sudo yunohost app setting wallabag path)
     wallabagUrl=$domain$wallabagPath
@@ -80,21 +80,21 @@ fi
 freshrss_users=$(ldapsearch -h localhost -b ou=users,dc=yunohost,dc=org -x objectClass=mailAccount uid | grep uid: | sed 's/uid: //' | xargs)
 for myuser in $freshrss_users
 do
-	#copy sql
-	sudo cp ../sources/install_ynh.sql /tmp/$myuser-install.sql
-	#change username in sql
-	sudo sed -i "s/YnoUser/$myuser/g" /tmp/$myuser-install.sql
-	#create tables
-	mysql -u $db_user -p$db_pwd $db_user < /tmp/$myuser-install.sql
-	#remove temp sql
-	sudo rm /tmp/$myuser-install.sql
-	#copy default conf
-	sudo cp -r $TMPDIR/data/users/_/ $TMPDIR/data/users/$myuser
-	sudo mv $TMPDIR/data/users/$myuser/config.default.php $TMPDIR/data/users/$myuser/config.php
+    #copy sql
+    sudo cp ../sources/install_ynh.sql /tmp/$myuser-install.sql
+    #change username in sql
+    sudo sed -i "s/YnoUser/$myuser/g" /tmp/$myuser-install.sql
+    #create tables
+    mysql -u $db_user -p$db_pwd $db_user < /tmp/$myuser-install.sql
+    #remove temp sql
+    sudo rm /tmp/$myuser-install.sql
+    #copy default conf
+    sudo cp -r $TMPDIR/data/users/_/ $TMPDIR/data/users/$myuser
+    sudo mv $TMPDIR/data/users/$myuser/config.default.php $TMPDIR/data/users/$myuser/config.php
 
-	if [[ $sharingEnable -eq 1 ]]; then
-		sudo sed -i "s@'sharing'\ =>\ array\ (@$sharingWallabag@g" $TMPDIR/data/users/$myuser/config.php
-	fi
+    if [[ $sharingEnable -eq 1 ]]; then
+        sudo sed -i "s@'sharing'\ =>\ array\ (@$sharingWallabag@g" $TMPDIR/data/users/$myuser/config.php
+    fi
 done
 # Delete install directive
 sudo rm $TMPDIR/data/do-install.txt
