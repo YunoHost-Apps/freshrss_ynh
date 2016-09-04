@@ -36,6 +36,8 @@ sudo rm -rf "$FINAL_PATH"
 sudo cp -rp "$TMPDIR" "$FINAL_PATH"
 
 
-#install extention for api
-sudo apt-get update
-sudo apt-get install -y php5-gmp
+#install extention for api if necessary
+if ! dpkg -s php5-gmp | grep "installed" > /dev/null 2>&1; then
+    sudo apt-get update
+    sudo apt-get install -y php5-gmp
+fi
