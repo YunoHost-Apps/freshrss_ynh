@@ -63,7 +63,6 @@ fi
 # Add users
 
 #check wallabag
-#if [[ $(sudo yunohost app list --installed -f wallabag2 --json | grep -q '"installed": true') -eq 0 ]]; then
 if sudo yunohost app list --installed -f wallabag2 | grep -q id ; then
     echo "Detected wallabag V2"
     wallabagPath=$(sudo yunohost app setting wallabag2 path | sed 's#/*$##')
@@ -71,11 +70,11 @@ if sudo yunohost app list --installed -f wallabag2 | grep -q id ; then
     sharingWallabag="'sharing' => \n\tarray( \n\t\t0 => \n\t\tarray(\n\t\t\t'type' => 'wallabagv2',\n\t\t\t'name' => 'Wallabag',\n\t\t\t'url' => 'https://$wallabagUrl',\n\t\t),"
     sharingEnable=1
 elif sudo yunohost app list --installed -f wallabag | grep -q id ; then
-        	echo "Detected wallabag"
-	        wallabagPath=$(sudo yunohost app setting wallabag path)
-	        wallabagUrl=$domain$wallabagPath
-        	sharingWallabag="'sharing' => \n\tarray( \n\t\t0 => \n\t\tarray(\n\t\t\t'type' => 'wallabag',\n\t\t\t'name' => 'Wallabag',\n\t\t\t'url' => 'https://$wallabagUrl',\n\t\t),"
-	        sharingEnable=1
+    echo "Detected wallabag"
+    wallabagPath=$(sudo yunohost app setting wallabag path)
+    wallabagUrl=$domain$wallabagPath
+    sharingWallabag="'sharing' => \n\tarray( \n\t\t0 => \n\t\tarray(\n\t\t\t'type' => 'wallabag',\n\t\t\t'name' => 'Wallabag',\n\t\t\t'url' => 'https://$wallabagUrl',\n\t\t),"
+    sharingEnable=1
 fi
 
 freshrss_users=$(ldapsearch -h localhost -b ou=users,dc=yunohost,dc=org -x objectClass=mailAccount uid | grep uid: | sed 's/uid: //' | xargs)
