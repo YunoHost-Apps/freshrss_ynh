@@ -65,9 +65,9 @@ fi
 #check wallabag
 if [[ $(sudo yunohost app list --installed -f wallabag2 | grep -q 'installed: True') -eq 0 ]]; then
     echo "Detected wallabag V2"
-    wallabagPath=$(sudo yunohost app setting wallabag2 path)
+    wallabagPath=$(sudo yunohost app setting wallabag2 path | sed 's#/*$##')
     wallabagUrl=$domain$wallabagPath
-    sharingWallabag="'sharing' => \n\tarray( \n\t\t0 => \n\t\tarray(\n\t\t\t'type' => 'wallabag',\n\t\t\t'name' => 'Wallabag',\n\t\t\t'url' => 'https://$wallabagUrl',\n\t\t),"
+    sharingWallabag="'sharing' => \n\tarray( \n\t\t0 => \n\t\tarray(\n\t\t\t'type' => 'wallabagv2',\n\t\t\t'name' => 'Wallabag',\n\t\t\t'url' => 'https://$wallabagUrl',\n\t\t),"
     sharingEnable=1
 elif [[ $(sudo yunohost app list --installed -f wallabag | grep -q 'installed: True') -eq 0 ]]; then
     echo "Detected wallabag"
