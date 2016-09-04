@@ -3,13 +3,13 @@
 #
 
 # FreshRss version
-VERSION="1.4.0"
+VERSION="1.5.0"
 
 # Roundcube complete tarball checksum
-FRESHRSS_SOURCE_SHA256="bcf8a7703b9258926ae5f76be8748a103d82df983e6097302977c9d83a2eca40"
+FRESHRSS_SOURCE_SHA256="72c3dcb3e58f4cf7d7e6a06ffec0cad8540ee5aeee9024e785b56e8d55656746"
 
 # Remote URL to fetch Roundcube source tarball
-FRESHRSS_SOURCE_URL="https://github.com/FreshRSS/FreshRSS/archive/1.4.0.tar.gz"
+FRESHRSS_SOURCE_URL="https://github.com/FreshRSS/FreshRSS/archive/1.5.0.tar.gz"
 
 PKGDIR=$(cd ../; pwd)
 
