@@ -63,6 +63,7 @@ fi
 # Add users
 
 #check wallabag
+sharingEnable=0
 if sudo yunohost app list --installed -f wallabag2 | grep -q id ; then
     echo "Detected wallabag V2"
     wallabagPath=$(sudo yunohost app setting wallabag2 path | sed 's#/*$##')
