@@ -46,7 +46,7 @@ sudo yunohost app setting freshrss mysqlpwd -v $db_pwd
 TMPDIR=$(ynh_mkdir_tmp)
 extract_freshrss "$TMPDIR"
 cd $TMPDIR
-./cli/do-install.php --default_user $admin_user --auth_type http --environment production --base_url $domain/$path --title FreshRSS --api_enabled --db-type mysql --db-host localhost:3306 --db-user $db_user --db-password $db_pwd --db-base $db_name
+./cli/do-install.php --default_user $admin_user --auth_type http_auth --environment production --base_url $domain/$path --title FreshRSS --api_enabled --db-type mysql --db-host localhost:3306 --db-user $db_user --db-password $db_pwd --db-base $db_name
 
 # sudo cp -a ../conf/config.php $TMPDIR/data
 # sudo cp ../sources/install_ynh.sql $TMPDIR/app/SQL/install_ynh.sql
@@ -95,9 +95,9 @@ do
     # < "/tmp/$myuser-install.sql"
 
     #remove temp sql
-    sudo rm /tmp/$myuser-install.sql
+    # sudo rm /tmp/$myuser-install.sql
     #copy default conf
-    sudo cp -r $TMPDIR/data/users/_/ $TMPDIR/data/users/$myuser
+    # sudo cp -r $TMPDIR/data/users/_/ $TMPDIR/data/users/$myuser
     sudo mv $TMPDIR/data/users/$myuser/config.default.php $TMPDIR/data/users/$myuser/config.php
 
     if [[ $sharingEnable -eq 1 ]]; then
