@@ -98,11 +98,11 @@ do
     # sudo rm /tmp/$myuser-install.sql
     #copy default conf
     # sudo cp -r $TMPDIR/data/users/_/ $TMPDIR/data/users/$myuser
-    sudo mv $TMPDIR/data/users/$myuser/config.default.php $TMPDIR/data/users/$myuser/config.php
+    # sudo mv $TMPDIR/data/users/$myuser/config.default.php $TMPDIR/data/users/$myuser/config.php
 
-    if [[ $sharingEnable -eq 1 ]]; then
-        sudo sed -i "s@'sharing'\ =>\ array\ (@$sharingWallabag@g" $TMPDIR/data/users/$myuser/config.php
-    fi
+    # if [[ $sharingEnable -eq 1 ]]; then
+    #     sudo sed -i "s@'sharing'\ =>\ array\ (@$sharingWallabag@g" $TMPDIR/data/users/$myuser/config.php
+    # fi
 done
 # Delete install directive
 sudo rm $TMPDIR/data/do-install.txt
