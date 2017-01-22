@@ -29,7 +29,9 @@ then
     for myuser in $(echo "$new_users" | sed "s/,/ /g")
     do
         #copy sql
-        sudo cp $app_path/app/SQL/install_ynh.sql /tmp/$myuser-install.sql
+        # sudo cp $app_path/app/SQL/install_ynh.sql /tmp/$myuser-install.sql
+         $app_path/cli/create-user.php --user  --email
+
 
         #change username in sql
         sudo sed -i "s/YnoUser/$myuser/g" /tmp/$myuser-install.sql
