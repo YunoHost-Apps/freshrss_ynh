@@ -28,6 +28,7 @@ fi
 # Check domain/path availability
 sudo yunohost app checkurl $domain$path -a freshrss
 if [[ ! $? -eq 0 ]]; then
+    echo "Wrong url"
     exit 1
 fi
 
