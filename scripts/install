@@ -41,7 +41,7 @@ db_user=freshrss
 db_name=freshrss
 # Initialize database and store mysql password for upgrade
 ynh_mysql_create_db "$db_name" "$db_user" "$db_pwd"
-sudo yunohost app setting freshrss mysqlpwd -v $db_pwd
+ynh_app_setting_set "$app" mysqlpwd "$dbpass"
 
 # Copy files to the right place
 TMPDIR=$(ynh_mkdir_tmp)
