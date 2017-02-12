@@ -104,8 +104,6 @@ do
     #     sudo sed -i "s@'sharing'\ =>\ array\ (@$sharingWallabag@g" $TMPDIR/data/users/$myuser/config.php
     # fi
 done
-# Delete install directive
-sudo rm $TMPDIR/data/do-install.txt
 # Move temp dir to final dir
 sudo mv $TMPDIR $FINAL_PATH
 # Modify Nginx configuration file and copy it to Nginx conf directory
