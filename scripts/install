@@ -22,7 +22,7 @@ if [[ $admin_user != '' ]]; then
         echo "Wrong user"
         exit 1
     fi
-    sudo yunohost app setting freshrss admin_user -v $admin_user
+    ynh_app_setting_set freshrss admin_user $admin_user
 fi
 
 # Check domain/path availability
