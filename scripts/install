@@ -46,8 +46,8 @@ ynh_app_setting_set "freshrss" mysqlpwd "$db_pwd"
 # Copy files to the right place
 TMPDIR=$(ynh_mkdir_tmp)
 extract_freshrss "$TMPDIR"
-cd $TMPDIR
-./cli/do-install.php --default_user $admin_user --auth_type http_auth --environment production --base_url $domain/$path --title FreshRSS --api_enabled --db-type mysql --db-host localhost --db-user $db_user --db-password $db_pwd --db-base $db_name
+
+$TMPDIR/cli/do-install.php --default_user $admin_user --auth_type http_auth --environment production --base_url $domain/$path --title FreshRSS --api_enabled --db-type mysql --db-host localhost --db-user $db_user --db-password $db_pwd --db-base $db_name
 
 # sudo cp -a ../conf/config.php $TMPDIR/data
 # sudo cp ../sources/install_ynh.sql $TMPDIR/app/SQL/install_ynh.sql
@@ -86,7 +86,7 @@ freshrss_users=$(ldapsearch -h localhost -b ou=users,dc=yunohost,dc=org -x objec
 for myuser in $freshrss_users
 do
     user_token=$(ynh_string_random)
-    ./cli/create-user.php --user $myuser --language en --token $user_token --no-default-feeds
+    $TMPDIR/cli/create-user.php --user $myuser --language en --token $user_token --no-default-feeds
     #copy sql
     # sudo cp ../sources/install_ynh.sql /tmp/$myuser-install.sql
     #change username in sql
