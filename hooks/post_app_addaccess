@@ -7,10 +7,6 @@ app_path=/var/www/freshrss
 
 if [[ "freshrss" = "$app" ]];
 then
-    db_user=freshrss
-    db_name=freshrss
-    db_pwd=$(sudo yunohost app setting freshrss mysqlpwd)
-
     for myuser in $(echo "$new_users" | sed "s/,/ /g")
     do
         user_token=$(ynh_string_random)
