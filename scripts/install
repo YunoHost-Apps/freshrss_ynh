@@ -22,7 +22,7 @@ db_name=$app
 # Check user parameter if not empty
 if [[ $admin_user != '' ]]; then
     ynh_user_exists $admin_user || ynh_die "Wrong user"
-    ynh_app_setting_set freshrss admin_user $admin_user
+    ynh_app_setting_set $app admin_user $admin_user
 fi
 
 # Check domain/path availability
@@ -88,8 +88,7 @@ sudo chmod 644 "$cron_path"
 sudo chown -R www-data: $FINAL_PATH/data/
 sudo chown -R www-data: $FINAL_PATH/extensions/
 #skip api directory
-ynh_app_setting_set "$app" skipped_uris -v /api/greader.php
-
+ynh_app_setting_set "$app" skipped_uris /api/greader.php
 # Reload Nginx and regenerate SSOwat conf
 sudo service nginx reload
 sudo yunohost app ssowatconf
