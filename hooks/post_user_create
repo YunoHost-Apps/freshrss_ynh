@@ -7,15 +7,6 @@ app_path=/var/www/freshrss
 
 myuser=$1
 
-#copy sql
-sudo cp $app_path/app/SQL/install_ynh.sql /tmp/$myuser-install.sql
-#change username in sql
-sudo sed -i "s/YnoUser/$myuser/g" /tmp/$myuser-install.sql
-#create tables
-mysql -u $db_user -p$db_pwd $db_user < /tmp/$myuser-install.sql
-#remove temp sql
-sudo rm /tmp/$myuser-install.sql
-#copy default conf
-sudo cp -r $app_path/data/users/_ $app_path/data/users/$myuser/
-sudo mv $app_path/data/users/$myuser/config.default.php $app_path/data/users/$myuser/config.php
+user_token=$(ynh_string_random)
+$app_path/cli/create-user.php --user $myuser --language en --token $user_token --no-default-feeds
 sudo chown -R www-data: $app_path/data/users/$myuser/
