@@ -7,6 +7,10 @@ set -eu
 domain=$1
 path=$2
 admin_user=$3
+# Setup variables
+$app=$APPNAME
+db_user=$app
+db_name=$app
 
 # Load common variables and helpers
 . ./_common.sh
@@ -17,31 +21,25 @@ admin_user=$3
 
 # Check user parameter if not empty
 if [[ $admin_user != '' ]]; then
-    ynh_user_exists $admin_user
-    if [[ ! $? -eq 0 ]]; then
-        echo "Wrong user"
-        exit 1
-    fi
+    ynh_user_exists $admin_user || ynh_die "Wrong user"
     ynh_app_setting_set freshrss admin_user $admin_user
 fi
 
 # Check domain/path availability
-sudo yunohost app checkurl $domain$path -a freshrss
-if [[ ! $? -eq 0 ]]; then
-    echo "Wrong url"
-    exit 1
-fi
+sudo yunohost app checkurl $domain$path -a freshrss || ynh_die "The path ${domain}${path} is not available for app installation."
+
+#install php5-cli
+ynh_package_install_from_equivs ../conf/${DEPS_PKG_NAME}.control \
+  || ynh_die "Unable to install dependencies"
 
 # Generate random DES key & password
 deskey=$(ynh_string_random)
 db_pwd=$(ynh_string_random)
 app_salt=$(ynh_string_random)
-# Use 'freshrss' as database name and user
-db_user=freshrss
-db_name=freshrss
+
 # Initialize database and store mysql password for upgrade
 ynh_mysql_create_db "$db_name" "$db_user" "$db_pwd"
-ynh_app_setting_set "freshrss" mysqlpwd "$db_pwd"
+ynh_app_setting_set "$app" mysqlpwd "$db_pwd"
 
 # Copy files to the right place
 TMPDIR=$(ynh_mkdir_tmp)
@@ -49,23 +47,7 @@ extract_freshrss "$TMPDIR"
 
 $TMPDIR/cli/do-install.php --default_user $admin_user --auth_type http_auth --environment production --base_url $domain/$path --title FreshRSS --api_enabled --db-type mysql --db-host localhost --db-user $db_user --db-password $db_pwd --db-base $db_name
 
-# sudo cp -a ../conf/config.php $TMPDIR/data
-# sudo cp ../sources/install_ynh.sql $TMPDIR/app/SQL/install_ynh.sql
-
-# Change variables in freshrss configuration
-# sudo sed -i "s/yunouser/$db_user/g" $TMPDIR/data/config.php
-# sudo sed -i "s/yunopass/$db_pwd/g" $TMPDIR/data/config.php
-# sudo sed -i "s/yunobase/$db_user/g" $TMPDIR/data/config.php
-# sudo sed -i "s/yunosalt/$app_salt/g" $TMPDIR/data/config.php
-# sudo sed -i "s@yunopath@$path@g" $TMPDIR/data/config.php
-# if [[ $admin_user != '' ]]; then
-#     sudo sed -i "s/yunoadminuser/$admin_user/g" $TMPDIR/data/config.php
-# else
-#     sudo sed -i '/yunoadminuser/d' $TMPDIR/data/config.php
-# fi
-
 # Add users
-
 #check wallabag
 sharingEnable=0
 if sudo yunohost app list --installed -f wallabag2 | grep -q id ; then
@@ -82,28 +64,10 @@ elif sudo yunohost app list --installed -f wallabag | grep -q id ; then
     sharingEnable=1
 fi
 
-freshrss_users=$(ldapsearch -h localhost -b ou=users,dc=yunohost,dc=org -x objectClass=mailAccount uid | grep uid: | sed 's/uid: //' | xargs)
-for myuser in $freshrss_users
+for myuser in ynh_user_list
 do
     user_token=$(ynh_string_random)
     $TMPDIR/cli/create-user.php --user $myuser --language en --token $user_token --no-default-feeds
-    #copy sql
-    # sudo cp ../sources/install_ynh.sql /tmp/$myuser-install.sql
-    #change username in sql
-    # sudo sed -i "s/YnoUser/$myuser/g" /tmp/$myuser-install.sql
-    #create tables
-    # ynh_mysql_connect_as "$db_user" "$db_pwd" "$db_name" \
-    # < "/tmp/$myuser-install.sql"
-
-    #remove temp sql
-    # sudo rm /tmp/$myuser-install.sql
-    #copy default conf
-    # sudo cp -r $TMPDIR/data/users/_/ $TMPDIR/data/users/$myuser
-    # sudo mv $TMPDIR/data/users/$myuser/config.default.php $TMPDIR/data/users/$myuser/config.php
-
-    # if [[ $sharingEnable -eq 1 ]]; then
-    #     sudo sed -i "s@'sharing'\ =>\ array\ (@$sharingWallabag@g" $TMPDIR/data/users/$myuser/config.php
-    # fi
 done
 # Move temp dir to final dir
 sudo mv $TMPDIR $FINAL_PATH
@@ -112,19 +76,19 @@ sed -i "s@PATHTOCHANGE@$path@g" ../conf/nginx.conf
 sed -i "s@ALIASTOCHANGE@$FINAL_PATH/@g" ../conf/nginx.conf
 sudo cp ../conf/nginx.conf /etc/nginx/conf.d/$domain.d/freshrss.conf
 
-#install php5-cli
-sudo apt-get update
-sudo apt-get install -y php5-cli php5-gmp
 #install update cron
-echo "*/10 * * * * www-data /usr/bin/php $FINAL_PATH/app/actualize_script.php >/tmp/FreshRSS.log 2>&1" > /tmp/cronfreshrss
-sudo mv /tmp/cronfreshrss /etc/cron.d/freshrss
-sudo chown root /etc/cron.d/freshrss
+# Add cron job
+cron_path="/etc/cron.d/$app"
+sed -i "s@#DESTDIR#@${FINAL_PATH}@g" ../conf/freshrss.cron
+sudo cp ../conf/freshrss.cron "$cron_path"
+sudo chmod 644 "$cron_path"
+
 
 # Set permissions to freshrss directory
 sudo chown -R www-data: $FINAL_PATH/data/
 sudo chown -R www-data: $FINAL_PATH/extensions/
 #skip api directory
-sudo yunohost app setting freshrss skipped_uris -v /api/greader.php
+ynh_app_setting_set "$app" skipped_uris -v /api/greader.php
 
 # Reload Nginx and regenerate SSOwat conf
 sudo service nginx reload
