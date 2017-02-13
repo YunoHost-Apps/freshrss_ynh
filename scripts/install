@@ -3,6 +3,9 @@
 # Exit on command errors and treat unset variables as an error
 set -eu
 
+# Load common variables and helpers
+. ./_common.sh
+
 # Retrieve arguments
 domain=$1
 path=$2
@@ -11,9 +14,6 @@ admin_user=$3
 app=$APPNAME
 db_user=$app
 db_name=$app
-
-# Load common variables and helpers
-. ./_common.sh
 
 # Source app helpers
 . /usr/share/yunohost/helpers
