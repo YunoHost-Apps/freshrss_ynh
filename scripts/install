@@ -64,7 +64,7 @@ elif sudo yunohost app list --installed -f wallabag | grep -q id ; then
     sharingEnable=1
 fi
 
-for myuser in ynh_user_list
+for myuser in $(ynh_user_list)
 do
     user_token=$(ynh_string_random)
     $TMPDIR/cli/create-user.php --user $myuser --language en --token $user_token --no-default-feeds
