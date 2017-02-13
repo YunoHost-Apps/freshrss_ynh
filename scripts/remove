@@ -1,13 +1,21 @@
 #!/bin/bash
 
+# Exit on command errors and treat unset variables as an error
+set -eu
+
+# Source app helpers
+. /usr/share/yunohost/helpers
+
 db_user=freshrss
 db_name=freshrss
-root_pwd=$(sudo cat /etc/yunohost/mysql)
-domain=$(sudo yunohost app setting freshrss domain)
+domain=$(ynh_app_setting_get freshrss domain)
 
-mysql -u root -p$root_pwd -e "DROP DATABASE $db_name ; DROP USER $db_user@localhost ;"
+ynh_mysql_drop_db $db_name
+ynh_mysql_drop_user $db_user
+
 sudo rm -rf /var/www/freshrss
 sudo rm -rf /etc/cron.d/freshrss
 sudo rm -f /etc/nginx/conf.d/$domain.d/freshrss.conf
 
 sudo service nginx reload
+sudo yunohost app ssowatconf
