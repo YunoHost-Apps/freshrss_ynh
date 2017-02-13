@@ -1,7 +1,7 @@
 #
 # Common variables
 #
-
+APPNAME="freshrss"
 # FreshRSS version
 VERSION="1.6.2"
 
