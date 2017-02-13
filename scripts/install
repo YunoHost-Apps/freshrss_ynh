@@ -8,7 +8,7 @@ domain=$1
 path=$2
 admin_user=$3
 # Setup variables
-$app=$APPNAME
+app=$APPNAME
 db_user=$app
 db_name=$app
 
