@@ -4,6 +4,9 @@ app=$1
 new_users=$2
 app_path=/var/www/freshrss
 
+# Source app helpers
+. /usr/share/yunohost/helpers
+
 
 if [[ "freshrss" = "$app" ]];
 then
