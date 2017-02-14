@@ -29,6 +29,7 @@ sudo cp -r $FINAL_PATH/data/users/. $TMPDIR/data/users/
 sudo cp -r $FINAL_PATH/extensions/. $TMPDIR/extensions/
 
 # Set permissions to freshrss directory
+sudo chown -R root:root $TMPDIR
 sudo chown -R www-data: $TMPDIR/data/
 sudo chown -R www-data: $TMPDIR/extensions/
 
