@@ -1,0 +1,5 @@
+#!/bin/bash
+app_path=/var/www/freshrss
+
+myuser=$1
+$app_path/cli/delete-user.php --user $myuser
