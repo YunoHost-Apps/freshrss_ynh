@@ -10,7 +10,7 @@ set -eu
 
 #old version cleanup
 if [ -f $FINAL_PATH/data/user.php.dist ]; then
-	sudo rm $FINAL_PATH/data/user.php.dist
+    sudo rm $FINAL_PATH/data/user.php.dist
 fi
 
 # Check destination directory
@@ -26,6 +26,7 @@ extract_freshrss "$TMPDIR"
 sudo rm $TMPDIR/data/do-install.txt
 sudo cp $FINAL_PATH/data/config.php $TMPDIR/data/config.php
 sudo cp -r $FINAL_PATH/data/users/. $TMPDIR/data/users/
+sudo cp -r $FINAL_PATH/extensions/. $TMPDIR/extensions/
 
 # Set permissions to freshrss directory
 sudo chown -R www-data: $TMPDIR/data/
@@ -37,7 +38,5 @@ sudo cp -rp "$TMPDIR" "$FINAL_PATH"
 
 
 #install extention for api if necessary
-if ! dpkg -s php5-gmp | grep "installed" > /dev/null 2>&1; then
-    sudo apt-get update
-    sudo apt-get install -y php5-gmp
-fi
+ynh_package_install_from_equivs ../conf/${DEPS_PKG_NAME}.control \
+  || ynh_die "Unable to install dependencies"
