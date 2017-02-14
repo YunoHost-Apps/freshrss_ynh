@@ -1,6 +1,6 @@
 #!/bin/bash
 
-set -e
+set -eu
 
 # The parameter $1 is the backup directory location dedicated to the app
 BACKUP_DIR=$1

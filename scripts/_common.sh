@@ -34,5 +34,5 @@ extract_freshrss() {
     || ynh_die "Invalid checksum of downloaded tarball"
   tar xf "$rc_tarball" -C "$DESTDIR" --strip-components 1 \
     || ynh_die "Unable to extract FreshRss tarball"
-  rm "$rc_tarball"
+  sudo rm "$rc_tarball"
 }

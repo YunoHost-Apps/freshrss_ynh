@@ -8,6 +8,10 @@ set -eu
 # Source app helpers
 . /usr/share/yunohost/helpers
 
+#install extention for api if necessary
+ynh_package_install_from_equivs ../conf/${DEPS_PKG_NAME}.control \
+  || ynh_die "Unable to install dependencies"
+
 #old version cleanup
 if [ -f $FINAL_PATH/data/user.php.dist ]; then
     sudo rm $FINAL_PATH/data/user.php.dist
@@ -36,8 +40,3 @@ sudo chown -R www-data: $TMPDIR/extensions/
 # Clean up existing files and copy new files to the right place
 sudo rm -rf "$FINAL_PATH"
 sudo cp -rp "$TMPDIR" "$FINAL_PATH"
-
-
-#install extention for api if necessary
-ynh_package_install_from_equivs ../conf/${DEPS_PKG_NAME}.control \
-  || ynh_die "Unable to install dependencies"

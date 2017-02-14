@@ -48,22 +48,6 @@ extract_freshrss "$TMPDIR"
 $TMPDIR/cli/do-install.php --default_user $admin_user --auth_type http_auth --environment production --base_url $domain/$path --title FreshRSS --api_enabled --db-type mysql --db-host localhost --db-user $db_user --db-password $db_pwd --db-base $db_name
 
 # Add users
-#check wallabag
-sharingEnable=0
-if sudo yunohost app list --installed -f wallabag2 | grep -q id ; then
-    echo "Detected wallabag V2"
-    wallabagPath=$(sudo yunohost app setting wallabag2 path | sed 's#/*$##')
-    wallabagUrl=$domain$wallabagPath
-    sharingWallabag="'sharing' => \n\tarray( \n\t\t0 => \n\t\tarray(\n\t\t\t'type' => 'wallabagv2',\n\t\t\t'name' => 'Wallabag',\n\t\t\t'url' => 'https://$wallabagUrl',\n\t\t),"
-    sharingEnable=1
-elif sudo yunohost app list --installed -f wallabag | grep -q id ; then
-    echo "Detected wallabag"
-    wallabagPath=$(sudo yunohost app setting wallabag path)
-    wallabagUrl=$domain$wallabagPath
-    sharingWallabag="'sharing' => \n\tarray( \n\t\t0 => \n\t\tarray(\n\t\t\t'type' => 'wallabag',\n\t\t\t'name' => 'Wallabag',\n\t\t\t'url' => 'https://$wallabagUrl',\n\t\t),"
-    sharingEnable=1
-fi
-
 for myuser in $(ynh_user_list)
 do
     user_token=$(ynh_string_random)
