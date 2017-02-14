@@ -85,6 +85,7 @@ sudo chmod 644 "$cron_path"
 
 
 # Set permissions to freshrss directory
+sudo chown -R root:root $FINAL_PATH
 sudo chown -R www-data: $FINAL_PATH/data/
 sudo chown -R www-data: $FINAL_PATH/extensions/
 #skip api directory
