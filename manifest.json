@@ -1,6 +1,7 @@
 {
     "name": "FreshRSS",
     "id": "freshrss",
+    "packaging_format": 1,
     "description": {
         "en": "FreshRSS is a selfhostable RSS reader",
         "fr": "FreshRSS est un agrégateur de flux RSS à auto-héberger"
@@ -11,7 +12,10 @@
         "name": "plopoyop",
         "email": "plopoyop@gmail.com"
     },
-    "multi_instance": "false",
+    "requirements": {
+        "yunohost": ">= 2.4.0"
+    },
+    "multi_instance": false,
     "services": [
         "nginx",
         "php5-fpm",
@@ -41,6 +45,7 @@
             {
                 "name": "admin",
                 "type": "user",
+                "optional": true,
                 "ask": {
                     "en": "Choose the default user (leave empty if none)",
                     "fr": "Choisissez l'utilisateur par defaut (laissez vide si aucun)"
