@@ -36,3 +36,8 @@ extract_freshrss() {
     || ynh_die "Unable to extract FreshRss tarball"
   sudo rm "$rc_tarball"
 }
+
+install_freshrss_dependencies() {
+    ynh_package_install_from_equivs ../conf/${DEPS_PKG_NAME}.control \
+      || ynh_die "Unable to install dependencies"
+}

@@ -11,7 +11,7 @@ domain=$1
 path=$2
 admin_user=$3
 # Setup variables
-app=$APPNAME
+app=$YNH_APP_INSTANCE_NAME
 db_user=$app
 db_name=$app
 

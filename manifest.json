@@ -15,7 +15,7 @@
     "requirements": {
         "yunohost": ">= 2.4.0"
     },
-    "multi_instance": false,
+    "multi_instance": true,
     "services": [
         "nginx",
         "php5-fpm",
@@ -45,7 +45,7 @@
             {
                 "name": "admin",
                 "type": "user",
-                "optional": true,
+                "optional": false,
                 "ask": {
                     "en": "Choose the default user (leave empty if none)",
                     "fr": "Choisissez l'utilisateur par defaut (laissez vide si aucun)"
