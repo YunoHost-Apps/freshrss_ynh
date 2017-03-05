@@ -44,7 +44,7 @@ ynh_mysql_create_db "$db_name" "$db_user" "$db_pwd"
 ynh_app_setting_set "$app" mysqlpwd "$db_pwd"
 
 # Copy files to the right place
-TMPDIR=$(mktemp -d)
+TMPDIR=$(sudo mktemp -d)
 sudo chmod 655 "$TMPDIR"
 extract_freshrss "$TMPDIR"
 

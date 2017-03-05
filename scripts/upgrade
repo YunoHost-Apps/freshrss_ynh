@@ -23,7 +23,7 @@ if [ -f $FINAL_PATH/data/user.php.dist ]; then
 fi
 
 # Create tmp directory and install app inside
-TMPDIR=$(mktemp -d)
+TMPDIR=$(sudo mktemp -d)
 sudo chmod 655 "$TMPDIR"
 extract_freshrss "$TMPDIR"
 
