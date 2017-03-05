@@ -26,7 +26,7 @@ extract_freshrss() {
 
   # retrieve and extract FreshRSS tarball
   rc_tarball="${DESTDIR}/freshrss.tar.gz"
-  wget -q -O "$rc_tarball" "$FRESHRSS_SOURCE_URL" \
+  sudo wget -q -O "$rc_tarball" "$FRESHRSS_SOURCE_URL" \
     || ynh_die "Unable to download FreshRSS tarball"
   echo "$FRESHRSS_SOURCE_SHA256 $rc_tarball" | sha256sum -c >/dev/null \
     || ynh_die "Invalid checksum of downloaded tarball"
