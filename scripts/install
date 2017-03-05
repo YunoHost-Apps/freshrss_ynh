@@ -15,6 +15,8 @@ app=$YNH_APP_INSTANCE_NAME
 db_user=$app
 db_name=$app
 
+FINAL_PATH="/var/www/$app"
+
 # Source app helpers
 . /usr/share/yunohost/helpers
 
@@ -26,7 +28,7 @@ if [[ $admin_user != '' ]]; then
 fi
 
 # Check domain/path availability
-sudo yunohost app checkurl $domain$path -a freshrss || ynh_die "The path ${domain}${path} is not available for app installation."
+sudo yunohost app checkurl $domain$path -a $app || ynh_die "The path ${domain}${path} is not available for app installation."
 
 #install php5-cli
 ynh_package_install_from_equivs ../conf/${DEPS_PKG_NAME}.control \
@@ -58,7 +60,7 @@ sudo mv $TMPDIR $FINAL_PATH
 # Modify Nginx configuration file and copy it to Nginx conf directory
 sed -i "s@PATHTOCHANGE@$path@g" ../conf/nginx.conf
 sed -i "s@ALIASTOCHANGE@$FINAL_PATH/@g" ../conf/nginx.conf
-sudo cp ../conf/nginx.conf /etc/nginx/conf.d/$domain.d/freshrss.conf
+sudo cp ../conf/nginx.conf /etc/nginx/conf.d/$domain.d/$app.conf
 
 #install update cron
 # Add cron job
