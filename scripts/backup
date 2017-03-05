@@ -24,4 +24,4 @@ sudo cp -a /etc/nginx/conf.d/$domain.d/${APP}.conf "${BACKUP_DIR}/conf/${APP}.co
 sudo cp -a /etc/cron.d/${APP} "${BACKUP_DIR}/conf/${APP}"
 
 # Backup mysql
-ynh_mysql_dump_db ${APP} ${BACKUP_DIR}/${APP}.dmp
+ynh_mysql_dump_db ${APP} > ${BACKUP_DIR}/${APP}.dmp
