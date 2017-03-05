@@ -23,7 +23,8 @@ if [ -f $FINAL_PATH/data/user.php.dist ]; then
 fi
 
 # Create tmp directory and install app inside
-TMPDIR=$(ynh_mkdir_tmp)
+TMPDIR=$(mktemp -d)
+sudo chmod 655 "$TMPDIR"
 extract_freshrss "$TMPDIR"
 
 # Restore config
