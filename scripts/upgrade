@@ -12,15 +12,15 @@ set -eu
 ynh_package_install_from_equivs ../conf/${DEPS_PKG_NAME}.control \
   || ynh_die "Unable to install dependencies"
 
-#old version cleanup
-if [ -f $FINAL_PATH/data/user.php.dist ]; then
-    sudo rm $FINAL_PATH/data/user.php.dist
-fi
-
 # Check destination directory
 [[ ! -d $FINAL_PATH ]] && ynh_die \
 "The destination directory '$FINAL_PATH' does not exist.\
 The app is not correctly installed, you should remove it first."
+
+#old version cleanup
+if [ -f $FINAL_PATH/data/user.php.dist ]; then
+    sudo rm $FINAL_PATH/data/user.php.dist
+fi
 
 # Create tmp directory and install app inside
 TMPDIR=$(ynh_mkdir_tmp)
