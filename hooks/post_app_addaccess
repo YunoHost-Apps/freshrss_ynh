@@ -1,8 +1,8 @@
 #!/bin/bash
 
-app=$1
+app=$YNH_APP_INSTANCE_NAME
 new_users=$2
-app_path=/var/www/freshrss
+app_path=/var/www/$app
 
 # Source app helpers
 . /usr/share/yunohost/helpers

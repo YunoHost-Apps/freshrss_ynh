@@ -1,5 +1,6 @@
 #!/bin/bash
-app_path=/var/www/freshrss
+app=$YNH_APP_INSTANCE_NAME
+app_path=/var/www/$app
 
 myuser=$1
 
@@ -7,5 +8,5 @@ myuser=$1
 . /usr/share/yunohost/helpers
 
 user_token=$(ynh_string_random)
-$app_path/cli/create-user.php --user $myuser --language en --token $user_token --no-default-feeds
+sudo $app_path/cli/create-user.php --user $myuser --language en --token $user_token --no-default-feeds
 sudo chown -R www-data: $app_path/data/users/$myuser/
