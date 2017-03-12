@@ -2,26 +2,20 @@
 
 set -eu
 
-# The parameter $1 is the backup directory location dedicated to the app
-BACKUP_DIR=$1
-
-# The parameter $2 is the id of the app instance ex: strut__2
-APP=$2
-
 # Source app helpers
 . /usr/share/yunohost/helpers
 
 # retrieve useful param
-domain=$(ynh_app_setting_get ${APP} domain)
+app=$YNH_APP_INSTANCE_NAME
+path=$(ynh_app_setting_get "$app" path)
+dbpass=$(ynh_app_setting_get "$app" mysqlpwd)
+domain=$(ynh_app_setting_get "$app" domain)
 
 # Backup app files
-sudo mkdir -p "${BACKUP_DIR}/www"
-sudo cp -a /var/www/${APP}/. "${BACKUP_DIR}/www"
-
+ynh_backup "$path" "www"
 # Backup conf files
-sudo mkdir -p "${BACKUP_DIR}/conf"
-sudo cp -a /etc/nginx/conf.d/$domain.d/${APP}.conf "${BACKUP_DIR}/conf/${APP}.conf"
-sudo cp -a /etc/cron.d/${APP} "${BACKUP_DIR}/conf/${APP}"
+ynh_backup "/etc/nginx/conf.d/$domain.d/$app.conf" "conf"
+ynh_backup "/etc/cron.d/$app" "conf"
 
 # Backup mysql
-ynh_mysql_dump_db ${APP} > ${BACKUP_DIR}/${APP}.dmp
+ynh_mysql_dump_db $app > $app.dmp
