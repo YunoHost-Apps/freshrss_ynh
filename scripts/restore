@@ -2,29 +2,26 @@
 
 set -eu
 
-# The parameter $1 is the backup directory location dedicated to the app
-BACKUP_DIR=$1
+app=$YNH_APP_INSTANCE_NAME
+db_user=$app
+db_name=$app
 
-# The parameter $2 is the id of the app instance ex: strut__2
-APP=$2
-dbname=$APP
-dbuser=$APP
 
 # Source app helpers
 . /usr/share/yunohost/helpers
 
 # retrieve useful param
-domain=$(ynh_app_setting_get ${APP} domain)
-path=$(ynh_app_setting_get ${APP} path)
-dbpass=$(ynh_app_setting_get ${APP} mysqlpwd)
+domain=$(ynh_app_setting_get $app domain)
+path=$(ynh_app_setting_get $app path)
+dbpass=$(ynh_app_setting_get $app mysqlpwd)
 
 # Check domain/path availability
-sudo yunohost app checkurl $domain$path -a ${APP} || ynh_die "The path ${domain}${path} is not available for app installation."
+sudo yunohost app checkurl $domain$path -a $app || ynh_die "The path ${domain}${path} is not available for app installation."
 
 # Restore sources & data
-final_path=/var/www/${APP}
+final_path=/var/www/$app
 sudo mkdir $final_path
-sudo cp -a ${BACKUP_DIR}/www/. $final_path
+ynh_backup "www" "$final_path"
 
 # Restore permissions
 sudo chown -R root:root $final_path
@@ -32,12 +29,13 @@ sudo chown -R www-data: $final_path/data/
 sudo chown -R www-data: $final_path/extensions/
 
 # Restore conf files
-sudo cp -a "${BACKUP_DIR}/conf/${APP}.conf" /etc/nginx/conf.d/$domain.d/${APP}.conf
-sudo cp -a "${BACKUP_DIR}/conf/${APP}" /etc/cron.d/${APP}
+ynh_backup "www" "$final_path"
+ynh_backup "nginx.conf" /etc/nginx/conf.d/$domain.d/$app.conf
+ynh_backup "$app.cron" /etc/cron.d/$app
 
 # Restore mysql dump
 ynh_mysql_create_db "$dbname" "$dbuser" "$dbpass"
-ynh_mysql_connect_as "$dbuser" "$dbpass" "$dbname" < "${BACKUP_DIR}/${APP}.dmp"
+ynh_mysql_connect_as "$dbuser" "$dbpass" "$dbname" < "$app.dmp"
 
 # Reload Nginx, and regenerate SSOwat conf
 sudo service nginx reload
