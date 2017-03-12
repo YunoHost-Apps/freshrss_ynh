@@ -7,7 +7,7 @@ set -eu
 
 # retrieve useful param
 app=$YNH_APP_INSTANCE_NAME
-path=$(ynh_app_setting_get "$app" path)
+path=/var/www/$app
 dbpass=$(ynh_app_setting_get "$app" mysqlpwd)
 domain=$(ynh_app_setting_get "$app" domain)
 
