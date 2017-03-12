@@ -29,9 +29,9 @@ sudo chown -R www-data: $final_path/data/
 sudo chown -R www-data: $final_path/extensions/
 
 # Restore conf files
-ynh_backup "www" "$final_path"
-ynh_backup "nginx.conf" /etc/nginx/conf.d/$domain.d/$app.conf
-ynh_backup "$app.cron" /etc/cron.d/$app
+sudo cp -a www/. $final_path
+sudo cp nginx.conf /etc/nginx/conf.d/$domain.d/$app.conf
+ynh_backup $app.cron /etc/cron.d/$app
 
 # Restore mysql dump
 ynh_mysql_create_db "$dbname" "$dbuser" "$dbpass"
