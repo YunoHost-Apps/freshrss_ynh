@@ -8,7 +8,7 @@ set -eu
 # Source app helpers
 . /usr/share/yunohost/helpers
 
-$app=$YNH_APP_INSTANCE_NAME
+app=$YNH_APP_INSTANCE_NAME
 FINAL_PATH="/var/www/$app"
 
 #install extention for api if necessary
