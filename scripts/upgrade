@@ -8,6 +8,9 @@ set -eu
 # Source app helpers
 . /usr/share/yunohost/helpers
 
+$app=$YNH_APP_INSTANCE_NAME
+FINAL_PATH="/var/www/$app"
+
 #install extention for api if necessary
 ynh_package_install_from_equivs ../conf/${DEPS_PKG_NAME}.control \
   || ynh_die "Unable to install dependencies"
@@ -24,7 +27,7 @@ fi
 
 # Create tmp directory and install app inside
 TMPDIR=$(mktemp -d)
-chmod 755 "$TMPDIR"
+sudo chmod 755 "$TMPDIR"
 extract_freshrss "$TMPDIR"
 
 # Restore config
