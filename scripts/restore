@@ -13,10 +13,11 @@ db_name=$app
 # retrieve useful param
 domain=$(ynh_app_setting_get $app domain)
 path=$(ynh_app_setting_get $app path)
-db_pass=$(ynh_app_setting_get $app mysqlpwd)
 
 # Check domain/path availability
 sudo yunohost app checkurl $domain$path -a $app || ynh_die "The path ${domain}${path} is not available for app installation."
+
+db_pass=$(ynh_app_setting_get $app mysqlpwd)
 
 # Restore sources & data
 final_path=/var/www/$app
