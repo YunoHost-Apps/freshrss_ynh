@@ -47,8 +47,8 @@
                 "type": "user",
                 "optional": false,
                 "ask": {
-                    "en": "Choose the default user (leave empty if none)",
-                    "fr": "Choisissez l'utilisateur par defaut (laissez vide si aucun)"
+                    "en": "Choose the default user",
+                    "fr": "Choisissez l'utilisateur par defaut"
                 },
                 "example": "homer"
             }
