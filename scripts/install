@@ -8,7 +8,7 @@ set -eu
 
 # Retrieve arguments
 domain=$YNH_APP_ARG_DOMAIN
-path=$YNH_APP_ARG_PATH
+path=${YNH_APP_ARG_PATH%/}
 admin_user=$YNH_APP_ARG_ADMIN
 # Setup variables
 app=$YNH_APP_INSTANCE_NAME
@@ -19,6 +19,14 @@ FINAL_PATH="/var/www/$app"
 
 # Source app helpers
 . /usr/share/yunohost/helpers
+
+# copy past from nextcloud package
+if [ "${path:0:1}" != "/" ] && [ ${#path} -gt 0 ]; then
+       path="/$path"
+fi
+if [ "${path:${#path}-1}" == "/" ] && [ ${#path} -gt 1 ]; then
+       path="${path:0:${#path}-1}"
+fi
 
 
 # Check user parameter if not empty
