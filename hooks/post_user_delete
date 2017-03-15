@@ -1,0 +1,6 @@
+#!/bin/bash
+app=$YNH_APP_INSTANCE_NAME
+app_path=/var/www/$app
+
+myuser=$1
+$app_path/cli/delete-user.php --user $myuser

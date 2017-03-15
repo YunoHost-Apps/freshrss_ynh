@@ -1,34 +1,41 @@
 #
 # Common variables
 #
+APPNAME="freshrss"
+# FreshRSS version
+VERSION="1.6.3"
 
-# FreshRss version
-VERSION="1.5.0"
+# FreshRSS complete tarball checksum
+FRESHRSS_SOURCE_SHA256="06bcdfbde53bd8f01b8376ee28a4f1f9630c3409d5dc12f02f74f2f7aff4a6f9"
 
-# Roundcube complete tarball checksum
-FRESHRSS_SOURCE_SHA256="72c3dcb3e58f4cf7d7e6a06ffec0cad8540ee5aeee9024e785b56e8d55656746"
-
-# Remote URL to fetch Roundcube source tarball
-FRESHRSS_SOURCE_URL="https://github.com/FreshRSS/FreshRSS/archive/1.5.0.tar.gz"
+# Remote URL to fetch FreshRSS source tarball
+FRESHRSS_SOURCE_URL="https://github.com/FreshRSS/FreshRSS/archive/1.6.3.tar.gz"
 
 PKGDIR=$(cd ../; pwd)
 
-FINAL_PATH="/var/www/freshrss"
+#apt dependencies
+DEPS_PKG_NAME="freshrss-deps"
+
 #
 # Common helpers
 #
-# Download and extract FreshRss sources to the given directory
+# Download and extract FreshRSS sources to the given directory
 # usage: extract_freshrss DESTDIR
 extract_freshrss() {
   local DESTDIR=$1
 
-  # retrieve and extract FreshRss tarball
+  # retrieve and extract FreshRSS tarball
   rc_tarball="${DESTDIR}/freshrss.tar.gz"
   wget -q -O "$rc_tarball" "$FRESHRSS_SOURCE_URL" \
-    || ynh_die "Unable to download FreshRss tarball"
+    || ynh_die "Unable to download FreshRSS tarball"
   echo "$FRESHRSS_SOURCE_SHA256 $rc_tarball" | sha256sum -c >/dev/null \
     || ynh_die "Invalid checksum of downloaded tarball"
   tar xf "$rc_tarball" -C "$DESTDIR" --strip-components 1 \
     || ynh_die "Unable to extract FreshRss tarball"
-  rm "$rc_tarball"
+  sudo rm "$rc_tarball"
+}
+
+install_freshrss_dependencies() {
+    ynh_package_install_from_equivs ../conf/${DEPS_PKG_NAME}.control \
+      || ynh_die "Unable to install dependencies"
 }

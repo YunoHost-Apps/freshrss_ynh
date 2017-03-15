@@ -8,36 +8,39 @@ set -eu
 # Source app helpers
 . /usr/share/yunohost/helpers
 
-#old version cleanup
-if [ -f $FINAL_PATH/data/user.php.dist ]; then
-	sudo rm $FINAL_PATH/data/user.php.dist
-fi
+app=$YNH_APP_INSTANCE_NAME
+FINAL_PATH="/var/www/$app"
+
+#install extention for api if necessary
+ynh_package_install_from_equivs ../conf/${DEPS_PKG_NAME}.control \
+  || ynh_die "Unable to install dependencies"
 
 # Check destination directory
 [[ ! -d $FINAL_PATH ]] && ynh_die \
 "The destination directory '$FINAL_PATH' does not exist.\
 The app is not correctly installed, you should remove it first."
 
+#old version cleanup
+if [ -f $FINAL_PATH/data/user.php.dist ]; then
+    sudo rm $FINAL_PATH/data/user.php.dist
+fi
+
 # Create tmp directory and install app inside
-TMPDIR=$(ynh_mkdir_tmp)
+TMPDIR=$(mktemp -d)
+sudo chmod 755 "$TMPDIR"
 extract_freshrss "$TMPDIR"
 
 # Restore config
 sudo rm $TMPDIR/data/do-install.txt
 sudo cp $FINAL_PATH/data/config.php $TMPDIR/data/config.php
 sudo cp -r $FINAL_PATH/data/users/. $TMPDIR/data/users/
+sudo cp -r $FINAL_PATH/extensions/. $TMPDIR/extensions/
 
 # Set permissions to freshrss directory
+sudo chown -R root:root $TMPDIR
 sudo chown -R www-data: $TMPDIR/data/
 sudo chown -R www-data: $TMPDIR/extensions/
 
 # Clean up existing files and copy new files to the right place
 sudo rm -rf "$FINAL_PATH"
 sudo cp -rp "$TMPDIR" "$FINAL_PATH"
-
-
-#install extention for api if necessary
-if ! dpkg -s php5-gmp | grep "installed" > /dev/null 2>&1; then
-    sudo apt-get update
-    sudo apt-get install -y php5-gmp
-fi
