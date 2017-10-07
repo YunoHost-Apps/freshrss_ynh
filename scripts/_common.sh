@@ -3,7 +3,7 @@
 #
 APPNAME="freshrss"
 # FreshRSS version
-VERSION="1.7.0"
+VERSION="1.8.0"
 
 # FreshRSS complete tarball checksum
 FRESHRSS_SOURCE_SHA256="004e67484b41e78adb89d19df5c326d0290896c17f9f7b7e60e8f22a13f88db9"
