@@ -15,7 +15,7 @@ domain=$(ynh_app_setting_get "$app" domain)
 ynh_backup "$path" "www"
 # Backup conf files
 ynh_backup "/etc/nginx/conf.d/$domain.d/$app.conf" "nginx.conf"
-ynh_backup "/etc/cron.d/$app" "$app.cron"
+ynh_backup "/etc/cron.d/$app" "cron"
 
 # Backup mysql
 ynh_mysql_dump_db $app > $app.dmp
