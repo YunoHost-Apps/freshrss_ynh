@@ -21,7 +21,7 @@ db_pass=$(ynh_app_setting_get $app mysqlpwd)
 
 # Restore sources & data
 final_path=/var/www/$app
-ynh_backup "www" "$final_path"
+ynh_restore_file "$final_path"
 
 # Restore permissions
 sudo chown -R root:root $final_path
