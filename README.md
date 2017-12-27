@@ -14,3 +14,9 @@ Changelog:
 * 2017-03-13 : Update to FreshRSS 1.6.3
 * 2017-03-13 : Complete package refactoring
 * 2017-01-22 : Update to FreshRSS 1.6.2
+
+API (mini) How To :
+* Into your user profile : Settings > profil
+* Setup an API password
+* Check the API is working : https://exemple.tld/rss/i/api/greader.php
+* Setup your client with : username : ynh user, password : the password you just setup, url https://exemple.tld/rss/i/api/greader.php
