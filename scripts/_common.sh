@@ -6,7 +6,7 @@ APPNAME="freshrss"
 VERSION="1.10.0"
 
 # FreshRSS complete tarball checksum
-FRESHRSS_SOURCE_SHA256="eb31952669d55c6ba45e85fb52e41686381e1f0084123ad330f68433e830c704"
+FRESHRSS_SOURCE_SHA256="76737974c9ea670aef5a089a3716d40a83e8896571aaac906b615c28d420af83"
 
 # Remote URL to fetch FreshRSS source tarball
 FRESHRSS_SOURCE_URL="https://github.com/FreshRSS/FreshRSS/archive/1.10.1.tar.gz"
