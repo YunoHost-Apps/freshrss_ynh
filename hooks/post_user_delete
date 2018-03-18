@@ -1,5 +1,5 @@
 #!/bin/bash
-app=$YNH_APP_INSTANCE_NAME
+app=APPNAMETOCHANGE
 app_path=/var/www/$app
 
 myuser=$1

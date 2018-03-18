@@ -72,6 +72,11 @@ sed -i "s@PATHTOCHANGE@$path@g" ../conf/nginx.conf
 sed -i "s@ALIASTOCHANGE@$FINAL_PATH/@g" ../conf/nginx.conf
 sudo cp ../conf/nginx.conf /etc/nginx/conf.d/$domain.d/$app.conf
 
+#update hook for multi instance
+sed -i "s@APPNAMETOCHANGE@$app@g" ../hooks/post_app_addaccess
+sed -i "s@APPNAMETOCHANGE@$app@g" ../hooks/post_user_create
+sed -i "s@APPNAMETOCHANGE@$app@g" ../hooks/post_user_delete
+
 #install update cron
 # Add cron job
 cron_path="/etc/cron.d/$app"
