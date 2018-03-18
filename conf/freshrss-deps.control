@@ -4,7 +4,7 @@ Homepage: https://github.com/FreshRSS/FreshRSS
 Standards-Version: 3.9.2
 
 Package: freshrss-deps
-Version: 1.8.0
+Version: 1.10.1
 Depends: php5-cli, php5-gmp
 Architecture: all
 Description: meta package for freshrss dependencies
