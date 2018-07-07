@@ -34,6 +34,7 @@ sudo chown -R www-data: $final_path/extensions/
 # Restore conf files
 ynh_restore_file "/etc/nginx/conf.d/$domain.d/$app.conf"
 ynh_restore_file "/etc/cron.d/$app"
+ynh_restore_file "/etc/php/7.0/fpm/pool.d/$app.conf"
 
 # Restore mysql dump
 ynh_mysql_create_db "$db_name" "$db_user" "$db_pass"
@@ -41,4 +42,5 @@ ynh_mysql_connect_as "$db_user" "$db_pass" "$db_name" < "$app.dmp"
 
 # Reload Nginx, and regenerate SSOwat conf
 sudo service nginx reload
+sudo service php7.0-fpm reload
 sudo yunohost app ssowatconf

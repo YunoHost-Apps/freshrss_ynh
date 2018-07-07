@@ -71,7 +71,16 @@ sudo mv $TMPDIR $FINAL_PATH
 # Modify Nginx configuration file and copy it to Nginx conf directory
 sed -i "s@PATHTOCHANGE@$path@g" ../conf/nginx.conf
 sed -i "s@ALIASTOCHANGE@$FINAL_PATH/@g" ../conf/nginx.conf
+sed -i "s@APPNAMETOCHANGE@$app@g" ../conf/nginx.conf
 sudo cp ../conf/nginx.conf /etc/nginx/conf.d/$domain.d/$app.conf
+
+# Modify php-fpm configuration file and copy it to pools directory
+php_conf=/etc/php/7.0/fpm/pool.d/$app.conf
+sed -i "s@APPNAMETOCHANGE@$app@g" ../conf/php-fpm.conf
+sed -i "s@ALIASTOCHANGE@$FINAL_PATH/@g" ../conf/php-fpm.conf
+sudo cp ../conf/php-fpm.conf $php_conf
+sudo chown root: $php_conf
+sudo chmod 644 $php_conf
 
 #update hook for multi instance
 sed -i "s@APPNAMETOCHANGE@$app@g" ../hooks/post_app_addaccess
@@ -94,4 +103,5 @@ sudo chown -R www-data: $FINAL_PATH/extensions/
 ynh_app_setting_set "$app" skipped_uris /api/greader.php
 # Reload Nginx and regenerate SSOwat conf
 sudo service nginx reload
+sudo service php7.0-fpm reload
 sudo yunohost app ssowatconf

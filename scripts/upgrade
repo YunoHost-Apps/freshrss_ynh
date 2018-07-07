@@ -24,6 +24,28 @@ if [ -f $FINAL_PATH/data/user.php.dist ]; then
     sudo rm $FINAL_PATH/data/user.php.dist
 fi
 
+# retrieve domain
+domain=$(ynh_app_setting_get $app domain)
+
+#add fpm config if not exists
+if [ -n $domain ] && [ ! -f /etc/php/7.0/fpm/pool.d/$app.conf ]; then
+    path=$(ynh_app_setting_get $app path)
+    sed -i "s@PATHTOCHANGE@$path@g" ../conf/nginx.conf
+    sed -i "s@ALIASTOCHANGE@$FINAL_PATH/@g" ../conf/nginx.conf
+    sed -i "s@APPNAMETOCHANGE@$app@g" ../conf/nginx.conf
+    sudo cp ../conf/nginx.conf /etc/nginx/conf.d/$domain.d/$app.conf
+
+    php_conf=/etc/php/7.0/fpm/pool.d/$app.conf
+    sed -i "s@APPNAMETOCHANGE@$app@g" ../conf/php-fpm.conf
+    sed -i "s@ALIASTOCHANGE@$FINAL_PATH/@g" ../conf/php-fpm.conf
+    sudo cp ../conf/php-fpm.conf $php_conf
+    sudo chown root: $php_conf
+    sudo chmod 644 $php_conf
+
+    sudo service nginx reload
+    sudo service php7.0-fpm reload
+fi
+
 # Create tmp directory and install app inside
 TMPDIR=$(mktemp -d)
 sudo chmod 755 "$TMPDIR"

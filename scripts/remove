@@ -18,6 +18,8 @@ ynh_mysql_drop_user $db_user
 sudo rm -rf /var/www/$app
 sudo rm -rf /etc/cron.d/$app
 sudo rm -f /etc/nginx/conf.d/$domain.d/$app.conf
+sudo rm -f /etc/php/7.0/fpm/pool.d/$app.conf
 
 sudo service nginx reload
+sudo service php7.0-fpm reload
 sudo yunohost app ssowatconf
