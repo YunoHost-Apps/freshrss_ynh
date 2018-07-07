@@ -13,9 +13,6 @@ FRESHRSS_SOURCE_URL="https://github.com/FreshRSS/FreshRSS/archive/1.11.1.tar.gz"
 
 PKGDIR=$(cd ../; pwd)
 
-#apt dependencies
-DEPS_PKG_NAME="freshrss-deps"
-
 #
 # Common helpers
 #
