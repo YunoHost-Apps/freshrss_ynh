@@ -36,6 +36,5 @@ extract_freshrss() {
 }
 
 install_freshrss_dependencies() {
-    ynh_package_install_from_equivs ../conf/${DEPS_PKG_NAME}.control \
-      || ynh_die "Unable to install dependencies"
+    ynh_install_app_dependencies php-cli php-gmp
 }

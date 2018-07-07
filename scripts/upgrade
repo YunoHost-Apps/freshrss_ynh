@@ -11,9 +11,8 @@ set -eu
 app=$YNH_APP_INSTANCE_NAME
 FINAL_PATH="/var/www/$app"
 
-#install extention for api if necessary
-ynh_package_install_from_equivs ../conf/${DEPS_PKG_NAME}.control \
-  || ynh_die "Unable to install dependencies"
+#install php dependencies if necessary
+install_freshrss_dependencies
 
 # Check destination directory
 [[ ! -d $FINAL_PATH ]] && ynh_die \

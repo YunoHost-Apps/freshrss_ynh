@@ -41,9 +41,8 @@ fi
 # Check domain/path availability
 sudo yunohost app register-url $app $domain $path
 
-#install php5-cli
-ynh_package_install_from_equivs ../conf/${DEPS_PKG_NAME}.control \
-  || ynh_die "Unable to install dependencies"
+#install php dependencies
+install_freshrss_dependencies
 
 # Generate random DES key & password
 deskey=$(ynh_string_random)

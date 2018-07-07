@@ -19,6 +19,9 @@ sudo yunohost app register-url $app $domain $path
 
 db_pass=$(ynh_app_setting_get $app mysqlpwd)
 
+#install php dependencies if necessary
+install_freshrss_dependencies
+
 # Restore sources & data
 final_path=/var/www/$app
 ynh_restore_file "$final_path"
