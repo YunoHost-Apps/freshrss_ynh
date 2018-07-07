@@ -15,7 +15,7 @@ domain=$(ynh_app_setting_get $app domain)
 path=$(ynh_app_setting_get $app path)
 
 # Check domain/path availability
-sudo yunohost app checkurl $domain$path -a $app || ynh_die "The path ${domain}${path} is not available for app installation."
+sudo yunohost app register-url $app $domain $path
 
 db_pass=$(ynh_app_setting_get $app mysqlpwd)
 

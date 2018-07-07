@@ -39,7 +39,7 @@ if [[ $admin_user != '' ]]; then
 fi
 
 # Check domain/path availability
-sudo yunohost app checkurl $domain$path -a $app || ynh_die "The path ${domain}${path} is not available for app installation."
+sudo yunohost app register-url $app $domain $path
 
 #install php5-cli
 ynh_package_install_from_equivs ../conf/${DEPS_PKG_NAME}.control \
