@@ -3,13 +3,13 @@
 #
 APPNAME="freshrss"
 # FreshRSS version
-VERSION="1.11.0"
+VERSION="1.11.1"
 
 # FreshRSS complete tarball checksum
-FRESHRSS_SOURCE_SHA256="1915f09b45654291d1a42574770cc680ea4edf87d1278cb9cd007c0d942d77cc"
+FRESHRSS_SOURCE_SHA256="df23af6878a4f4f27245320c9c29e481530c6b205bc03fc92179c625e2dd1c18"
 
 # Remote URL to fetch FreshRSS source tarball
-FRESHRSS_SOURCE_URL="https://github.com/FreshRSS/FreshRSS/archive/1.11.0.tar.gz"
+FRESHRSS_SOURCE_URL="https://github.com/FreshRSS/FreshRSS/archive/1.11.1.tar.gz"
 
 PKGDIR=$(cd ../; pwd)
 
