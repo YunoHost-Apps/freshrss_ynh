@@ -29,6 +29,8 @@ if [ "${path:${#path}-1}" == "/" ] && [ ${#path} -gt 1 ]; then
        path="${path:0:${#path}-1}"
 fi
 
+# keep domain for later
+ynh_app_setting_set $app domain $domain
 
 # Check user parameter if not empty
 if [[ $admin_user != '' ]]; then
