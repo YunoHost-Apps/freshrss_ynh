@@ -7,6 +7,8 @@ An efficient but powerful RSS aggregator with a nice and mobile-friendly design,
 
 [![Install FreshRSS with YunoHost](https://install-app.yunohost.org/install-with-yunohost.png)](https://install-app.yunohost.org/?app=freshrss)
 
+![](https://freshrss.org/images/screenshot.png)
+
 Changelog:
 * 2018-06-03 : Update to FreshRSS 1.11.0
 * 2018-02-04 : Update to FreshRSS 1.10.1
