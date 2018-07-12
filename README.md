@@ -18,7 +18,9 @@ or command line :
 
 # :warning: WARNING :warning:
 upgrade for stretch has now dedicated php-fpm pool. To make upgrade works :
-
+Check if domain is already sets :
+`yunohost app setting freshrss domain`
+if this command does't return anything :
 `yunohost app setting freshrss domain -v yourdomain.tld`
 
 if you have multiple instances :
