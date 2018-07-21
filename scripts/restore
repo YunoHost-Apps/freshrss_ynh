@@ -1,21 +1,33 @@
 #!/bin/bash
 
-set -eu
+#=================================================
+# GENERIC START
+#=================================================
+# IMPORT GENERIC HELPERS
+#=================================================
+
+source _common.sh
+source /usr/share/yunohost/helpers
+
+#=================================================
+# MANAGE SCRIPT FAILURE
+#=================================================
+
+# Exit if an error occurs during the execution of the script
+ynh_abort_if_errors
 
 app=$YNH_APP_INSTANCE_NAME
 db_user=$app
 db_name=$app
 
-
-# Source app helpers
-. /usr/share/yunohost/helpers
-
 # retrieve useful param
 domain=$(ynh_app_setting_get $app domain)
 path=$(ynh_app_setting_get $app path)
 
-# Check domain/path availability
-sudo yunohost app register-url $app $domain $path
+# Check web path availability
+ynh_webpath_available $domain $path
+# Register (book) web path
+ynh_webpath_register $app $domain $path
 
 db_pass=$(ynh_app_setting_get $app mysqlpwd)
 
