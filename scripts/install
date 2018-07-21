@@ -1,12 +1,24 @@
 #!/bin/bash
 
-# Exit on command errors and treat unset variables as an error
-set -eu
+#=================================================
+# GENERIC START
+#=================================================
+# IMPORT GENERIC HELPERS
+#=================================================
 
-# Load common variables and helpers
-. ./_common.sh
+source _common.sh
+source /usr/share/yunohost/helpers
 
-# Retrieve arguments
+#=================================================
+# MANAGE SCRIPT FAILURE
+#=================================================
+
+# Exit if an error occurs during the execution of the script
+ynh_abort_if_errors
+
+#=================================================
+# RETRIEVE ARGUMENTS FROM THE MANIFEST
+#=================================================
 domain=$YNH_APP_ARG_DOMAIN
 path=${YNH_APP_ARG_PATH%/}
 admin_user=$YNH_APP_ARG_ADMIN
@@ -17,42 +29,34 @@ db_name=$app
 
 FINAL_PATH="/var/www/$app"
 
-# Source app helpers
-. /usr/share/yunohost/helpers
-
-# if path do not begin with / add a / at the begining
-if [ "${path:0:1}" != "/" ]; then
-       path="/$path"
-fi
-# if path do not end with / add a / at the end
-if [ "${path:${#path}-1}" == "/" ] && [ ${#path} -gt 1 ]; then
-       path="${path:0:${#path}-1}"
-fi
-
-# keep domain for later
-ynh_app_setting_set $app domain $domain
+# Normalize the url path syntax
+path=$(ynh_normalize_url_path $path)
 
 # Check user parameter if not empty
 if [[ $admin_user != '' ]]; then
     ynh_user_exists $admin_user || ynh_die "Wrong user"
-    ynh_app_setting_set $app admin_user $admin_user
 fi
 
-# Check domain/path availability
-sudo yunohost app checkurl $domain$path -a $app || ynh_die "The path ${domain}${path} is not available for app installation."
+# Check web path availability
+ynh_webpath_available $domain $path
+# Register (book) web path
+ynh_webpath_register $app $domain $path
 
-#install php5-cli
-ynh_package_install_from_equivs ../conf/${DEPS_PKG_NAME}.control \
-  || ynh_die "Unable to install dependencies"
+#install php dependencies
+install_freshrss_dependencies
 
 # Generate random DES key & password
 deskey=$(ynh_string_random)
 db_pwd=$(ynh_string_random)
 app_salt=$(ynh_string_random)
 
+# keep settings for later
+ynh_app_setting_set $app domain $domain
+ynh_app_setting_set $app admin_user $admin_user
+ynh_app_setting_set "$app" mysqlpwd "$db_pwd"
+
 # Initialize database and store mysql password for upgrade
 ynh_mysql_create_db "$db_name" "$db_user" "$db_pwd"
-ynh_app_setting_set "$app" mysqlpwd "$db_pwd"
 
 # Copy files to the right place
 TMPDIR=$(mktemp -d)
@@ -72,7 +76,16 @@ sudo mv $TMPDIR $FINAL_PATH
 # Modify Nginx configuration file and copy it to Nginx conf directory
 sed -i "s@PATHTOCHANGE@$path@g" ../conf/nginx.conf
 sed -i "s@ALIASTOCHANGE@$FINAL_PATH/@g" ../conf/nginx.conf
+sed -i "s@APPNAMETOCHANGE@$app@g" ../conf/nginx.conf
 sudo cp ../conf/nginx.conf /etc/nginx/conf.d/$domain.d/$app.conf
+
+# Modify php-fpm configuration file and copy it to pools directory
+php_conf=/etc/php/7.0/fpm/pool.d/$app.conf
+sed -i "s@APPNAMETOCHANGE@$app@g" ../conf/php-fpm.conf
+sed -i "s@ALIASTOCHANGE@$FINAL_PATH/@g" ../conf/php-fpm.conf
+sudo cp ../conf/php-fpm.conf $php_conf
+sudo chown root: $php_conf
+sudo chmod 644 $php_conf
 
 #update hook for multi instance
 sed -i "s@APPNAMETOCHANGE@$app@g" ../hooks/post_app_addaccess
@@ -95,4 +108,5 @@ sudo chown -R www-data: $FINAL_PATH/extensions/
 ynh_app_setting_set "$app" skipped_uris /api/greader.php
 # Reload Nginx and regenerate SSOwat conf
 sudo service nginx reload
+sudo service php7.0-fpm reload
 sudo yunohost app ssowatconf
