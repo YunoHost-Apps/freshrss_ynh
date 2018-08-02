@@ -33,5 +33,5 @@ extract_freshrss() {
 }
 
 install_freshrss_dependencies() {
-    ynh_install_app_dependencies php-cli php-gmp
+    ynh_install_app_dependencies php-cli php-gmp php-curl php-zip
 }
