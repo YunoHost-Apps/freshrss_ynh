@@ -13,6 +13,12 @@ FRESHRSS_SOURCE_URL="https://github.com/FreshRSS/FreshRSS/archive/1.11.1.tar.gz"
 
 PKGDIR=$(cd ../; pwd)
 
+if [ "$(lsb_release --codename --short)" == "jessie" ]; then
+	pkg_dependencies="php5-gd"
+else
+	pkg_dependencies="php-gd php-zip php-dom php-mbstring"
+fi
+
 #
 # Common helpers
 #
@@ -33,5 +39,5 @@ extract_freshrss() {
 }
 
 install_freshrss_dependencies() {
-    ynh_install_app_dependencies php-cli php-gmp php-curl php-zip
+    ynh_install_app_dependencies $pkg_dependencies
 }
