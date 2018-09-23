@@ -20,7 +20,7 @@ ynh_abort_if_errors
 # RETRIEVE ARGUMENTS FROM THE MANIFEST
 #=================================================
 domain=$YNH_APP_ARG_DOMAIN
-path=${YNH_APP_ARG_PATH%/}
+path=${YNH_APP_ARG_PATH}
 admin_user=$YNH_APP_ARG_ADMIN
 # Setup variables
 app=$YNH_APP_INSTANCE_NAME
