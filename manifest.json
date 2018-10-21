@@ -1,13 +1,14 @@
 {
     "name": "FreshRSS",
     "id": "freshrss",
+    "version": "1.11.2",
     "packaging_format": 1,
     "description": {
         "en": "FreshRSS is a selfhostable RSS reader",
         "fr": "FreshRSS est un agrégateur de flux RSS à auto-héberger"
     },
     "url": "http://freshrss.org/",
-    "license": "free",
+    "license": "agpl-3.0",
     "maintainer": {
         "name": "plopoyop",
         "email": "plopoyop@gmail.com"
@@ -18,7 +19,7 @@
     "multi_instance": true,
     "services": [
         "nginx",
-        "php5-fpm",
+        "php7-fpm",
         "mysql"
     ],
     "arguments": {
