@@ -1,9 +1,14 @@
 #!/bin/bash
 
-set -eu
-
 # Source app helpers
 . /usr/share/yunohost/helpers
+
+#=================================================
+# MANAGE SCRIPT FAILURE
+#=================================================
+
+# Exit if an error occurs during the execution of the script
+ynh_abort_if_errors
 
 # retrieve useful param
 app=$YNH_APP_INSTANCE_NAME

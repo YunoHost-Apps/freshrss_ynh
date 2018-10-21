@@ -1,12 +1,18 @@
 #!/bin/bash
-# Exit on command errors and treat unset variables as an error
-set -eu
-
 # Load common variables and helpers
 . ./_common.sh
 
 # Source app helpers
 . /usr/share/yunohost/helpers
+
+#=================================================
+# MANAGE SCRIPT FAILURE
+#=================================================
+
+# Exit if an error occurs during the execution of the script
+ynh_abort_if_errors
+
+
 
 app=$YNH_APP_INSTANCE_NAME
 FINAL_PATH="/var/www/$app"
