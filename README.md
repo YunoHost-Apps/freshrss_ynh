@@ -31,6 +31,8 @@ if you have multiple instances :
 `yunohost app setting freshrss__instancenumber domain -v yourdomain.tld`
 
 Changelog:
+* 2018-10-28 :
+    * Update to FreshRSS 1.12.0
 * 2018-09-23 :
     * Update to FreshRSS 1.11.2
     * Fix install on domain root path
