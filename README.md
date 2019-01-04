@@ -31,6 +31,10 @@ if you have multiple instances :
 `yunohost app setting freshrss__instancenumber domain -v yourdomain.tld`
 
 Changelog:
+
+* 2019-01-04 :
+    * Fix user add access hook
+    * Upgrade to 1.13.0
 * 2018-10-28 :
     * Update to FreshRSS 1.12.0
 * 2018-09-23 :
