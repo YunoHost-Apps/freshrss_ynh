@@ -68,6 +68,10 @@ sed -i "s@APPNAMETOCHANGE@$app@g" ../hooks/post_app_addaccess
 sed -i "s@APPNAMETOCHANGE@$app@g" ../hooks/post_user_create
 sed -i "s@APPNAMETOCHANGE@$app@g" ../hooks/post_user_delete
 
+#add api to unprotected url
+ynh_app_setting_set "$app" unprotected_uris "/api/"
+sudo yunohost app ssowatconf
+
 # Set permissions to freshrss directory
 sudo chown -R root:root $TMPDIR
 sudo chown -R www-data: $TMPDIR/data/

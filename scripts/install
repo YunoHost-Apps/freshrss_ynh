@@ -105,7 +105,7 @@ sudo chown -R root:root $FINAL_PATH
 sudo chown -R www-data: $FINAL_PATH/data/
 sudo chown -R www-data: $FINAL_PATH/extensions/
 #skip api directory
-ynh_app_setting_set "$app" skipped_uris /api/greader.php
+ynh_app_setting_set "$app" unprotected_uris "/api/"
 # Reload Nginx and regenerate SSOwat conf
 sudo service nginx reload
 sudo service php7.0-fpm reload
