@@ -1,5 +1,5 @@
 #!/bin/bash
-app=APPNAMETOCHANGE
+app=$1
 new_users=$2
 app_path=/var/www/$app
 
