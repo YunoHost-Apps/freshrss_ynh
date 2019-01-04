@@ -35,6 +35,7 @@ Changelog:
 * 2019-01-04 :
     * Fix user add access hook
     * Upgrade to 1.13.0
+    * Open /api url instead of /api/greader.php
 * 2018-10-28 :
     * Update to FreshRSS 1.12.0
 * 2018-09-23 :
