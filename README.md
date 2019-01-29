@@ -32,6 +32,10 @@ if you have multiple instances :
 
 Changelog:
 
+* 2019-01-29 :
+    * Upgrade to 1.13.1
+    * Remove ynh_abort_if_errors to comply with linter
+    * Change licence to comply with linter
 * 2019-01-04 :
     * Fix user add access hook
     * Upgrade to 1.13.0
