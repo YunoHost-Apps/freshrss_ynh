@@ -7,9 +7,6 @@
 # MANAGE SCRIPT FAILURE
 #=================================================
 
-# Exit if an error occurs during the execution of the script
-ynh_abort_if_errors
-
 app=$YNH_APP_INSTANCE_NAME
 db_user=$app
 db_name=$app
