@@ -1,14 +1,14 @@
 {
     "name": "FreshRSS",
     "id": "freshrss",
-    "version": "1.11.2",
+    "version": "1.13.1",
     "packaging_format": 1,
     "description": {
         "en": "FreshRSS is a selfhostable RSS reader",
         "fr": "FreshRSS est un agrégateur de flux RSS à auto-héberger"
     },
     "url": "http://freshrss.org/",
-    "license": "agpl-3.0",
+    "license": "AGPL-3.0-only",
     "maintainer": {
         "name": "plopoyop",
         "email": "plopoyop@gmail.com"
