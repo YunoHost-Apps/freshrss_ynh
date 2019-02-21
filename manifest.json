@@ -52,6 +52,16 @@
                     "fr": "Choisissez l'utilisateur par defaut"
                 },
                 "example": "homer"
+            },
+            {
+                "name": "language",
+                "type": "string",
+                "ask": {
+                    "en": "Choose the application language",
+                    "fr": "Choisissez la langue de l'application"
+                },
+                "choices": ["cz", "de", "en", "es", "fr", "he", "it", "kr", "nl", "oc", "pt", "ru", "tr", "zh-cn"],
+                "default": "fr"
             }
         ]
     }
