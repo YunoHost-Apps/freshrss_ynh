@@ -20,93 +20,210 @@ ynh_abort_if_errors
 # RETRIEVE ARGUMENTS FROM THE MANIFEST
 #=================================================
 domain=$YNH_APP_ARG_DOMAIN
-path=${YNH_APP_ARG_PATH}
-admin_user=$YNH_APP_ARG_ADMIN
-# Setup variables
-app=$YNH_APP_INSTANCE_NAME
-db_user=$app
-db_name=$app
+path_url=$YNH_APP_ARG_PATH
+admin=$YNH_APP_ARG_ADMIN
+language=$YNH_APP_ARG_LANGUAGE
 
-FINAL_PATH="/var/www/$app"
+### If it's a multi-instance app, meaning it can be installed several times independently
+### The id of the app as stated in the manifest is available as $YNH_APP_ID
+### The instance number is available as $YNH_APP_INSTANCE_NUMBER (equals "1", "2", ...)
+### The app instance name is available as $YNH_APP_INSTANCE_NAME
+###    - the first time the app is installed, YNH_APP_INSTANCE_NAME = ynhexample
+###    - the second time the app is installed, YNH_APP_INSTANCE_NAME = ynhexample__2
+###    - ynhexample__{N} for the subsequent installations, with N=3,4, ...
+### The app instance name is probably what interests you most, since this is
+### guaranteed to be unique. This is a good unique identifier to define installation path,
+### db names, ...
+app=$YNH_APP_INSTANCE_NAME
+
+#=================================================
+# CHECK IF THE APP CAN BE INSTALLED WITH THESE ARGS
+#=================================================
+ynh_print_info "Validating installation parameters..."
+
+### If the app uses nginx as web server (written in HTML/PHP in most cases), the final path should be "/var/www/$app".
+### If the app provides an internal web server (or uses another application server such as uwsgi), the final path should be "/opt/yunohost/$app"
+final_path=/var/www/$app
+test ! -e "$final_path" || ynh_die "This path already contains a folder"
 
 # Normalize the url path syntax
-path=$(ynh_normalize_url_path $path)
+path_url=$(ynh_normalize_url_path $path_url)
 
-# Check user parameter if not empty
-if [[ $admin_user != '' ]]; then
-    ynh_user_exists $admin_user || ynh_die "Wrong user"
-fi
-
-# Check web path availability
-ynh_webpath_available $domain $path
 # Register (book) web path
-ynh_webpath_register $app $domain $path
+ynh_webpath_register $app $domain $path_url
 
-#install php dependencies
-install_freshrss_dependencies
+#=================================================
+# STORE SETTINGS FROM MANIFEST
+#=================================================
+ynh_print_info "Storing installation settings..."
 
-# Generate random DES key & password
-deskey=$(ynh_string_random)
-db_pwd=$(ynh_string_random)
-app_salt=$(ynh_string_random)
-
-# keep settings for later
 ynh_app_setting_set $app domain $domain
-ynh_app_setting_set $app admin_user $admin_user
-ynh_app_setting_set "$app" mysqlpwd "$db_pwd"
+ynh_app_setting_set $app path $path_url
+ynh_app_setting_set $app admin $admin
+ynh_app_setting_set $app language $language
 
-# Initialize database and store mysql password for upgrade
-ynh_mysql_create_db "$db_name" "$db_user" "$db_pwd"
+#=================================================
+# STANDARD MODIFICATIONS
+#=================================================
 
-# Copy files to the right place
-TMPDIR=$(mktemp -d)
-sudo chmod 755 "$TMPDIR"
-extract_freshrss "$TMPDIR"
+#=================================================
+# INSTALL DEPENDENCIES
+#=================================================
+ynh_print_info "Installing dependencies..."
 
-$TMPDIR/cli/do-install.php --default_user $admin_user --auth_type http_auth --environment production --base_url $domain/$path --title FreshRSS --api_enabled --db-type mysql --db-host localhost --db-user $db_user --db-password $db_pwd --db-base $db_name
+### `ynh_install_app_dependencies` allows you to add any "apt" dependencies to the package.
+### Those deb packages will be installed as dependencies of this package.
+### If you're not using this helper:
+###		- Remove the section "REMOVE DEPENDENCIES" in the remove script
+###		- As well as the section "REINSTALL DEPENDENCIES" in the restore script
+###		- And the section "UPGRADE DEPENDENCIES" in the upgrade script
+
+ynh_install_app_dependencies $pkg_dependencies
+
+#=================================================
+# CREATE A MYSQL DATABASE
+#=================================================
+ynh_print_info "Creating a MySQL database..."
+
+### Use these lines if you need a database for the application.
+### `ynh_mysql_setup_db` will create a database, an associated user and a ramdom password.
+### The password will be stored as 'mysqlpwd' into the app settings,
+### and will be available as $db_pwd
+### If you're not using these lines:
+###		- Remove the section "BACKUP THE MYSQL DATABASE" in the backup script
+###		- Remove also the section "REMOVE THE MYSQL DATABASE" in the remove script
+###		- As well as the section "RESTORE THE MYSQL DATABASE" in the restore script
+
+db_name=$(ynh_sanitize_dbid $app)
+ynh_app_setting_set $app db_name $db_name
+ynh_mysql_setup_db $db_name $db_name
+
+#=================================================
+# DOWNLOAD, CHECK AND UNPACK SOURCE
+#=================================================
+ynh_print_info "Setting up source files..."
+
+### `ynh_setup_source` is used to install an app from a zip or tar.gz file,
+### downloaded from an upstream source, like a git repository.
+### `ynh_setup_source` use the file conf/app.src
+
+ynh_app_setting_set $app final_path $final_path
+# Download, check integrity, uncompress and patch the source from app.src
+ynh_setup_source "$final_path"
+
+#=================================================
+# NGINX CONFIGURATION
+#=================================================
+ynh_print_info "Configuring nginx web server..."
+
+### `ynh_add_nginx_config` will use the file conf/nginx.conf
+
+# Create a dedicated nginx config
+ynh_add_nginx_config
+
+#=================================================
+# CREATE DEDICATED USER
+#=================================================
+ynh_print_info "Configuring system user..."
+
+# Create a system user
+ynh_system_user_create $app
+
+#=================================================
+# PHP-FPM CONFIGURATION
+#=================================================
+ynh_print_info "Configuring php-fpm..."
+
+### `ynh_add_fpm_config` is used to set up a PHP config.
+### You can remove it if your app doesn't use PHP.
+### `ynh_add_fpm_config` will use the files conf/php-fpm.conf and conf/php-fpm.ini
+### If you're not using these lines:
+###		- You can remove these files in conf/.
+###		- Remove the section "BACKUP THE PHP-FPM CONFIGURATION" in the backup script
+###		- Remove also the section "REMOVE PHP-FPM CONFIGURATION" in the remove script
+###		- As well as the section "RESTORE THE PHP-FPM CONFIGURATION" in the restore script
+###		With the reload at the end of the script.
+###		- And the section "PHP-FPM CONFIGURATION" in the upgrade script
+
+# Create a dedicated php-fpm config
+ynh_add_fpm_config
+
+#=================================================
+# SPECIFIC SETUP
+#=================================================
+ynh_print_info "FreshRSS setup script..."
+$final_path/cli/do-install.php --default_user $admin --auth_type http_auth --environment production --base_url $domain/$path_url --title FreshRSS --api_enabled --db-type mysql --db-host localhost --db-user $db_name --db-password $db_pwd --db-base $db_name
 
 # Add users
+ynh_print_info "Creating users..."
 for myuser in $(ynh_user_list)
 do
     user_token=$(ynh_string_random)
-    $TMPDIR/cli/create-user.php --user $myuser --language en --token $user_token
+    $final_path/cli/create-user.php --user $myuser --language $language --token $user_token --no-default-feeds
 done
-# Move temp dir to final dir
-sudo mv $TMPDIR $FINAL_PATH
-# Modify Nginx configuration file and copy it to Nginx conf directory
-sed -i "s@PATHTOCHANGE@$path@g" ../conf/nginx.conf
-sed -i "s@ALIASTOCHANGE@$FINAL_PATH/@g" ../conf/nginx.conf
-sed -i "s@APPNAMETOCHANGE@$app@g" ../conf/nginx.conf
-sudo cp ../conf/nginx.conf /etc/nginx/conf.d/$domain.d/$app.conf
 
-# Modify php-fpm configuration file and copy it to pools directory
-php_conf=/etc/php/7.0/fpm/pool.d/$app.conf
-sed -i "s@APPNAMETOCHANGE@$app@g" ../conf/php-fpm.conf
-sed -i "s@ALIASTOCHANGE@$FINAL_PATH/@g" ../conf/php-fpm.conf
-sudo cp ../conf/php-fpm.conf $php_conf
-sudo chown root: $php_conf
-sudo chmod 644 $php_conf
-
-#update hook for multi instance
-sed -i "s@APPNAMETOCHANGE@$app@g" ../hooks/post_app_addaccess
-sed -i "s@APPNAMETOCHANGE@$app@g" ../hooks/post_user_create
-sed -i "s@APPNAMETOCHANGE@$app@g" ../hooks/post_user_delete
-
-#install update cron
-# Add cron job
+#=================================================
+# CRON SETUP
+#=================================================
+ynh_print_info "Setting up cron..."
 cron_path="/etc/cron.d/$app"
-sed -i "s@#DESTDIR#@${FINAL_PATH}@g" ../conf/freshrss.cron
-sudo cp ../conf/freshrss.cron "$cron_path"
-sudo chmod 644 "$cron_path"
+ynh_replace_string "__FINALPATH__" $final_path ../conf/freshrss.cron
+cp ../conf/freshrss.cron "$cron_path"
+chmod 644 "$cron_path"
+
+#=================================================
 
 
-# Set permissions to freshrss directory
-sudo chown -R root:root $FINAL_PATH
-sudo chown -R www-data: $FINAL_PATH/data/
-sudo chown -R www-data: $FINAL_PATH/extensions/
+#=================================================
+# GENERIC FINALIZATION
+#=================================================
+# SECURE FILES AND DIRECTORIES
+#=================================================
+
+### For security reason, any app should set the permissions to root: before anything else.
+### Then, if write authorization is needed, any access should be given only to directories
+### that really need such authorization.
+
+# Set permissions to app files
+chown -R root: $final_path
+chown -R $app: $final_path/data/
+chown -R $app: $final_path/extensions/
+
+#=================================================
+# SETUP LOGROTATE
+#=================================================
+ynh_print_info "Configuring log rotation..."
+
+### `ynh_use_logrotate` is used to configure a logrotate configuration for the logs of this app.
+### Use this helper only if there is effectively a log file for this app.
+### If you're not using this helper:
+###		- Remove the section "BACKUP LOGROTATE" in the backup script
+###		- Remove also the section "REMOVE LOGROTATE CONFIGURATION" in the remove script
+###		- As well as the section "RESTORE THE LOGROTATE CONFIGURATION" in the restore script
+###		- And the section "SETUP LOGROTATE" in the upgrade script
+
+# Use logrotate to manage application logfile(s)
+ynh_use_logrotate
+
+
+#=================================================
+# SETUP SSOWAT
+#=================================================
+ynh_print_info "Configuring SSOwat..."
+
 #skip api directory
 ynh_app_setting_set "$app" unprotected_uris "/api/"
-# Reload Nginx and regenerate SSOwat conf
-sudo service nginx reload
-sudo service php7.0-fpm reload
-sudo yunohost app ssowatconf
+
+
+#=================================================
+# RELOAD NGINX
+#=================================================
+ynh_print_info "Reloading nginx web server..."
+
+systemctl reload nginx
+
+#=================================================
+# END OF SCRIPT
+#=================================================
+
+ynh_print_info "Installation of $app completed"
