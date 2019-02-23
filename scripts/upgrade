@@ -1,82 +1,165 @@
 #!/bin/bash
-# Load common variables and helpers
-. ./_common.sh
-
-# Source app helpers
-. /usr/share/yunohost/helpers
 
 #=================================================
-# MANAGE SCRIPT FAILURE
+# GENERIC START
+#=================================================
+# IMPORT GENERIC HELPERS
 #=================================================
 
+source _common.sh
+source /usr/share/yunohost/helpers
+
+#=================================================
+# LOAD SETTINGS
+#=================================================
+ynh_print_info "Loading installation settings..."
+
+app=$YNH_APP_INSTANCE_NAME
+
+domain=$(ynh_app_setting_get $app domain)
+path_url=$(ynh_app_setting_get $app path)
+admin=$(ynh_app_setting_get $app admin)
+final_path=$(ynh_app_setting_get $app final_path)
+language=$(ynh_app_setting_get $app language)
+db_name=$(ynh_app_setting_get $app db_name)
+
+#=================================================
+# ENSURE DOWNWARD COMPATIBILITY
+#=================================================
+ynh_print_info "Ensuring downward compatibility..."
+
+# If db_name doesn't exist, create it
+if [ -z $db_name ]; then
+	db_name=$(ynh_sanitize_dbid $app)
+	ynh_app_setting_set $app db_name $db_name
+fi
+
+# If final_path doesn't exist, create it
+if [ -z $final_path ]; then
+	final_path=/var/www/$app
+	ynh_app_setting_set $app final_path $final_path
+fi
+
+
+#=================================================
+# BACKUP BEFORE UPGRADE THEN ACTIVE TRAP
+#=================================================
+ynh_print_info "Backing up the app before upgrading (may take a while)..."
+
+# Backup the current version of the app
+ynh_backup_before_upgrade
+ynh_clean_setup () {
+	# restore it if the upgrade fails
+	ynh_restore_upgradebackup
+}
 # Exit if an error occurs during the execution of the script
 ynh_abort_if_errors
 
 
+#=================================================
+# CHECK THE PATH
+#=================================================
 
-app=$YNH_APP_INSTANCE_NAME
-FINAL_PATH="/var/www/$app"
+# Normalize the URL path syntax
+path_url=$(ynh_normalize_url_path $path_url)
 
-#install php dependencies if necessary
-install_freshrss_dependencies
+#=================================================
+# STANDARD UPGRADE STEPS
+#=================================================
+# DOWNLOAD, CHECK AND UNPACK SOURCE
+#=================================================
+ynh_print_info "Upgrading source files..."
 
-# Check destination directory
-[[ ! -d $FINAL_PATH ]] && ynh_die \
-"The destination directory '$FINAL_PATH' does not exist.\
-The app is not correctly installed, you should remove it first."
+# Download, check integrity, uncompress and patch the source from app.src
+# into tmp dir
+tmp_path=$(mktemp -d)
+ynh_setup_source "$tmp_path"
+
+#=================================================
+# NGINX CONFIGURATION
+#=================================================
+ynh_print_info "Upgrading nginx web server configuration..."
+
+# Create a dedicated nginx config
+ynh_add_nginx_config
+
+#=================================================
+# UPGRADE DEPENDENCIES
+#=================================================
+ynh_print_info "Upgrading dependencies..."
+
+ynh_install_app_dependencies $pkg_dependencies
+
+#=================================================
+# CREATE DEDICATED USER
+#=================================================
+ynh_print_info "Making sure dedicated system user exists..."
+
+# Create a dedicated user (if not existing)
+ynh_system_user_create $app
+
+#=================================================
+# PHP-FPM CONFIGURATION
+#=================================================
+ynh_print_info "Upgrading php-fpm configuration..."
+
+# Create a dedicated php-fpm config
+ynh_add_fpm_config
+
+#=================================================
+# SPECIFIC UPGRADE
+#=================================================
 
 #old version cleanup
-if [ -f $FINAL_PATH/data/user.php.dist ]; then
-    sudo rm $FINAL_PATH/data/user.php.dist
+if [ -f $final_path/data/user.php.dist ]; then
+    ynh_secure_remove $final_path/data/user.php.dist
 fi
 
-# retrieve domain
-domain=$(ynh_app_setting_get $app domain)
-
-#add fpm config if not exists
-if [ -n $domain ] && [ ! -f /etc/php/7.0/fpm/pool.d/$app.conf ]; then
-    path=$(ynh_app_setting_get $app path)
-    sed -i "s@PATHTOCHANGE@$path@g" ../conf/nginx.conf
-    sed -i "s@ALIASTOCHANGE@$FINAL_PATH/@g" ../conf/nginx.conf
-    sed -i "s@APPNAMETOCHANGE@$app@g" ../conf/nginx.conf
-    sudo cp ../conf/nginx.conf /etc/nginx/conf.d/$domain.d/$app.conf
-
-    php_conf=/etc/php/7.0/fpm/pool.d/$app.conf
-    sed -i "s@APPNAMETOCHANGE@$app@g" ../conf/php-fpm.conf
-    sed -i "s@ALIASTOCHANGE@$FINAL_PATH/@g" ../conf/php-fpm.conf
-    sudo cp ../conf/php-fpm.conf $php_conf
-    sudo chown root: $php_conf
-    sudo chmod 644 $php_conf
-
-    sudo service nginx reload
-    sudo service php7.0-fpm reload
-fi
-
-# Create tmp directory and install app inside
-TMPDIR=$(mktemp -d)
-sudo chmod 755 "$TMPDIR"
-extract_freshrss "$TMPDIR"
-
-# Restore config
-sudo rm $TMPDIR/data/do-install.txt
-sudo cp $FINAL_PATH/data/config.php $TMPDIR/data/config.php
-sudo cp -r $FINAL_PATH/data/users/. $TMPDIR/data/users/
-sudo cp -r $FINAL_PATH/extensions/. $TMPDIR/extensions/
-
-#update hook for multi instance
-sed -i "s@APPNAMETOCHANGE@$app@g" ../hooks/post_app_addaccess
-sed -i "s@APPNAMETOCHANGE@$app@g" ../hooks/post_user_create
-sed -i "s@APPNAMETOCHANGE@$app@g" ../hooks/post_user_delete
-
-#add api to unprotected url
-ynh_app_setting_set "$app" unprotected_uris "/api/"
-sudo yunohost app ssowatconf
+#restore config
+ynh_secure_remove $tmp_path/data/do-install.txt
+cp $final_path/data/config.php $tmp_path/data/config.php
+cp -r $final_path/data/users/. $tmp_path/data/users/
+cp -r $final_path/extensions/. $tmp_path/extensions/
 
 # Set permissions to freshrss directory
-sudo chown -R root:root $TMPDIR
-sudo chown -R www-data: $TMPDIR/data/
-sudo chown -R www-data: $TMPDIR/extensions/
-
 # Clean up existing files and copy new files to the right place
-sudo rm -rf "$FINAL_PATH"
-sudo cp -rp "$TMPDIR" "$FINAL_PATH"
+ynh_secure_remove "$final_path"
+cp -rp "$tmp_path" "$final_path"
+
+#update hook for multi instance
+ynh_replace_string "APPNAMETOCHANGE" $app ../hooks/post_app_addaccess
+ynh_replace_string "APPNAMETOCHANGE" $app ../hooks/post_user_create
+ynh_replace_string "APPNAMETOCHANGE" $app ../hooks/post_user_delete
+
+#=================================================
+# GENERIC FINALIZATION
+#=================================================
+# SECURE FILES AND DIRECTORIES
+#=================================================
+
+# Set permissions on app files
+chown -R root: $final_path
+chmod 755 $final_path
+chown -R $app: $final_path/data/
+chown -R $app: $final_path/extensions/
+
+#=================================================
+# SETUP SSOWAT
+#=================================================
+ynh_print_info "Upgrading SSOwat configuration..."
+
+ynh_app_setting_set "$app" unprotected_uris "/api/"
+
+
+#=================================================
+# RELOAD NGINX
+#=================================================
+ynh_print_info "Reloading nginx web server..."
+
+systemctl reload nginx
+
+#=================================================
+# END OF SCRIPT
+#=================================================
+
+ynh_print_info "Upgrade of $app completed"
