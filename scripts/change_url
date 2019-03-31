@@ -51,6 +51,7 @@ fi
 #=================================================
 # MODIFY URL IN NGINX CONF FILE
 #=================================================
+ynh_print_info "Updating nginx web server configuration..."
 
 nginx_conf_path=/etc/nginx/conf.d/$old_domain.d/$app.conf
 
@@ -59,18 +60,17 @@ if [ $change_path -eq 1 ]
 then
   # Make a backup of the original nginx config file if modified
   ynh_backup_if_checksum_is_different "$nginx_conf_path"
-
-	ynh_replace_string "location $old_path" "location $new_path" "$nginx_conf_path"
-
-  # Calculate and store the nginx config file checksum
-  ynh_store_file_checksum "$nginx_conf_path"
+  domain="$old_domain"
+  path_url="$new_path"
+  # Create a dedicated nginx config
+  ynh_add_nginx_config
 fi
 
 # Change the domain for nginx
 if [ $change_domain -eq 1 ]
 then
   ynh_delete_file_checksum "$nginx_conf_path"
-	sudo mv $nginx_conf_path /etc/nginx/conf.d/$new_domain.d/$app.conf
+  mv $nginx_conf_path /etc/nginx/conf.d/$new_domain.d/$app.conf
   # Store file checksum for the new config file location
   ynh_store_file_checksum "/etc/nginx/conf.d/$new_domain.d/$app.conf"
 fi
@@ -80,5 +80,11 @@ fi
 #=================================================
 # RELOAD NGINX
 #=================================================
-
+ynh_print_info "Reloading nginx web server..."
 sudo systemctl reload nginx
+
+#=================================================
+# END OF SCRIPT
+#=================================================
+
+ynh_print_info "Change of URL completed for $app"
