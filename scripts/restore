@@ -42,6 +42,7 @@ test ! -d $final_path \
 #=================================================
 # RESTORE THE NGINX CONFIGURATION
 #=================================================
+ynh_print_info "Restoring nginx configuration..."
 
 ynh_restore_file "/etc/nginx/conf.d/$domain.d/$app.conf"
 
