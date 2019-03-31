@@ -12,7 +12,7 @@ then
     for myuser in $(echo "$new_users" | sed "s/,/ /g")
     do
         user_token=$(ynh_string_random)
-        $app_path/cli/create-user.php --user $myuser --language en --token $user_token --no-default-feeds
+        $app_path/cli/create-user.php --user $myuser --language en --token $user_token
         sudo chown -R www-data: $app_path/data/users/$myuser/
     done
 fi
