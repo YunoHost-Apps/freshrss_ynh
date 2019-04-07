@@ -32,6 +32,8 @@ if you have multiple instances :
 
 Changelog:
 
+* 2019-04-07 :
+    * Upgrade to 1.14.1
 * 2019-03-31 :
     * Upgrade to 1.14.0
 * 2019-01-29 :
