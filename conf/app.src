@@ -1,5 +1,5 @@
-SOURCE_URL=https://github.com/FreshRSS/FreshRSS/archive/1.13.1.tar.gz
-SOURCE_SUM=45510d4f9fff1ee530e94e8c3bf35649f0c7cc032118b57346621de0d4dd1abe
+SOURCE_URL=https://github.com/FreshRSS/FreshRSS/archive/1.14.1.tar.gz
+SOURCE_SUM=fd5ce6906021282e12cd6346844d21b82b70ac12d08834079a46b8722bfb0cce 
 SOURCE_SUM_PRG=sha256sum
 SOURCE_FORMAT=tar.gz
 SOURCE_IN_SUBDIR=true
