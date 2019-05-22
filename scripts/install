@@ -159,7 +159,7 @@ ynh_print_info "Creating users..."
 for myuser in $(ynh_user_list)
 do
     user_token=$(ynh_string_random)
-    $final_path/cli/create-user.php --user $myuser --language $language --token $user_token --no-default-feeds
+    $final_path/cli/create-user.php --user $myuser --language $language --token $user_token
 done
 
 #=================================================
