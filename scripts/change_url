@@ -21,6 +21,23 @@ new_path=$YNH_APP_NEW_PATH
 
 app=$YNH_APP_INSTANCE_NAME
 
+
+#=================================================
+# LOAD SETTINGS
+#=================================================
+ynh_print_info "Loading installation settings..."
+
+# Needed for helper "ynh_add_nginx_config"
+final_path=$(ynh_app_setting_get --app=$app --key=final_path)
+
+# Add settings here as needed by your application
+db_name=$(ynh_app_setting_get --app=$app --key=db_name)
+db_user=$db_name
+db_pwd=$(ynh_app_setting_get --app=$app --key=db_pwd)
+admin=$(ynh_app_setting_get --app=$app --key=admin)
+language=$(ynh_app_setting_get --app=$app --key=language)
+
+
 #=================================================
 # CHECK PATHS SYNTAX
 #=================================================
@@ -74,6 +91,15 @@ then
   # Store file checksum for the new config file location
   ynh_store_file_checksum "/etc/nginx/conf.d/$new_domain.d/$app.conf"
 fi
+
+#=================================================
+# SPECIFIC MODIFICATIONS
+#=================================================
+
+$final_path/cli/reconfigure.php --default_user $admin --auth_type http_auth --environment production --base_url $domain/$path_url --title FreshRSS --api_enabled --db-type mysql --db-host localhost --db-user $db_name --db-password $db_pwd --db-base $db_name
+
+#=================================================
+
 
 #=================================================
 # GENERIC FINALIZATION
