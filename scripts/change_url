@@ -33,9 +33,18 @@ final_path=$(ynh_app_setting_get --app=$app --key=final_path)
 # Add settings here as needed by your application
 db_name=$(ynh_app_setting_get --app=$app --key=db_name)
 db_user=$db_name
-db_pwd=$(ynh_app_setting_get --app=$app --key=db_pwd)
+db_pwd=$(ynh_app_setting_get --app=$app --key=mysqlpwd)
 admin=$(ynh_app_setting_get --app=$app --key=admin)
 language=$(ynh_app_setting_get --app=$app --key=language)
+
+if [ -z $admin ]; then
+	admin=$(ynh_app_setting_get $app admin_user)
+	if [ -z $admin ]; then
+		ynh_die --message="no admin user found"
+	fi;
+  ynh_app_setting_delete $app admin_user
+	ynh_app_setting_set $app admin $admin
+fi
 
 
 #=================================================
@@ -96,7 +105,7 @@ fi
 # SPECIFIC MODIFICATIONS
 #=================================================
 
-$final_path/cli/reconfigure.php --default_user $admin --auth_type http_auth --environment production --base_url $domain/$path_url --title FreshRSS --api_enabled --db-type mysql --db-host localhost --db-user $db_name --db-password $db_pwd --db-base $db_name
+$final_path/cli/reconfigure.php --auth_type http_auth --environment production --base_url https://$domain$path_url --title FreshRSS --api_enabled --db-type mysql --db-host localhost --db-user $db_name --db-password $db_pwd --db-base $db_name
 
 #=================================================
 
