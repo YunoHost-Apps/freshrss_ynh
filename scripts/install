@@ -152,7 +152,7 @@ ynh_add_fpm_config
 # SPECIFIC SETUP
 #=================================================
 ynh_print_info "FreshRSS setup script..."
-$final_path/cli/do-install.php --default_user $admin --auth_type http_auth --environment production --base_url $domain/$path_url --title FreshRSS --api_enabled --db-type mysql --db-host localhost --db-user $db_name --db-password $db_pwd --db-base $db_name
+$final_path/cli/do-install.php --default_user $admin --auth_type http_auth --environment production --base_url https://$domain$path_url --title FreshRSS --api_enabled --db-type mysql --db-host localhost --db-user $db_name --db-password $db_pwd --db-base $db_name
 
 # Add users
 ynh_print_info "Creating users..."
@@ -196,8 +196,8 @@ chown -R $app: $final_path/extensions/
 ynh_print_info "Configuring SSOwat..."
 
 #skip api directory
-ynh_app_setting_set "$app" unprotected_uris "/api/"
-
+ynh_app_setting_set "$app" unprotected_regex "^\/api\/.*|\/scripts\/api.js$"
+ynh_app_setting_delete "$app" unprotected_uris
 
 #=================================================
 # RELOAD NGINX
