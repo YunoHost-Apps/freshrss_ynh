@@ -142,6 +142,16 @@ ynh_replace_string "APPNAMETOCHANGE" $app ../hooks/post_user_create
 ynh_replace_string "APPNAMETOCHANGE" $app ../hooks/post_user_delete
 
 #=================================================
+# CRON SETUP
+#=================================================
+ynh_print_info "Setting up cron..."
+cron_path="/etc/cron.d/$app"
+ynh_replace_string "__FINALPATH__" $final_path ../conf/freshrss.cron
+ynh_replace_string "__APP__" $app ../conf/freshrss.cron
+cp ../conf/freshrss.cron "$cron_path"
+chmod 644 "$cron_path"
+
+#=================================================
 # GENERIC FINALIZATION
 #=================================================
 # SECURE FILES AND DIRECTORIES
