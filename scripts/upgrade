@@ -12,49 +12,54 @@ source /usr/share/yunohost/helpers
 #=================================================
 # LOAD SETTINGS
 #=================================================
-ynh_print_info "Loading installation settings..."
+ynh_print_info --message="Loading installation settings..."
 
 app=$YNH_APP_INSTANCE_NAME
 
-domain=$(ynh_app_setting_get $app domain)
-path_url=$(ynh_app_setting_get $app path)
-admin=$(ynh_app_setting_get $app admin)
-final_path=$(ynh_app_setting_get $app final_path)
-language=$(ynh_app_setting_get $app language)
-db_name=$(ynh_app_setting_get $app db_name)
-db_pwd=$(ynh_app_setting_get $app mysqlpwd)
+domain=$(ynh_app_setting_get --app=$app --key=domain)
+path_url=$(ynh_app_setting_get --app=$app --key=path)
+admin=$(ynh_app_setting_get --app=$app --key=admin)
+final_path=$(ynh_app_setting_get --app=$app --key=final_path)
+language=$(ynh_app_setting_get --app=$app --key=language)
+db_name=$(ynh_app_setting_get --app=$app --key=db_name)
+db_pwd=$(ynh_app_setting_get --app=$app --key=mysqlpwd)
+
+#=================================================
+# CHECK VERSION
+#=================================================
+
+upgrade_type=$(ynh_check_app_version_changed)
 
 #=================================================
 # ENSURE DOWNWARD COMPATIBILITY
 #=================================================
-ynh_print_info "Ensuring downward compatibility..."
+ynh_print_info --message="Ensuring downward compatibility..."
 
 # If db_name doesn't exist, create it
-if [ -z $db_name ]; then
-	db_name=$(ynh_sanitize_dbid $app)
-	ynh_app_setting_set $app db_name $db_name
+if [ -z "$db_name" ]; then
+	db_name=$(ynh_sanitize_dbid --db_name=$app)
+	ynh_app_setting_set --app=$app --key=db_name --value=$db_name
 fi
 
-if [ -z $admin ]; then
-	admin=$(ynh_app_setting_get $app admin_user)
+if [ -z "$admin" ]; then
+	admin=$(ynh_app_setting_get --app=$app --key=admin_user)
 	if [ -z $admin ]; then
 		ynh_die --message="no admin user found"
 	fi;
-	ynh_app_setting_delete $app admin_user
-	ynh_app_setting_set $app admin $admin
+	ynh_app_setting_delete --app=$app --key=admin_user
+	ynh_app_setting_set --app=$app --key=admin --value=$admin
 fi
 
 # If final_path doesn't exist, create it
-if [ -z $final_path ]; then
+if [ -z "$final_path" ]; then
 	final_path=/var/www/$app
-	ynh_app_setting_set $app final_path $final_path
+	ynh_app_setting_set --app=$app --key=final_path --value=$final_path
 fi
-
 
 #=================================================
 # BACKUP BEFORE UPGRADE THEN ACTIVE TRAP
 #=================================================
-ynh_print_info "Backing up the app before upgrading (may take a while)..."
+ynh_print_info --message="Backing up the app before upgrading (may take a while)..."
 
 # Backup the current version of the app
 ynh_backup_before_upgrade
@@ -65,20 +70,19 @@ ynh_clean_setup () {
 # Exit if an error occurs during the execution of the script
 ynh_abort_if_errors
 
-
 #=================================================
 # CHECK THE PATH
 #=================================================
 
 # Normalize the URL path syntax
-path_url=$(ynh_normalize_url_path $path_url)
+path_url=$(ynh_normalize_url_path --path_url=$path_url)
 
 #=================================================
 # STANDARD UPGRADE STEPS
 #=================================================
 # DOWNLOAD, CHECK AND UNPACK SOURCE
 #=================================================
-ynh_print_info "Upgrading source files..."
+ynh_print_info --message="Upgrading source files..."
 
 # Download, check integrity, uncompress and patch the source from app.src
 # into tmp dir
@@ -88,7 +92,7 @@ ynh_setup_source "$tmp_path"
 #=================================================
 # NGINX CONFIGURATION
 #=================================================
-ynh_print_info "Upgrading nginx web server configuration..."
+ynh_print_info --message="Upgrading nginx web server configuration..."
 
 # Create a dedicated nginx config
 ynh_add_nginx_config
@@ -96,14 +100,14 @@ ynh_add_nginx_config
 #=================================================
 # UPGRADE DEPENDENCIES
 #=================================================
-ynh_print_info "Upgrading dependencies..."
+ynh_print_info --message="Upgrading dependencies..."
 
 ynh_install_app_dependencies $pkg_dependencies
 
 #=================================================
 # CREATE DEDICATED USER
 #=================================================
-ynh_print_info "Making sure dedicated system user exists..."
+ynh_print_info --message="Making sure dedicated system user exists..."
 
 # Create a dedicated user (if not existing)
 ynh_system_user_create $app
@@ -111,7 +115,7 @@ ynh_system_user_create $app
 #=================================================
 # PHP-FPM CONFIGURATION
 #=================================================
-ynh_print_info "Upgrading php-fpm configuration..."
+ynh_print_info --message="Upgrading php-fpm configuration..."
 
 # Create a dedicated php-fpm config
 ynh_add_fpm_config
@@ -144,7 +148,7 @@ ynh_replace_string "APPNAMETOCHANGE" $app ../hooks/post_user_delete
 #=================================================
 # CRON SETUP
 #=================================================
-ynh_print_info "Setting up cron..."
+ynh_print_info --message="Setting up cron..."
 cron_path="/etc/cron.d/$app"
 ynh_replace_string "__FINALPATH__" $final_path ../conf/freshrss.cron
 ynh_replace_string "__APP__" $app ../conf/freshrss.cron
@@ -165,22 +169,23 @@ chown -R $app: $final_path/extensions/
 
 # reconfigure application with latest parameters
 $final_path/cli/reconfigure.php --default_user $admin --auth_type http_auth --environment production --base_url https://$domain$path_url --title FreshRSS --api_enabled --db-type mysql --db-host localhost --db-user $db_name --db-password $db_pwd --db-base $db_name
+
 #=================================================
 # SETUP SSOWAT
 #=================================================
-ynh_print_info "Upgrading SSOwat configuration..."
+ynh_print_info --message="Upgrading SSOwat configuration..."
 
-ynh_app_setting_set "$app" unprotected_regex "^\/api\/.*|\/scripts\/api.js$"
+ynh_app_setting_set --app="$app" --key=unprotected_regex --value="^\/api\/.*|\/scripts\/api.js$"
 
 #=================================================
 # RELOAD NGINX
 #=================================================
-ynh_print_info "Reloading nginx web server..."
+ynh_print_info --message="Reloading nginx web server..."
 
-systemctl reload nginx
+ynh_systemd_action --service_name=nginx --action=reload
 
 #=================================================
 # END OF SCRIPT
 #=================================================
 
-ynh_print_info "Upgrade of $app completed"
+ynh_print_info --message="Upgrade of $app completed"

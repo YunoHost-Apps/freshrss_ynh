@@ -1,12 +1,12 @@
 {
     "name": "FreshRSS",
     "id": "freshrss",
-    "version": "1.14.1",
     "packaging_format": 1,
     "description": {
         "en": "FreshRSS is a selfhostable RSS reader",
         "fr": "FreshRSS est un agrégateur de flux RSS à auto-héberger"
     },
+    "version": "1.14.1~ynh1",
     "url": "http://freshrss.org/",
     "license": "AGPL-3.0-only",
     "maintainer": {
@@ -14,7 +14,7 @@
         "email": "plopoyop@gmail.com"
     },
     "requirements": {
-        "yunohost": ">= 3.0.0"
+        "yunohost": ">= 3.5"
     },
     "multi_instance": true,
     "services": [
@@ -28,8 +28,8 @@
                 "name": "domain",
                 "type": "domain",
                 "ask": {
-                    "en": "Choose a domain for FreshRSS",
-                    "fr": "Choisissez un domaine pour FreshRSS"
+                    "en": "Choose a domain name for FreshRSS",
+                    "fr": "Choisissez un nom de domaine pour FreshRSS"
                 },
                 "example": "domain.org"
             },
@@ -48,8 +48,8 @@
                 "type": "user",
                 "optional": false,
                 "ask": {
-                    "en": "Choose the default user",
-                    "fr": "Choisissez l'utilisateur par defaut"
+                    "en": "Choose an admin user",
+                    "fr": "Choisissez l’administrateur"
                 },
                 "example": "homer"
             },
