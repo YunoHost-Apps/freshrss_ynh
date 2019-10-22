@@ -9,4 +9,4 @@ myuser=$1
 
 user_token=$(ynh_string_random)
 sudo $app_path/cli/create-user.php --user $myuser --language en --token $user_token
-sudo chown -R www-data: $app_path/data/users/$myuser/
+sudo chown -R $app: $app_path/data/users/$myuser/
