@@ -1,1 +1,1 @@
-*/10 * * * * __APP__ /usr/bin/php7.0 __FINALPATH__/app/actualize_script.php >/tmp/FreshRSS.log 2>&1
+*/10 * * * * __APP__ /usr/bin/php7.0 __FINALPATH__/app/actualize_script.php >/tmp/__APP__.log 2>&1

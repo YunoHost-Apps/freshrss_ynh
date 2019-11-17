@@ -156,6 +156,10 @@ ynh_replace_string "__APP__" $app ../conf/freshrss.cron
 cp ../conf/freshrss.cron "$cron_path"
 chmod 644 "$cron_path"
 
+if [ -f /tmp/FreshRSS.log ]; then
+	ynh_secure_remove /tmp/FreshRSS.log
+fi
+
 #=================================================
 # GENERIC FINALIZATION
 #=================================================
