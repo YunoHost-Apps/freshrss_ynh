@@ -6,7 +6,7 @@
         "en": "FreshRSS is a selfhostable RSS reader",
         "fr": "FreshRSS est un agrégateur de flux RSS à auto-héberger"
     },
-    "version": "1.14.2~ynh1",
+    "version": "1.15.2~ynh1",
     "url": "http://freshrss.org/",
     "license": "AGPL-3.0-only",
     "maintainer": {

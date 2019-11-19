@@ -149,11 +149,16 @@ ynh_replace_string "APPNAMETOCHANGE" $app ../hooks/post_user_delete
 # CRON SETUP
 #=================================================
 ynh_print_info --message="Setting up cron..."
+
 cron_path="/etc/cron.d/$app"
 ynh_replace_string "__FINALPATH__" $final_path ../conf/freshrss.cron
 ynh_replace_string "__APP__" $app ../conf/freshrss.cron
 cp ../conf/freshrss.cron "$cron_path"
 chmod 644 "$cron_path"
+
+if [ -f /tmp/FreshRSS.log ]; then
+	ynh_secure_remove /tmp/FreshRSS.log
+fi
 
 #=================================================
 # GENERIC FINALIZATION
@@ -175,7 +180,9 @@ $final_path/cli/reconfigure.php --default_user $admin --auth_type http_auth --en
 #=================================================
 ynh_print_info --message="Upgrading SSOwat configuration..."
 
-ynh_app_setting_set --app="$app" --key=unprotected_regex --value="^\/api\/.*|\/scripts\/api.js$"
+ynh_app_setting_set --app="$app" --key=unprotected_uris --value="/api/,/scripts/api.js"
+ynh_app_setting_delete --app="$app" --key=unprotected_regex
+ynh_app_setting_delete --app="$app" --key=skipped_uris
 
 #=================================================
 # RELOAD NGINX
