@@ -1,5 +1,5 @@
 #!/bin/bash
-app=APPNAMETOCHANGE
+app=freshrss
 app_path=/var/www/$app
 
 myuser=$1
