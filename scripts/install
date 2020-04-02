@@ -111,6 +111,10 @@ ynh_add_fpm_config
 #=================================================
 # SPECIFIC SETUP
 #=================================================
+ynh_replace_string "APPNAMETOCHANGE" $app ../hooks/post_app_addaccess
+ynh_replace_string "APPNAMETOCHANGE" $app ../hooks/post_user_create
+ynh_replace_string "APPNAMETOCHANGE" $app ../hooks/post_user_delete
+
 # SETUPING FRESHRSS
 #=================================================
 ynh_print_info --message="FreshRSS setup script..."
