@@ -180,9 +180,9 @@ $final_path/cli/reconfigure.php --default_user $admin --auth_type http_auth --en
 #=================================================
 ynh_print_info --message="Upgrading SSOwat configuration..."
 
-ynh_app_setting_set --app="$app" --key=unprotected_uris --value="/api/,/scripts/api.js"
+ynh_app_setting_set --app="$app" --key=skipped_uris --value="/api/,/scripts/api.js"
 ynh_app_setting_delete --app="$app" --key=unprotected_regex
-ynh_app_setting_delete --app="$app" --key=skipped_uris
+ynh_app_setting_delete --app="$app" --key=unprotected_uris
 
 #=================================================
 # RELOAD NGINX
