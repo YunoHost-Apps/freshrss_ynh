@@ -111,6 +111,10 @@ ynh_add_fpm_config
 #=================================================
 # SPECIFIC SETUP
 #=================================================
+ynh_replace_string "APPNAMETOCHANGE" $app ../hooks/post_app_addaccess
+ynh_replace_string "APPNAMETOCHANGE" $app ../hooks/post_user_create
+ynh_replace_string "APPNAMETOCHANGE" $app ../hooks/post_user_delete
+
 # SETUPING FRESHRSS
 #=================================================
 ynh_print_info --message="FreshRSS setup script..."
@@ -157,9 +161,9 @@ chown -R $app: $final_path/extensions/
 ynh_print_info --message="Configuring SSOwat..."
 
 #skip api directory
-ynh_app_setting_set --app="$app" --key=unprotected_uris --value="/api/,/scripts/api.js"
+ynh_app_setting_set --app="$app" --key=skipped_uris --value="/api/,/scripts/api.js"
 ynh_app_setting_delete --app="$app" --key=unprotected_regex
-ynh_app_setting_delete --app="$app" --key=skipped_uris
+ynh_app_setting_delete --app="$app" --key=unprotected_uris
 
 
 #=================================================

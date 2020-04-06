@@ -7,7 +7,7 @@ app_path=/var/www/$app
 . /usr/share/yunohost/helpers
 
 
-if [[ "freshrss" = "$app" ]];
+if [[ "APPNAMETOCHANGE" = "$app" ]];
 then
     for myuser in $(echo "$new_users" | sed "s/,/ /g")
     do
