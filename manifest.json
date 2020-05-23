@@ -4,7 +4,7 @@
     "packaging_format": 1,
     "description": {
         "en": "An RSS aggregator with a nice and mobile-friendly design",
-        "fr": "Un agrégateur de flux RSS avec une interface conçu pour mobile"
+        "fr": "Un agrégateur de flux RSS avec une interface adaptée au mobile"
     },
     "version": "1.16.0~ynh1",
     "url": "http://freshrss.org/",
