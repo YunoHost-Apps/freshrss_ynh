@@ -117,7 +117,7 @@ ynh_system_user_create $app
 #=================================================
 ynh_script_progression --message="Upgrading PHP-FPM configuration..."
 
-# Create a dedicated php-fpm config
+# Create a dedicated PHP-FPM config
 ynh_add_fpm_config
 
 #=================================================
@@ -151,8 +151,10 @@ ynh_replace_string --match_string="APPNAMETOCHANGE" --replace_string=$app --targ
 ynh_script_progression --message="Setting up cron..."
 
 cron_path="/etc/cron.d/$app"
-ynh_replace_string "__FINALPATH__" $final_path ../conf/freshrss.cron
-ynh_replace_string "__APP__" $app ../conf/freshrss.cron
+
+ynh_replace_string --match_string="__FINALPATH__" --replace_string=$final_path --target_file="../conf/freshrss.cron"
+ynh_replace_string --match_string="__APP__" --replace_string=$app --target_file="../conf/freshrss.cron"
+
 cp ../conf/freshrss.cron "$cron_path"
 chmod 644 "$cron_path"
 
@@ -186,7 +188,7 @@ ynh_app_setting_delete --app="$app" --key=unprotected_uris
 #=================================================
 # RELOAD NGINX
 #=================================================
-ynh_script_progression --message="Reloading nginx web server..."
+ynh_script_progression --message="Reloading NGINX web server..."
 
 ynh_systemd_action --service_name=nginx --action=reload
 
