@@ -76,19 +76,14 @@ chown -R $app: $final_path/extensions/
 #=================================================
 # RESTORE THE PHP-FPM CONFIGURATION
 #=================================================
+ynh_script_progression --message="Reconfiguring PHP-FPM..." --weight=10
 
 ynh_restore_file --origin_path="/etc/php/$phpversion/fpm/pool.d/$app.conf"
 
+ynh_add_fpm_config --phpversion=$YNH_PHP_VERSION --package="$extra_php_dependencies"
+
 #=================================================
 # SPECIFIC RESTORATION
-#=================================================
-# REINSTALL DEPENDENCIES
-#=================================================
-ynh_script_progression --message="Reinstalling dependencies..."
-
-# Define and install dependencies
-ynh_install_app_dependencies $pkg_dependencies
-
 #=================================================
 # RESTORE THE MYSQL DATABASE
 #=================================================

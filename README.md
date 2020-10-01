@@ -10,7 +10,7 @@ If you don't have YunoHost, please see [here](https://yunohost.org/#/install) to
 
 An efficient but powerful RSS aggregator with a nice and mobile-friendly design, as well as extension and themes support.
 
-**Shipped version:** 1.16.2
+**Shipped version:** 1.17.0
 
 ## Screenshots
 
