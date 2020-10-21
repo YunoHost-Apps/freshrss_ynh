@@ -13,7 +13,7 @@
         setup_private=0
         setup_public=0
 		upgrade=1
-        upgrade=1	from_commit=b89554865459520d7d90a5a666f09f6987f41de6
+        upgrade=1	from_commit=0b1c3be0716e4800f2ed6f5b3065f707ed67b6bf
         backup_restore=1
         multi_instance=1
 		# This test is no longer necessary since the version 2.7 (PR: https://github.com/YunoHost/yunohost/pull/304), you can still do it if your app could be installed with this version.
@@ -24,6 +24,6 @@
 	# If the level 5 (Package linter) is forced to 1. Please add justifications here.
 	Level 5=auto
 ;;; Upgrade options
-	; commit=b89554865459520d7d90a5a666f09f6987f41de6
-		name=Tue Jan 29 21:28:14 2019 +0100 update README
+	; commit=0b1c3be0716e4800f2ed6f5b3065f707ed67b6bf
+		name=30 août 2020. Merge pull request #103 from ericgaspar/patch-1 
         manifest_arg=domain=DOMAIN&path=PATH&admin=USER
