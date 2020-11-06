@@ -80,6 +80,7 @@ ynh_script_progression --message="Reconfiguring PHP-FPM..." --weight=5
 
 ynh_restore_file --origin_path="/etc/php/$phpversion/fpm/pool.d/$app.conf"
 
+ynh_add_fpm_config --phpversion=$phpversion --package="$extra_php_dependencies"
 #=================================================
 # SPECIFIC RESTORATION
 #=================================================
