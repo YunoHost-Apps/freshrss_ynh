@@ -10,7 +10,7 @@ If you don't have YunoHost, please see [here](https://yunohost.org/#/install) to
 
 An efficient but powerful RSS aggregator with a nice and mobile-friendly design, as well as extension and themes support.
 
-**Shipped version:** 1.16.2
+**Shipped version:** 1.17.0
 
 ## Screenshots
 
@@ -26,7 +26,7 @@ API (mini) How To:
 * Into your user profile: Settings > profil
 * Setup an API password
 * Check the API is working: https://exemple.tld/rss/api/greader.php
-* Setup your client with: username: ynh user, password: the password you just setup, url https://exemple.tld/rss/api/greader.php
+* Setup your client with: username: ynh user, password: the password you just setup, URL https://exemple.tld/rss/api/greader.php
 
 ## Documentation
 

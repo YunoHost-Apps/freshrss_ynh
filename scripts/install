@@ -30,7 +30,7 @@ app=$YNH_APP_INSTANCE_NAME
 #=================================================
 # CHECK IF THE APP CAN BE INSTALLED WITH THESE ARGS
 #=================================================
-ynh_print_info --message="Validating installation parameters..."
+ynh_script_progression --message="Validating installation parameters..."
 
 final_path=/var/www/$app
 test ! -e "$final_path" || ynh_die --message="This path already contains a folder"
@@ -41,7 +41,7 @@ ynh_webpath_register --app=$app --domain=$domain --path_url=$path_url
 #=================================================
 # STORE SETTINGS FROM MANIFEST
 #=================================================
-ynh_print_info --message="Storing installation settings..."
+ynh_script_progression --message="Storing installation settings..."
 
 ynh_app_setting_set --app=$app --key=domain --value=$domain
 ynh_app_setting_set --app=$app --key=path --value=$path_url
@@ -49,20 +49,9 @@ ynh_app_setting_set --app=$app --key=admin --value=$admin
 ynh_app_setting_set --app=$app --key=language --value=$language
 
 #=================================================
-# STANDARD MODIFICATIONS
-#=================================================
-
-#=================================================
-# INSTALL DEPENDENCIES
-#=================================================
-ynh_print_info --message="Installing dependencies..."
-
-ynh_install_app_dependencies $pkg_dependencies
-
-#=================================================
 # CREATE A MYSQL DATABASE
 #=================================================
-ynh_print_info --message="Creating a MySQL database..."
+ynh_script_progression --message="Creating a MySQL database..."
 
 db_name=$(ynh_sanitize_dbid --db_name=$app)
 db_user=$db_name
@@ -72,11 +61,7 @@ ynh_mysql_setup_db --db_user=$db_user --db_name=$db_name
 #=================================================
 # DOWNLOAD, CHECK AND UNPACK SOURCE
 #=================================================
-ynh_print_info --message="Setting up source files..."
-
-### `ynh_setup_source` is used to install an app from a zip or tar.gz file,
-### downloaded from an upstream source, like a git repository.
-### `ynh_setup_source` use the file conf/app.src
+ynh_script_progression --message="Setting up source files..."
 
 ynh_app_setting_set --app=$app --key=final_path --value=$final_path
 # Download, check integrity, uncompress and patch the source from app.src
@@ -85,17 +70,15 @@ ynh_setup_source --dest_dir="$final_path"
 #=================================================
 # NGINX CONFIGURATION
 #=================================================
-ynh_print_info --message="Configuring nginx web server..."
+ynh_script_progression --message="Configuring NGINX web server..."
 
-### `ynh_add_nginx_config` will use the file conf/nginx.conf
-
-# Create a dedicated nginx config
+# Create a dedicated NGINX config
 ynh_add_nginx_config
 
 #=================================================
 # CREATE DEDICATED USER
 #=================================================
-ynh_print_info --message="Configuring system user..."
+ynh_script_progression --message="Configuring system user..."
 
 # Create a system user
 ynh_system_user_create --username=$app
@@ -103,26 +86,32 @@ ynh_system_user_create --username=$app
 #=================================================
 # PHP-FPM CONFIGURATION
 #=================================================
-ynh_print_info --message="Configuring php-fpm..."
+ynh_script_progression --message="Configuring PHP-FPM..."
 
-# Create a dedicated php-fpm config
-ynh_add_fpm_config
+# Create a dedicated PHP-FPM config
+ynh_add_fpm_config --package="$extra_php_dependencies"
+phpversion=$(ynh_app_setting_get --app=$app --key=phpversion)
 
 #=================================================
 # SPECIFIC SETUP
 #=================================================
-ynh_replace_string "APPNAMETOCHANGE" $app ../hooks/post_app_addaccess
-ynh_replace_string "APPNAMETOCHANGE" $app ../hooks/post_user_create
-ynh_replace_string "APPNAMETOCHANGE" $app ../hooks/post_user_delete
 
+ynh_replace_string --match_string="APPNAMETOCHANGE" --replace_string=$app --target_file="../hooks/post_app_addaccess"
+ynh_replace_string --match_string="APPNAMETOCHANGE" --replace_string=$app --target_file="../hooks/post_user_create"
+ynh_replace_string --match_string="APPNAMETOCHANGE" --replace_string=$app --target_file="../hooks/post_user_delete"
+
+#=================================================
 # SETUPING FRESHRSS
 #=================================================
-ynh_print_info --message="FreshRSS setup script..."
+ynh_script_progression --message="FreshRSS setup script..."
 
 $final_path/cli/do-install.php --default_user $admin --auth_type http_auth --environment production --base_url https://$domain$path_url --title FreshRSS --api_enabled --db-type mysql --db-host localhost --db-user $db_name --db-password $db_pwd --db-base $db_name
 
-# Add users
-ynh_print_info --message="Creating users..."
+#=================================================
+# CREATE DEDICATED USER
+#=================================================
+ynh_script_progression --message="Creating users..."
+
 for myuser in $(ynh_user_list)
 do
     user_token=$(ynh_string_random)
@@ -132,16 +121,16 @@ done
 #=================================================
 # SETUP A CRON
 #=================================================
-ynh_print_info --message="Setting up cron..."
+ynh_script_progression --message="Setting up cron..."
 
 cron_path="/etc/cron.d/$app"
+
 ynh_replace_string --match_string="__FINALPATH__" --replace_string=$final_path --target_file="../conf/freshrss.cron"
 ynh_replace_string --match_string="__APP__" --replace_string=$app --target_file="../conf/freshrss.cron"
+ynh_replace_string --match_string="__PHPVERSION__" --replace_string=$phpversion --target_file="../conf/freshrss.cron"
+
 cp ../conf/freshrss.cron "$cron_path"
 chmod 644 "$cron_path"
-
-#=================================================
-
 
 #=================================================
 # GENERIC FINALIZATION
@@ -151,25 +140,22 @@ chmod 644 "$cron_path"
 
 # Set permissions to app files
 chown -R root: $final_path
-chown -R $app: $final_path/data/
-chown -R $app: $final_path/extensions/
-
+chown -R $app: $final_path/{data,extensions}
 
 #=================================================
 # SETUP SSOWAT
 #=================================================
-ynh_print_info --message="Configuring SSOwat..."
+ynh_script_progression --message="Configuring SSOwat..."
 
 #skip api directory
 ynh_app_setting_set --app="$app" --key=skipped_uris --value="/api/,/scripts/api.js"
 ynh_app_setting_delete --app="$app" --key=unprotected_regex
 ynh_app_setting_delete --app="$app" --key=unprotected_uris
 
-
 #=================================================
 # RELOAD NGINX
 #=================================================
-ynh_print_info --message="Reloading nginx web server..."
+ynh_script_progression --message="Reloading NGINX web server..."
 
 ynh_systemd_action --service_name=nginx --action=reload
 
@@ -177,4 +163,5 @@ ynh_systemd_action --service_name=nginx --action=reload
 # END OF SCRIPT
 #=================================================
 
-ynh_print_info --message="Installation of $app completed"
+ynh_script_progression --message="Installation of $app completed" --last
+
