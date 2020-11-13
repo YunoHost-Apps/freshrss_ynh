@@ -26,7 +26,7 @@ API (mini) How To:
 * Into your user profile: Settings > profil
 * Setup an API password
 * Check the API is working: https://exemple.tld/rss/api/greader.php
-* Setup your client with: username: ynh user, password: the password you just setup, url https://exemple.tld/rss/api/greader.php
+* Setup your client with: username: ynh user, password: the password you just setup, URL https://exemple.tld/rss/api/greader.php
 
 ## Documentation
 
