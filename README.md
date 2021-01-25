@@ -25,8 +25,8 @@ An efficient but powerful RSS aggregator with a nice and mobile-friendly design,
 API (mini) How To:
 * Into your user profile: Settings > profil
 * Setup an API password
-* Check the API is working: https://exemple.tld/rss/api/greader.php
-* Setup your client with: username: ynh user, password: the password you just setup, URL https://exemple.tld/rss/api/greader.php
+* Check that the API is working: https://example.net/rss/api/greader.php
+* Setup your client with: username: ynh user, password: the password you just setup, URL https://example.tld/rss/api/greader.php
 
 ## Documentation
 
@@ -50,7 +50,7 @@ API (mini) How To:
 
 Please do your pull request to the [testing branch](https://github.com/YunoHost-Apps/freshrss_ynh/tree/testing).
 
-To try the testing branch, please proceed like that.
+To try the testing branch, please proceed like this:
 ```
 sudo yunohost app install https://github.com/YunoHost-Apps/freshrss_ynh/tree/testing --debug
 or
