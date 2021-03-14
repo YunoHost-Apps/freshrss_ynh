@@ -146,11 +146,12 @@ chown -R $app: $final_path/{data,extensions}
 # SETUP SSOWAT
 #=================================================
 ynh_script_progression --message="Configuring SSOwat..."
+ynh_permission_update --permission="main" --add="visitors"
 
 #skip api directory
-ynh_app_setting_set --app="$app" --key=skipped_uris --value="/api/,/scripts/api.js"
-ynh_app_setting_delete --app="$app" --key=unprotected_regex
-ynh_app_setting_delete --app="$app" --key=unprotected_uris
+
+
+
 
 #=================================================
 # RELOAD NGINX
