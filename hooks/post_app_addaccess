@@ -13,6 +13,7 @@ then
     do
         user_token=$(ynh_string_random)
         $app_path/cli/create-user.php --user $myuser --language en --token $user_token
-        sudo chown -R $app: $app_path/data/users/$myuser/
+        sudo chown -R $app:$app $app_path/data/users/$myuser/
+        setfacl -n -R -m user:www-data:rx -m default:user:www-data:rx $app_path/data/users/$myuser/
     done
 fi

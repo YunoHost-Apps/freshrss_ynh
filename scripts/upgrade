@@ -99,6 +99,13 @@ ynh_script_progression --message="Upgrading NGINX web server configuration..."
 ynh_add_nginx_config
 
 #=================================================
+# UPGRADE DEPENDENCIES
+#=================================================
+ynh_script_progression --message="Upgrading dependencies..." --weight=1
+
+ynh_install_app_dependencies $pkg_dependencies
+
+#=================================================
 # CREATE DEDICATED USER
 #=================================================
 ynh_script_progression --message="Making sure dedicated system user exists..."
@@ -164,9 +171,11 @@ fi
 #=================================================
 
 # Set permissions on app files
-chown -R root: $final_path
-chmod 755 $final_path
-chown -R $app: $final_path/{data,extensions}
+chown -R root:$app $final_path
+chmod -R g-w $final_path
+chown -R $app:$app $final_path/{data,extensions}
+chmod o-rwx $final_path
+setfacl -n -R -m user:www-data:rx -m default:user:www-data:rx $final_path
 
 # reconfigure application with latest parameters
 $final_path/cli/reconfigure.php --default_user $admin --auth_type http_auth --environment production --base_url https://$domain$path_url --title FreshRSS --api_enabled --db-type mysql --db-host localhost --db-user $db_name --db-password $db_pwd --db-base $db_name

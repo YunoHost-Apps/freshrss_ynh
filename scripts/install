@@ -49,6 +49,15 @@ ynh_app_setting_set --app=$app --key=admin --value=$admin
 ynh_app_setting_set --app=$app --key=language --value=$language
 
 #=================================================
+# STANDARD MODIFICATIONS
+#=================================================
+# INSTALL DEPENDENCIES
+#=================================================
+ynh_script_progression --message="Installing dependencies..." --weight=3
+
+ynh_install_app_dependencies $pkg_dependencies
+
+#=================================================
 # CREATE A MYSQL DATABASE
 #=================================================
 ynh_script_progression --message="Creating a MySQL database..."
@@ -139,8 +148,11 @@ chmod 644 "$cron_path"
 #=================================================
 
 # Set permissions to app files
-chown -R root: $final_path
-chown -R $app: $final_path/{data,extensions}
+chown -R root:$app $final_path
+chmod -R g-w $final_path
+chown -R $app:$app $final_path/{data,extensions}
+chmod o-rwx $final_path
+setfacl -n -R -m user:www-data:rx -m default:user:www-data:rx $final_path
 
 #=================================================
 # SETUP SSOWAT
