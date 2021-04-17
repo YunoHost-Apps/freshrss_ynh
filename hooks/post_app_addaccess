@@ -1,19 +1,17 @@
-#!/bin/bash
+#!/usr/bin/env bash
+
+set -a
+source /usr/share/yunohost/helpers
+
 app=$1
 new_users=$2
-app_path=/var/www/$app
 
-# Source app helpers
-. /usr/share/yunohost/helpers
+if [[ "${0//.\/50-}" = "$app" ]]; then
+    final_path=$(ynh_app_setting_get --app=$app --key=final_path)
 
-
-if [[ "APPNAMETOCHANGE" = "$app" ]];
-then
-    for myuser in $(echo "$new_users" | sed "s/,/ /g")
+    for user in $(echo "$new_users" | sed "s/,/ /g")
     do
         user_token=$(ynh_string_random)
-        $app_path/cli/create-user.php --user $myuser --language en --token $user_token
-        sudo chown -R $app:$app $app_path/data/users/$myuser/
-        setfacl -n -R -m user:www-data:rx -m default:user:www-data:rx $app_path/data/users/$myuser/
+        sudo -u $app $final_path/cli/create-user.php --user $user --language en --token $user_token
     done
 fi

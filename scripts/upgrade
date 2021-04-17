@@ -81,6 +81,21 @@ path_url=$(ynh_normalize_url_path --path_url=$path_url)
 #=================================================
 # STANDARD UPGRADE STEPS
 #=================================================
+# CREATE DEDICATED USER
+#=================================================
+ynh_script_progression --message="Making sure dedicated system user exists..."
+
+# Create a dedicated user (if not existing)
+ynh_system_user_create --username=$app
+
+#=================================================
+# UPGRADE DEPENDENCIES
+#=================================================
+ynh_script_progression --message="Upgrading dependencies..." --weight=1
+
+ynh_install_app_dependencies $pkg_dependencies
+
+#=================================================
 # DOWNLOAD, CHECK AND UNPACK SOURCE
 #=================================================
 ynh_script_progression --message="Upgrading source files..."
@@ -97,21 +112,6 @@ ynh_script_progression --message="Upgrading NGINX web server configuration..."
 
 # Create a dedicated nginx config
 ynh_add_nginx_config
-
-#=================================================
-# UPGRADE DEPENDENCIES
-#=================================================
-ynh_script_progression --message="Upgrading dependencies..." --weight=1
-
-ynh_install_app_dependencies $pkg_dependencies
-
-#=================================================
-# CREATE DEDICATED USER
-#=================================================
-ynh_script_progression --message="Making sure dedicated system user exists..."
-
-# Create a dedicated user (if not existing)
-ynh_system_user_create --username=$app
 
 #=================================================
 # PHP-FPM CONFIGURATION
@@ -141,11 +141,6 @@ cp -r $final_path/extensions/. $tmp_path/extensions/
 ynh_secure_remove "$final_path"
 cp -rp "$tmp_path" "$final_path"
 
-#update hook for multi instance
-ynh_replace_string --match_string="APPNAMETOCHANGE" --replace_string=$app --target_file="../hooks/post_app_addaccess"
-ynh_replace_string --match_string="APPNAMETOCHANGE" --replace_string=$app --target_file="../hooks/post_user_create"
-ynh_replace_string --match_string="APPNAMETOCHANGE" --replace_string=$app --target_file="../hooks/post_user_delete"
-
 #=================================================
 # CRON SETUP
 #=================================================
@@ -170,15 +165,10 @@ fi
 # SECURE FILES AND DIRECTORIES
 #=================================================
 
-# Set permissions on app files
-chown -R root:$app $final_path
-chmod -R g-w $final_path
-chown -R $app:$app $final_path/{data,extensions}
-chmod o-rwx $final_path
-setfacl -n -R -m user:www-data:rx -m default:user:www-data:rx $final_path
+set_permissions
 
 # reconfigure application with latest parameters
-$final_path/cli/reconfigure.php --default_user $admin --auth_type http_auth --environment production --base_url https://$domain$path_url --title FreshRSS --api_enabled --db-type mysql --db-host localhost --db-user $db_name --db-password $db_pwd --db-base $db_name
+sudo -u $app $final_path/cli/reconfigure.php --default_user $admin --auth_type http_auth --environment production --base_url https://$domain$path_url --title FreshRSS --api_enabled --db-type mysql --db-host localhost --db-user $db_name --db-password $db_pwd --db-base $db_name
 
 #=================================================
 # SETUP SSOWAT
@@ -190,11 +180,12 @@ ynh_app_setting_delete --app="$app" --key=unprotected_regex
 ynh_app_setting_delete --app="$app" --key=unprotected_uris
 
 #=================================================
-# RELOAD NGINX
+# RELOAD NGINX AND PHP-FPM
 #=================================================
-ynh_script_progression --message="Reloading NGINX web server..."
+ynh_script_progression --message="Reloading NGINX web server and PHP-FPM..."
 
 ynh_systemd_action --service_name=nginx --action=reload
+ynh_systemd_action --service_name=php$YNH_PHP_VERSION-fpm --action=reload
 
 #=================================================
 # END OF SCRIPT

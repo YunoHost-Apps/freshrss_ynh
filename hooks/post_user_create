@@ -1,13 +1,10 @@
-#!/bin/bash
-app=APPNAMETOCHANGE
-app_path=/var/www/$app
+#!/usr/bin/env bash
 
-myuser=$1
+set -a
+source /usr/share/yunohost/helpers
 
-# Source app helpers
-. /usr/share/yunohost/helpers
+app="${0//.\/50-}"
+username=$1
 
 user_token=$(ynh_string_random)
-sudo $app_path/cli/create-user.php --user $myuser --language en --token $user_token
-sudo chown -R $app:$app $app_path/data/users/$myuser/
-setfacl -n -R -m user:www-data:rx -m default:user:www-data:rx $app_path/data/users/$myuser/
+sudo -u $app $final_path/cli/create-user.php --user $username --language en --token $user_token
