@@ -50,13 +50,6 @@ ynh_script_progression --message="Restoring NGINX configuration..."
 ynh_restore_file --origin_path="/etc/nginx/conf.d/$domain.d/$app.conf"
 
 #=================================================
-# RESTORE THE APP MAIN DIR
-#=================================================
-ynh_script_progression --message="Restoring the app main directory..."
-
-ynh_restore_file --origin_path="$final_path"
-
-#=================================================
 # RECREATE THE DEDICATED USER
 #=================================================
 ynh_script_progression --message="Recreating the dedicated system user..."
@@ -65,13 +58,21 @@ ynh_script_progression --message="Recreating the dedicated system user..."
 ynh_system_user_create --username=$app
 
 #=================================================
-# RESTORE USER RIGHTS
+# REINSTALL DEPENDENCIES
 #=================================================
+ynh_script_progression --message="Reinstalling dependencies..." --weight=1
 
-# Restore permissions on app files
-chown -R root: $final_path
-chown -R $app: $final_path/data/
-chown -R $app: $final_path/extensions/
+# Define and install dependencies
+ynh_install_app_dependencies $pkg_dependencies
+
+#=================================================
+# RESTORE THE APP MAIN DIR
+#=================================================
+ynh_script_progression --message="Restoring the app main directory..."
+
+ynh_restore_file --origin_path="$final_path"
+
+set_permissions
 
 #=================================================
 # RESTORE THE PHP-FPM CONFIGURATION
