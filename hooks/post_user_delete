@@ -1,6 +1,10 @@
-#!/bin/bash
-app=APPNAMETOCHANGE
-app_path=/var/www/$app
+#!/usr/bin/env bash
 
-myuser=$1
-$app_path/cli/delete-user.php --user $myuser
+set -a
+source /usr/share/yunohost/helpers
+
+app="${0//.\/50-}"
+final_path=$(ynh_app_setting_get --app=$app --key=final_path)
+username=$1
+
+sudo -u $app $final_path/cli/delete-user.php --user $username

@@ -1,7 +1,7 @@
 # FreshRSS for YunoHost
 
 [![Integration level](https://dash.yunohost.org/integration/freshrss.svg)](https://dash.yunohost.org/appci/app/freshrss) ![](https://ci-apps.yunohost.org/ci/badges/freshrss.status.svg) ![](https://ci-apps.yunohost.org/ci/badges/freshrss.maintain.svg)  
-[![Install FreshRSS with YunoHost](https://install-app.yunohost.org/install-with-yunohost.png)](https://install-app.yunohost.org/?app=freshrss)
+[![Install FreshRSS with YunoHost](https://install-app.yunohost.org/install-with-yunohost.svg)](https://install-app.yunohost.org/?app=freshrss)
 
 > *This package allow you to install FreshRSS quickly and simply on a YunoHost server.
 If you don't have YunoHost, please see [here](https://yunohost.org/#/install) to know how to install and enjoy it.*
@@ -10,7 +10,7 @@ If you don't have YunoHost, please see [here](https://yunohost.org/#/install) to
 
 An efficient but powerful RSS aggregator with a nice and mobile-friendly design, as well as extension and themes support.
 
-**Shipped version:** 1.17.0
+**Shipped version:** 1.18.0
 
 ## Screenshots
 
@@ -25,8 +25,9 @@ An efficient but powerful RSS aggregator with a nice and mobile-friendly design,
 API (mini) How To:
 * Into your user profile: Settings > profil
 * Setup an API password
-* Check the API is working: https://exemple.tld/rss/api/greader.php
-* Setup your client with: username: ynh user, password: the password you just setup, URL https://exemple.tld/rss/api/greader.php
+* Check that the API is working: https://example.net/rss/api/greader.php
+* Setup your client with: username: ynh user, password: the password you just setup, URL https://example.tld/rss/api/greader.php
+
 
 ## Documentation
 
@@ -50,7 +51,7 @@ API (mini) How To:
 
 Please do your pull request to the [testing branch](https://github.com/YunoHost-Apps/freshrss_ynh/tree/testing).
 
-To try the testing branch, please proceed like that.
+To try the testing branch, please proceed like this:
 ```
 sudo yunohost app install https://github.com/YunoHost-Apps/freshrss_ynh/tree/testing --debug
 or
