@@ -171,6 +171,12 @@ set_permissions
 sudo -u $app $final_path/cli/reconfigure.php --default_user $admin --auth_type http_auth --environment production --base_url https://$domain$path_url --title FreshRSS --api_enabled --db-type mysql --db-host localhost --db-user $db_name --db-password $db_pwd --db-base $db_name
 
 #=================================================
+# SETUP FAIL2BAN
+#=================================================
+ynh_script_progression --message="Adding fail2ban configuration..."
+ynh_add_fail2ban_config_temp "/var/log/nginx/$domain-access.log" ".* - - .*\/api\/[a-z]*(.php)\/accounts\/ClientLogin\?Email=[a-z]*&Passwd=[a-z]* HTTP.* 401 .*" 12 # 10 retries should be enough to permit some tests with (for instance) an app client
+
+#=================================================
 # SETUP SSOWAT
 #=================================================
 ynh_script_progression --message="Upgrading SSOwat configuration..."
