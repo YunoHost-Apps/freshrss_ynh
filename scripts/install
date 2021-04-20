@@ -138,7 +138,7 @@ chmod 644 "$cron_path"
 #=================================================
 # SETUP FAIL2BAN
 #=================================================
-
+ynh_script_progression --message="Adding fail2ban configuration..."
 ynh_add_fail2ban_config_temp "/var/log/nginx/$domain-access.log" ".* - - .*\/api\/[a-z]*(.php)\/accounts\/ClientLogin\?Email=[a-z]*&Passwd=[a-z]* HTTP.* 401 .*" 12 # 10 retries should be enough to permit some tests with (for instance) an app client
 
 #=================================================
