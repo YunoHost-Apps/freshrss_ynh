@@ -127,7 +127,7 @@ done
 ynh_script_progression --message="Setting up cron..."
 
 ynh_add_config --template="../conf/freshrss.cron" --destination="/etc/cron.d/$app"
-chmod 644 "$cron_path"
+chmod 644 "/etc/cron.d/$app"
 
 #=================================================
 # GENERIC FINALIZATION
