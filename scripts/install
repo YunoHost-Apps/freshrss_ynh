@@ -126,13 +126,7 @@ done
 #=================================================
 ynh_script_progression --message="Setting up cron..."
 
-cron_path="/etc/cron.d/$app"
-
-ynh_replace_string --match_string="__FINALPATH__" --replace_string=$final_path --target_file="../conf/freshrss.cron"
-ynh_replace_string --match_string="__APP__" --replace_string=$app --target_file="../conf/freshrss.cron"
-ynh_replace_string --match_string="__PHPVERSION__" --replace_string=$phpversion --target_file="../conf/freshrss.cron"
-
-cp ../conf/freshrss.cron "$cron_path"
+ynh_add_config --template="../conf/freshrss.cron" --destination="/etc/cron.d/$app"
 chmod 644 "$cron_path"
 
 #=================================================
