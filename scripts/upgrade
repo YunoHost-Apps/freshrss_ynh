@@ -57,6 +57,13 @@ if [ -z "$final_path" ]; then
 	ynh_app_setting_set --app=$app --key=final_path --value=$final_path
 fi
 
+# Cleaning legacy permissions
+if ynh_legacy_permissions_exists; then
+	ynh_legacy_permissions_delete_all
+
+	ynh_app_setting_delete --app=$app --key=is_public
+fi
+
 #=================================================
 # BACKUP BEFORE UPGRADE THEN ACTIVE TRAP
 #=================================================
@@ -95,8 +102,8 @@ ynh_script_progression --message="Upgrading source files..."
 
 # Download, check integrity, uncompress and patch the source from app.src
 # into tmp dir
-tmp_path=$(mktemp -d)
-ynh_setup_source "$tmp_path"
+# tmp_path=$(mktemp -d)
+# ynh_setup_source "$tmp_path"
 
 #=================================================
 # NGINX CONFIGURATION
@@ -118,21 +125,29 @@ ynh_add_fpm_config --package="$extra_php_dependencies"
 # SPECIFIC UPGRADE
 #=================================================
 
-#old version cleanup
-if [ -f $final_path/data/user.php.dist ]; then
-    ynh_secure_remove $final_path/data/user.php.dist
+if [ "$upgrade_type" == "UPGRADE_APP" ]
+then
+	ynh_script_progression --message="Upgrading source files..." --time --weight=1
+
+	# Download, check integrity, uncompress and patch the source from app.src
+	ynh_setup_source --dest_dir="$final_path" --keep="$final_path/data/config.php $final_path/data/users/. $final_path/extensions/."
 fi
 
-#restore config
-ynh_secure_remove $tmp_path/data/do-install.txt
-cp $final_path/data/config.php $tmp_path/data/config.php
-cp -r $final_path/data/users/. $tmp_path/data/users/
-cp -r $final_path/extensions/. $tmp_path/extensions/
+# #old version cleanup
+# if [ -f $final_path/data/user.php.dist ]; then
+#     ynh_secure_remove $final_path/data/user.php.dist
+# fi
 
-# Set permissions to freshrss directory
-# Clean up existing files and copy new files to the right place
-ynh_secure_remove "$final_path"
-cp -rp "$tmp_path" "$final_path"
+# #restore config
+# ynh_secure_remove $tmp_path/data/do-install.txt
+# cp $final_path/data/config.php $tmp_path/data/config.php
+# cp -r $final_path/data/users/. $tmp_path/data/users/
+# cp -r $final_path/extensions/. $tmp_path/extensions/
+
+# # Set permissions to freshrss directory
+# # Clean up existing files and copy new files to the right place
+# ynh_secure_remove "$final_path"
+# cp -rp "$tmp_path" "$final_path"
 
 chmod 750 "$final_path"
 chmod -R o-rwx "$final_path"
