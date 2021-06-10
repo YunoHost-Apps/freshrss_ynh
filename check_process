@@ -3,6 +3,7 @@
         domain="domain.tld"
         path="/path"
         admin="homer"
+        is_public=1
         language="fr"
     ; Checks
         pkg_linter=1
