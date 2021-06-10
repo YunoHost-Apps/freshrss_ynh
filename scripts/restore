@@ -55,7 +55,7 @@ ynh_restore_file --origin_path="/etc/nginx/conf.d/$domain.d/$app.conf"
 ynh_script_progression --message="Recreating the dedicated system user..."
 
 # Create the dedicated user (if not existing)
-ynh_system_user_create --username=$app
+ynh_system_user_create --username=$app --home_dir="$final_path"
 
 #=================================================
 # REINSTALL DEPENDENCIES
@@ -72,7 +72,9 @@ ynh_script_progression --message="Restoring the app main directory..."
 
 ynh_restore_file --origin_path="$final_path"
 
-set_permissions
+chmod 750 "$final_path"
+chmod -R o-rwx "$final_path"
+chown -R $app:www-data "$final_path"
 
 #=================================================
 # RESTORE THE PHP-FPM CONFIGURATION

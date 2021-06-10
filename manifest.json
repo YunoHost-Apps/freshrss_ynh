@@ -6,15 +6,23 @@
         "en": "RSS aggregator with a nice and mobile-friendly design",
         "fr": "Agrégateur de flux RSS avec une interface adaptée au mobile"
     },
-    "version": "1.18.0~ynh1",
+    "version": "1.18.1~ynh1",
     "url": "http://freshrss.org/",
+    "upstream": {
+        "license": "AGPL-3.0-only",
+        "website": "http://freshrss.org/",
+        "demo": "https://demo.freshrss.org",
+        "admindoc": "https://freshrss.github.io/FreshRSS/",
+        "userdoc": "https://yunohost.org/apps",
+        "code": "https://github.com/FreshRSS/FreshRSS"
+    },
     "license": "AGPL-3.0-only",
     "maintainer": {
         "name": "plopoyop",
         "email": "plopoyop@gmail.com"
     },
     "requirements": {
-        "yunohost": ">= 4.1.7"
+        "yunohost": ">= 4.2.0"
     },
     "multi_instance": true,
     "services": [
@@ -40,6 +48,11 @@
                 "type": "user",
                 "optional": false,
                 "example": "homer"
+            },
+            {
+                "name": "is_public",
+                "type": "boolean",
+                "default": true
             },
             {
                 "name": "language",
