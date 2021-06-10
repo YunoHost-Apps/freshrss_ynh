@@ -63,7 +63,7 @@ ynh_install_app_dependencies $pkg_dependencies
 ynh_script_progression --message="Configuring system user..."
 
 # Create a system user
-ynh_system_user_create --username=$app
+ynh_system_user_create --username=$app --home_dir="$final_path"
 
 #=================================================
 # CREATE A MYSQL DATABASE
@@ -84,7 +84,9 @@ ynh_app_setting_set --app=$app --key=final_path --value=$final_path
 # Download, check integrity, uncompress and patch the source from app.src
 ynh_setup_source --dest_dir="$final_path"
 
-set_permissions
+chmod 750 "$final_path"
+chmod -R o-rwx "$final_path"
+chown -R $app:www-data "$final_path"
 
 #=================================================
 # NGINX CONFIGURATION
@@ -108,7 +110,7 @@ phpversion=$(ynh_app_setting_get --app=$app --key=phpversion)
 #=================================================
 ynh_script_progression --message="FreshRSS setup script..."
 
-sudo -u $app $final_path/cli/do-install.php --default_user $admin --auth_type http_auth --environment production --base_url https://$domain$path_url --title FreshRSS --api_enabled --db-type mysql --db-host localhost --db-user $db_name --db-password $db_pwd --db-base $db_name
+ynh_exec_as $app $final_path/cli/do-install.php --default_user $admin --auth_type http_auth --environment production --base_url https://$domain$path_url --title FreshRSS --api_enabled --db-type mysql --db-host localhost --db-user $db_name --db-password $db_pwd --db-base $db_name
 
 #=================================================
 # CREATE DEDICATED USER
@@ -118,7 +120,7 @@ ynh_script_progression --message="Creating users..."
 for myuser in $(ynh_user_list)
 do
     user_token=$(ynh_string_random)
-    sudo -u $app $final_path/cli/create-user.php --user $myuser --language $language --token $user_token
+    ynh_exec_as $app $final_path/cli/create-user.php --user $myuser --language $language --token $user_token
 done
 
 #=================================================
@@ -134,12 +136,15 @@ chmod 644 "/etc/cron.d/$app"
 #=================================================
 # SETUP SSOWAT
 #=================================================
-ynh_script_progression --message="Configuring SSOwat..."
+ynh_script_progression --message="Configuring permissions..." --weight=1
 
-#skip api directory
-ynh_app_setting_set --app="$app" --key=skipped_uris --value="/api/,/scripts/api.js"
-ynh_app_setting_delete --app="$app" --key=unprotected_regex
-ynh_app_setting_delete --app="$app" --key=unprotected_uris
+# Make app public if necessary
+if [ $is_public -eq 1 ]
+then
+	# Everyone can access the app.
+	# The "main" permission is automatically created before the install script.
+	ynh_permission_update --permission="main" --add="visitors"
+fi
 
 #=================================================
 # RELOAD NGINX
@@ -153,4 +158,3 @@ ynh_systemd_action --service_name=nginx --action=reload
 #=================================================
 
 ynh_script_progression --message="Installation of $app completed" --last
-

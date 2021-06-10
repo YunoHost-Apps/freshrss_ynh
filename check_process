@@ -1,5 +1,4 @@
 ;; Test complet
-    auto_remove=1
     ; Manifest
         domain="domain.tld"
         path="/path"

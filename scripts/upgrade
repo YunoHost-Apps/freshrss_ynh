@@ -79,8 +79,8 @@ ynh_abort_if_errors
 ynh_script_progression --message="Making sure dedicated system user exists..."
 
 # Create a dedicated user (if not existing)
-ynh_system_user_create --username=$app
-
+ynh_system_user_create --username=$app --home_dir="$final_path"
+ 
 #=================================================
 # UPGRADE DEPENDENCIES
 #=================================================
@@ -134,6 +134,10 @@ cp -r $final_path/extensions/. $tmp_path/extensions/
 ynh_secure_remove "$final_path"
 cp -rp "$tmp_path" "$final_path"
 
+chmod 750 "$final_path"
+chmod -R o-rwx "$final_path"
+chown -R $app:www-data "$final_path"
+
 #=================================================
 # CRON SETUP
 #=================================================
@@ -152,19 +156,8 @@ fi
 # SECURE FILES AND DIRECTORIES
 #=================================================
 
-set_permissions
-
 # reconfigure application with latest parameters
-sudo -u $app $final_path/cli/reconfigure.php --default_user $admin --auth_type http_auth --environment production --base_url https://$domain$path_url --title FreshRSS --api_enabled --db-type mysql --db-host localhost --db-user $db_name --db-password $db_pwd --db-base $db_name
-
-#=================================================
-# SETUP SSOWAT
-#=================================================
-ynh_script_progression --message="Upgrading SSOwat configuration..."
-
-ynh_app_setting_set --app="$app" --key=skipped_uris --value="/api/,/scripts/api.js"
-ynh_app_setting_delete --app="$app" --key=unprotected_regex
-ynh_app_setting_delete --app="$app" --key=unprotected_uris
+ynh_exec-as $app $final_path/cli/reconfigure.php --default_user $admin --auth_type http_auth --environment production --base_url https://$domain$path_url --title FreshRSS --api_enabled --db-type mysql --db-host localhost --db-user $db_name --db-password $db_pwd --db-base $db_name
 
 #=================================================
 # RELOAD NGINX AND PHP-FPM
