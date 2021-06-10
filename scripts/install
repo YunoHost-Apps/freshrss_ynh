@@ -23,6 +23,7 @@ ynh_abort_if_errors
 domain=$YNH_APP_ARG_DOMAIN
 path_url=$YNH_APP_ARG_PATH
 admin=$YNH_APP_ARG_ADMIN
+is_public=$YNH_APP_ARG_IS_PUBLIC
 language=$YNH_APP_ARG_LANGUAGE
 
 app=$YNH_APP_INSTANCE_NAME
@@ -141,8 +142,6 @@ ynh_script_progression --message="Configuring permissions..." --weight=1
 # Make app public if necessary
 if [ $is_public -eq 1 ]
 then
-	# Everyone can access the app.
-	# The "main" permission is automatically created before the install script.
 	ynh_permission_update --permission="main" --add="visitors"
 fi
 
