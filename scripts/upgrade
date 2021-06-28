@@ -57,6 +57,13 @@ if [ -z "$final_path" ]; then
 	ynh_app_setting_set --app=$app --key=final_path --value=$final_path
 fi
 
+# Cleaning legacy permissions
+if ynh_legacy_permissions_exists; then
+	ynh_legacy_permissions_delete_all
+
+	ynh_app_setting_delete --app=$app --key=is_public
+fi
+
 #=================================================
 # BACKUP BEFORE UPGRADE THEN ACTIVE TRAP
 #=================================================
@@ -72,13 +79,6 @@ ynh_clean_setup () {
 ynh_abort_if_errors
 
 #=================================================
-# CHECK THE PATH
-#=================================================
-
-# Normalize the URL path syntax
-path_url=$(ynh_normalize_url_path --path_url=$path_url)
-
-#=================================================
 # STANDARD UPGRADE STEPS
 #=================================================
 # CREATE DEDICATED USER
@@ -86,12 +86,12 @@ path_url=$(ynh_normalize_url_path --path_url=$path_url)
 ynh_script_progression --message="Making sure dedicated system user exists..."
 
 # Create a dedicated user (if not existing)
-ynh_system_user_create --username=$app
-
+ynh_system_user_create --username=$app --home_dir="$final_path"
+ 
 #=================================================
 # UPGRADE DEPENDENCIES
 #=================================================
-ynh_script_progression --message="Upgrading dependencies..." --weight=1
+ynh_script_progression --message="Upgrading dependencies..."
 
 ynh_install_app_dependencies $pkg_dependencies
 
@@ -102,8 +102,8 @@ ynh_script_progression --message="Upgrading source files..."
 
 # Download, check integrity, uncompress and patch the source from app.src
 # into tmp dir
-tmp_path=$(mktemp -d)
-ynh_setup_source "$tmp_path"
+# tmp_path=$(mktemp -d)
+# ynh_setup_source "$tmp_path"
 
 #=================================================
 # NGINX CONFIGURATION
@@ -125,35 +125,41 @@ ynh_add_fpm_config --package="$extra_php_dependencies"
 # SPECIFIC UPGRADE
 #=================================================
 
-#old version cleanup
-if [ -f $final_path/data/user.php.dist ]; then
-    ynh_secure_remove $final_path/data/user.php.dist
+if [ "$upgrade_type" == "UPGRADE_APP" ]
+then
+	ynh_script_progression --message="Upgrading source files..."
+
+	# Download, check integrity, uncompress and patch the source from app.src
+	ynh_setup_source --dest_dir="$final_path" --keep="$final_path/data/config.php $final_path/data/users/. $final_path/extensions/."
 fi
 
-#restore config
-ynh_secure_remove $tmp_path/data/do-install.txt
-cp $final_path/data/config.php $tmp_path/data/config.php
-cp -r $final_path/data/users/. $tmp_path/data/users/
-cp -r $final_path/extensions/. $tmp_path/extensions/
+# #old version cleanup
+# if [ -f $final_path/data/user.php.dist ]; then
+#     ynh_secure_remove $final_path/data/user.php.dist
+# fi
 
-# Set permissions to freshrss directory
-# Clean up existing files and copy new files to the right place
-ynh_secure_remove "$final_path"
-cp -rp "$tmp_path" "$final_path"
+# #restore config
+# ynh_secure_remove $tmp_path/data/do-install.txt
+# cp $final_path/data/config.php $tmp_path/data/config.php
+# cp -r $final_path/data/users/. $tmp_path/data/users/
+# cp -r $final_path/extensions/. $tmp_path/extensions/
+
+# # Set permissions to freshrss directory
+# # Clean up existing files and copy new files to the right place
+# ynh_secure_remove "$final_path"
+# cp -rp "$tmp_path" "$final_path"
+
+chmod 750 "$final_path"
+chmod -R o-rwx "$final_path"
+chown -R $app:www-data "$final_path"
 
 #=================================================
 # CRON SETUP
 #=================================================
 ynh_script_progression --message="Setting up cron..."
 
-cron_path="/etc/cron.d/$app"
-
-ynh_replace_string --match_string="__FINALPATH__" --replace_string=$final_path --target_file="../conf/freshrss.cron"
-ynh_replace_string --match_string="__APP__" --replace_string=$app --target_file="../conf/freshrss.cron"
-ynh_replace_string --match_string="__PHPVERSION__" --replace_string=$phpversion --target_file="../conf/freshrss.cron"
-
-cp ../conf/freshrss.cron "$cron_path"
-chmod 644 "$cron_path"
+ynh_add_config --template="../conf/freshrss.cron" --destination="/etc/cron.d/$app"
+chmod 644 "/etc/cron.d/$app"
 
 if [ -f /tmp/FreshRSS.log ]; then
 	ynh_secure_remove /tmp/FreshRSS.log
@@ -165,19 +171,8 @@ fi
 # SECURE FILES AND DIRECTORIES
 #=================================================
 
-set_permissions
-
 # reconfigure application with latest parameters
-sudo -u $app $final_path/cli/reconfigure.php --default_user $admin --auth_type http_auth --environment production --base_url https://$domain$path_url --title FreshRSS --api_enabled --db-type mysql --db-host localhost --db-user $db_name --db-password $db_pwd --db-base $db_name
-
-#=================================================
-# SETUP SSOWAT
-#=================================================
-ynh_script_progression --message="Upgrading SSOwat configuration..."
-
-ynh_app_setting_set --app="$app" --key=skipped_uris --value="/api/,/scripts/api.js"
-ynh_app_setting_delete --app="$app" --key=unprotected_regex
-ynh_app_setting_delete --app="$app" --key=unprotected_uris
+ynh_exec_as $app $final_path/cli/reconfigure.php --default_user $admin --auth_type http_auth --environment production --base_url https://$domain$path_url --title FreshRSS --api_enabled --db-type mysql --db-host localhost --db-user $db_name --db-password $db_pwd --db-base $db_name
 
 #=================================================
 # RELOAD NGINX AND PHP-FPM
@@ -185,7 +180,7 @@ ynh_app_setting_delete --app="$app" --key=unprotected_uris
 ynh_script_progression --message="Reloading NGINX web server and PHP-FPM..."
 
 ynh_systemd_action --service_name=nginx --action=reload
-ynh_systemd_action --service_name=php$YNH_PHP_VERSION-fpm --action=reload
+ynh_systemd_action --service_name=php$phpversion-fpm --action=reload
 
 #=================================================
 # END OF SCRIPT
