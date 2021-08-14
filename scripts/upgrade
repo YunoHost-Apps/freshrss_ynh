@@ -102,8 +102,6 @@ ynh_script_progression --message="Upgrading source files..."
 
 # Download, check integrity, uncompress and patch the source from app.src
 # into tmp dir
-# tmp_path=$(mktemp -d)
-# ynh_setup_source "$tmp_path"
 
 #=================================================
 # NGINX CONFIGURATION
@@ -133,21 +131,7 @@ then
 	ynh_setup_source --dest_dir="$final_path" --keep="$final_path/data/config.php $final_path/data/users/. $final_path/extensions/."
 fi
 
-# #old version cleanup
-# if [ -f $final_path/data/user.php.dist ]; then
-#     ynh_secure_remove $final_path/data/user.php.dist
-# fi
 
-# #restore config
-# ynh_secure_remove $tmp_path/data/do-install.txt
-# cp $final_path/data/config.php $tmp_path/data/config.php
-# cp -r $final_path/data/users/. $tmp_path/data/users/
-# cp -r $final_path/extensions/. $tmp_path/extensions/
-
-# # Set permissions to freshrss directory
-# # Clean up existing files and copy new files to the right place
-# ynh_secure_remove "$final_path"
-# cp -rp "$tmp_path" "$final_path"
 
 chmod 750 "$final_path"
 chmod -R o-rwx "$final_path"
