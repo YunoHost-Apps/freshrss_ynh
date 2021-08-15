@@ -46,13 +46,38 @@ if [ -z $admin ]; then
 fi
 
 #=================================================
+# BACKUP BEFORE CHANGE URL THEN ACTIVE TRAP
+#=================================================
+ynh_script_progression --message="Backing up the app before changing its URL (may take a while)..."
+
+# Backup the current version of the app
+ynh_backup_before_upgrade
+ynh_clean_setup () {
+  # Remove the new domain config file, the remove script won't do it as it doesn't know yet its location.
+  ynh_secure_remove --file="/etc/nginx/conf.d/$new_domain.d/$app.conf"
+
+  # Restore it if the upgrade fails
+  ynh_restore_upgradebackup
+}
+# Exit if an error occurs during the execution of the script
+ynh_abort_if_errors
+
+#=================================================
 # CHECK PATHS SYNTAX
 #=================================================
+ynh_script_progression --message="Backing up the app before changing its URL (may take a while)..." --weight=1
 
-test -n "$old_path" || old_path="/"
-test -n "$new_path" || new_path="/"
-new_path=$(ynh_normalize_url_path $new_path)
-old_path=$(ynh_normalize_url_path $old_path)
+# Backup the current version of the app
+ynh_backup_before_upgrade
+ynh_clean_setup () {
+  # Remove the new domain config file, the remove script won't do it as it doesn't know yet its location.
+  ynh_secure_remove --file="/etc/nginx/conf.d/$new_domain.d/$app.conf"
+
+  # Restore it if the upgrade fails
+  ynh_restore_upgradebackup
+}
+# Exit if an error occurs during the execution of the script
+ynh_abort_if_errors
 
 #=================================================
 # CHECK WHICH PARTS SHOULD BE CHANGED
@@ -103,7 +128,7 @@ fi
 # SPECIFIC MODIFICATIONS
 #=================================================
 
-sudo -u $app $final_path/cli/reconfigure.php --auth_type http_auth --environment production --base_url https://$domain$path_url --title FreshRSS --api_enabled --db-type mysql --db-host localhost --db-user $db_name --db-password $db_pwd --db-base $db_name
+ynh_exec_as $app $final_path/cli/reconfigure.php --auth_type http_auth --environment production --base_url https://$domain$path_url --title FreshRSS --api_enabled --db-type mysql --db-host localhost --db-user $db_name --db-password $db_pwd --db-base $db_name
 
 #=================================================
 # GENERIC FINALIZATION
