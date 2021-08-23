@@ -147,6 +147,8 @@ fi
 
 ynh_app_setting_set --app="$app" --key=skipped_uris --value="/api/,/scripts/api.js"
 
+#ynh_permission_create --permission="api" --url="/api" --additional_urls="/scripts/api.js" --allowed="visitors" --auth_header="false" --show_tile="false" --protected="true"
+
 #=================================================
 # RELOAD NGINX
 #=================================================
