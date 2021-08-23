@@ -150,6 +150,13 @@ if [ -f /tmp/FreshRSS.log ]; then
 fi
 
 #=================================================
+# SETUP SSOWAT
+#=================================================
+ynh_script_progression --message="Upgrading SSOwat configuration..."
+
+ynh_app_setting_set --app="$app" --key=skipped_uris --value="/api/,/scripts/api.js"
+
+#=================================================
 # GENERIC FINALIZATION
 #=================================================
 # SECURE FILES AND DIRECTORIES

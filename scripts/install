@@ -145,6 +145,8 @@ then
 	ynh_permission_update --permission="main" --add="visitors"
 fi
 
+ynh_app_setting_set --app="$app" --key=skipped_uris --value="/api/,/scripts/api.js"
+
 #=================================================
 # RELOAD NGINX
 #=================================================
