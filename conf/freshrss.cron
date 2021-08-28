@@ -1,1 +1,2 @@
-*/10 * * * * __APP__ /usr/bin/php__PHPVERSION__ __FINALPATH__/app/actualize_script.php >/tmp/__APP__.log 2>&1
+MAILTO="root"
+*/10 * * * * __APP__ /usr/bin/php__PHPVERSION__ __FINALPATH__/app/actualize_script.php >/var/www/__APP__/__APP__.log 2>&1

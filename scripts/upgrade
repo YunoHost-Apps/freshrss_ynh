@@ -64,6 +64,10 @@ if ynh_legacy_permissions_exists; then
 	ynh_app_setting_delete --app=$app --key=is_public
 fi
 
+# Create a permission if needed
+if ! ynh_permission_exists --permission="api"; then
+	ynh_permission_create --permission="api" --url="/api" --additional_urls="/scripts/api.js" --allowed="visitors" --auth_header="false" --show_tile="false" --protected="true"
+fi
 #=================================================
 # BACKUP BEFORE UPGRADE THEN ACTIVE TRAP
 #=================================================
@@ -87,7 +91,7 @@ ynh_script_progression --message="Making sure dedicated system user exists..."
 
 # Create a dedicated user (if not existing)
 ynh_system_user_create --username=$app --home_dir="$final_path"
- 
+
 #=================================================
 # UPGRADE DEPENDENCIES
 #=================================================
@@ -131,8 +135,6 @@ then
 	ynh_setup_source --dest_dir="$final_path" --keep="$final_path/data/config.php $final_path/data/users/. $final_path/extensions/."
 fi
 
-
-
 chmod 750 "$final_path"
 chmod -R o-rwx "$final_path"
 chown -R $app:www-data "$final_path"
@@ -143,6 +145,7 @@ chown -R $app:www-data "$final_path"
 ynh_script_progression --message="Setting up cron..."
 
 ynh_add_config --template="../conf/freshrss.cron" --destination="/etc/cron.d/$app"
+chown root: "/etc/cron.d/$app"
 chmod 644 "/etc/cron.d/$app"
 
 if [ -f /tmp/FreshRSS.log ]; then
