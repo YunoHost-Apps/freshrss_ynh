@@ -17,7 +17,7 @@ If you don't have YunoHost, please consult [the guide](https://yunohost.org/#/in
 
 RSS aggregator with a nice and mobile-friendly design
 
-**Shipped version:** 1.18.1~ynh3
+**Shipped version:** 1.18.1~ynh4
 
 **Demo:** https://demo.freshrss.org
 
@@ -38,7 +38,6 @@ API (mini) How To:
 ## Documentation and resources
 
 * Official app website: http://freshrss.org/
-* Official user documentation: https://yunohost.org/apps
 * Official admin documentation: https://freshrss.github.io/FreshRSS/
 * Upstream app code repository: https://github.com/FreshRSS/FreshRSS
 * YunoHost documentation for this app: https://yunohost.org/app_freshrss
