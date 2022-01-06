@@ -6,7 +6,7 @@
         "en": "RSS aggregator with a nice and mobile-friendly design",
         "fr": "Agrégateur de flux RSS avec une interface adaptée au mobile"
     },
-    "version": "1.19.0~ynh1",
+    "version": "1.19.1~ynh1",
     "url": "http://freshrss.org/",
     "upstream": {
         "license": "AGPL-3.0-only",
