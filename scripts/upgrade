@@ -153,11 +153,24 @@ chown root: "/etc/cron.d/$app"
 chmod 644 "/etc/cron.d/$app"
 
 if [ -f /tmp/FreshRSS.log ]; then
-	ynh_secure_remove /tmp/FreshRSS.log
+	ynh_secure_remove --file="/tmp/FreshRSS.log"
+fi
+
+if [ -f /var/www/$app/$app.log ]; then
+	ynh_secure_remove --file="/var/www/$app/$app.log"
 fi
 
 #=================================================
 # GENERIC FINALIZATION
+#=================================================
+# SETUP LOGROTATE
+#=================================================
+ynh_script_progression --message="Upgrading logrotate configuration..." --weight=1
+
+mkdir -p "/var/log/$app"
+# Use logrotate to manage app-specific logfile(s)
+ynh_use_logrotate --non-append
+
 #=================================================
 # RELOAD NGINX
 #=================================================

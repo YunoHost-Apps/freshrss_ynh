@@ -141,6 +141,15 @@ chmod 644 "/etc/cron.d/$app"
 #=================================================
 # GENERIC FINALIZATION
 #=================================================
+# SETUP LOGROTATE
+#=================================================
+ynh_script_progression --message="Configuring log rotation..." --weight=1
+
+mkdir -p "/var/log/$app"
+# Use logrotate to manage application logfile(s)
+ynh_use_logrotate
+
+#=================================================
 # SETUP SSOWAT
 #=================================================
 ynh_script_progression --message="Configuring permissions..." --weight=1
