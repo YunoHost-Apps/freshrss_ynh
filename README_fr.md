@@ -17,7 +17,8 @@ Si vous n'avez pas YunoHost, regardez [ici](https://yunohost.org/#/install) pour
 
 Agrégateur de flux RSS avec une interface adaptée au mobile
 
-**Version incluse :** 1.19.2~ynh1
+
+**Version incluse :** 1.20.0~ynh1 *(:warning: Il s'agit de la branche `upgrade`. La [branche `master`](https://github.com/YunoHost-Apps/freshrss_ynh/tree/master) utilisée dans le catalogue est actuellement en 1.19.2\~ynh1.)*
 
 
 **Démo :** https://demo.freshrss.org
@@ -30,11 +31,11 @@ Agrégateur de flux RSS avec une interface adaptée au mobile
 
 ## Configuration
 
-API (mini) How To:
-* Into your user profile: Settings > profil
-* Setup an API password
-* Check that the API is working: https://example.net/rss/api/greader.php
-* Setup your client with: username: ynh user, password: the password you just setup, URL https://example.tld/rss/api/greader.php
+API (mini) Comment faire :
+* Dans votre profil utilisateur : Paramètres > profil
+* Configurer un mot de passe API
+* Vérifiez que l'API fonctionne : https://example.net/rss/api/greader.php
+* Configurez votre client avec : nom d'utilisateur : ynh user, mot de passe : le mot de passe que vous venez de configurer, URL https://example.tld/rss/api/greader.php
 
 ## Documentations et ressources
 
