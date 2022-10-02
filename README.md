@@ -15,9 +15,10 @@ If you don't have YunoHost, please consult [the guide](https://yunohost.org/#/in
 
 ## Overview
 
-RSS aggregator with a nice and mobile-friendly design
+An efficient but powerful RSS aggregator with a nice and mobile-friendly design, as well as extension and themes support.
 
-**Shipped version:** 1.19.2~ynh1
+
+**Shipped version:** 1.20.0~ynh1 *(:warning: This is the `upgrade` branch. The [`master` branch](https://github.com/YunoHost-Apps/freshrss_ynh/tree/master) used in the catalog is currently on version 1.19.2\~ynh1.)*
 
 
 **Demo:** https://demo.freshrss.org
