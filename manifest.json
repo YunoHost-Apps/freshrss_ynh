@@ -13,7 +13,8 @@
         "website": "http://freshrss.org/",
         "demo": "https://demo.freshrss.org",
         "admindoc": "https://freshrss.github.io/FreshRSS/",
-        "code": "https://github.com/FreshRSS/FreshRSS"
+        "code": "https://github.com/FreshRSS/FreshRSS",
+        "cpe": "cpe:2.3:a:freshrss:freshrss"
     },
     "license": "AGPL-3.0-only",
     "maintainer": {
@@ -58,7 +59,22 @@
                     "en": "Choose the application language",
                     "fr": "Choisissez la langue de l'application"
                 },
-                "choices": ["cz", "de", "en", "es", "fr", "he", "it", "kr", "nl", "oc", "pt", "ru", "tr", "zh-cn"],
+                "choices": [
+                    "cz",
+                    "de",
+                    "en",
+                    "es",
+                    "fr",
+                    "he",
+                    "it",
+                    "kr",
+                    "nl",
+                    "oc",
+                    "pt",
+                    "ru",
+                    "tr",
+                    "zh-cn"
+                ],
                 "default": "fr"
             }
         ]
