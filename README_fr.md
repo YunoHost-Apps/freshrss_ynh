@@ -18,8 +18,7 @@ Si vous n'avez pas YunoHost, regardez [ici](https://yunohost.org/#/install) pour
 Agrégateur de flux RSS avec une interface adaptée au mobile
 
 
-**Version incluse :** 1.20.0~ynh1 *(:warning: Il s'agit de la branche `upgrade`. La [branche `master`](https://github.com/YunoHost-Apps/freshrss_ynh/tree/master) utilisée dans le catalogue est actuellement en 1.19.2\~ynh1.)*
-
+**Version incluse :** 1.20.0~ynh1
 
 **Démo :** https://demo.freshrss.org
 
