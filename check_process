@@ -1,23 +1,30 @@
 ;; Test complet
-    ; Manifest
-        domain="domain.tld"
-        path="/path"
-        admin="homer"
-        is_public=1
-        language="fr"
-    ; Checks
-        pkg_linter=1
-        setup_sub_dir=1
-        setup_root=1
-        setup_nourl=0
-        setup_private=1
-        setup_public=1
+	; Manifest
+		domain="domain.tld"
+		path="/path"
+		is_public=1
+		language="fr"
+		admin="john"
+	; Checks
+		pkg_linter=1
+		setup_sub_dir=1
+		setup_root=1
+		setup_nourl=0
+		setup_private=1
+		setup_public=1
 		upgrade=1
-        upgrade=1	from_commit=0b1c3be0716e4800f2ed6f5b3065f707ed67b6bf
-        backup_restore=1
-        multi_instance=1
-        change_url=1
+		# 1.16.2~ynh1
+		upgrade=1	from_commit=0b1c3be0716e4800f2ed6f5b3065f707ed67b6bf
+		# 1.19.2~ynh1
+		upgrade=1	from_commit=722ade2ac45b6380f30cb0817817d528f89459df
+		backup_restore=1
+		multi_instance=1
+		port_already_use=0
+		change_url=1
+;;; Options
+Email=
+Notification=none
 ;;; Upgrade options
 	; commit=0b1c3be0716e4800f2ed6f5b3065f707ed67b6bf
 		name=30 août 2020. Merge pull request #103 from ericgaspar/patch-1 
-        manifest_arg=domain=DOMAIN&path=PATH&admin=USER
+		manifest_arg=domain=DOMAIN&path=PATH&admin=USER

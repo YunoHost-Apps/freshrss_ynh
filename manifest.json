@@ -6,14 +6,15 @@
         "en": "RSS aggregator with a nice and mobile-friendly design",
         "fr": "Agrégateur de flux RSS avec une interface adaptée au mobile"
     },
-    "version": "1.19.2~ynh1",
+    "version": "1.20.0~ynh1",
     "url": "http://freshrss.org/",
     "upstream": {
         "license": "AGPL-3.0-only",
         "website": "http://freshrss.org/",
         "demo": "https://demo.freshrss.org",
         "admindoc": "https://freshrss.github.io/FreshRSS/",
-        "code": "https://github.com/FreshRSS/FreshRSS"
+        "code": "https://github.com/FreshRSS/FreshRSS",
+        "cpe": "cpe:2.3:a:freshrss:freshrss"
     },
     "license": "AGPL-3.0-only",
     "maintainer": {
@@ -42,11 +43,6 @@
                 "default": "/rss"
             },
             {
-                "name": "admin",
-                "type": "user",
-                "optional": false
-            },
-            {
                 "name": "is_public",
                 "type": "boolean",
                 "default": true
@@ -58,8 +54,28 @@
                     "en": "Choose the application language",
                     "fr": "Choisissez la langue de l'application"
                 },
-                "choices": ["cz", "de", "en", "es", "fr", "he", "it", "kr", "nl", "oc", "pt", "ru", "tr", "zh-cn"],
+                "choices": [
+                    "cz",
+                    "de",
+                    "en",
+                    "es",
+                    "fr",
+                    "he",
+                    "it",
+                    "kr",
+                    "nl",
+                    "oc",
+                    "pt",
+                    "ru",
+                    "tr",
+                    "zh-cn"
+                ],
                 "default": "fr"
+            },
+            {
+                "name": "admin",
+                "type": "user",
+                "optional": false
             }
         ]
     }
