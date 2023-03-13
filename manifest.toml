@@ -20,8 +20,8 @@ code = "https://github.com/FreshRSS/FreshRSS"
 yunohost = ">= 11.1.15"
 architectures = "all"
 multi_instance = true
-ldap = "?"
-sso = "?"
+ldap = false
+sso = false
 disk = "50M"
 ram.build = "50M"
 ram.runtime = "50M"
