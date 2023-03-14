@@ -47,7 +47,6 @@ ram.runtime = "50M"
 
     [install.admin]
     type = "user"
-    optional = false
 
 [resources]
         [resources.sources.main]
