@@ -47,35 +47,15 @@ chmod -R o-rwx "$install_dir"
 chown -R $app:www-data "$install_dir"
 
 #=================================================
-# PHP-FPM CONFIGURATION
+# REAPPLY SYSTEM CONFIGURATIONS
 #=================================================
-ynh_script_progression --message="Upgrading PHP-FPM configuration..." --weight=1
+ynh_script_progression --message="Upgrading system configurations related to $app..." --weight=1
 
 # Create a dedicated PHP-FPM config
 ynh_add_fpm_config
 
-#=================================================
-# NGINX CONFIGURATION
-#=================================================
-ynh_script_progression --message="Upgrading NGINX web server configuration..." --weight=1
-
 # Create a dedicated NGINX config
 ynh_add_nginx_config
-
-#=================================================
-# SPECIFIC UPGRADE
-#=================================================
-# UPGRADING FRESHRSS
-#=================================================
-ynh_script_progression --message="Upgrading FreshRSS..." --weight=1
-
-# reconfigure application with latest parameters
-ynh_exec_as $app $install_dir/cli/reconfigure.php --default_user $admin --auth_type http_auth --environment production --base_url https://$domain$path --title FreshRSS --api_enabled --db-type mysql --db-host localhost --db-user $db_name --db-password $db_pwd --db-base $db_name
-
-#=================================================
-# CRON SETUP
-#=================================================
-ynh_script_progression --message="Setting up cron..." --weight=1
 
 ynh_add_config --template="../conf/freshrss.cron" --destination="/etc/cron.d/$app"
 chown root: "/etc/cron.d/$app"
@@ -89,18 +69,21 @@ if [ -f $install_dir/$app.log ]; then
 	ynh_secure_remove --file="/var/www/$app/$app.log"
 fi
 
-#=================================================
-# GENERIC FINALIZATION
-#=================================================
-# SETUP LOGROTATE
-#=================================================
-ynh_script_progression --message="Upgrading logrotate configuration..." --weight=1
-
 log_path="/var/log/$app"
 mkdir -p $log_path
 chown $app:www-data "$log_path"
 # Use logrotate to manage app-specific logfile(s)
 ynh_use_logrotate --non-append
+
+#=================================================
+# SPECIFIC UPGRADE
+#=================================================
+# UPGRADING FRESHRSS
+#=================================================
+ynh_script_progression --message="Upgrading FreshRSS..." --weight=1
+
+# reconfigure application with latest parameters
+ynh_exec_as $app $install_dir/cli/reconfigure.php --default_user $admin --auth_type http_auth --environment production --base_url https://$domain$path --title FreshRSS --api_enabled --db-type mysql --db-host localhost --db-user $db_name --db-password $db_pwd --db-base $db_name
 
 #=================================================
 # END OF SCRIPT
