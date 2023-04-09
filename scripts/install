@@ -26,7 +26,7 @@ chown -R $app:www-data "$install_dir"
 ynh_script_progression --message="Adding system configurations related to $app..." --weight=1
 
 # Create a dedicated PHP-FPM config
-ynh_add_fpm_config
+ynh_add_fpm_config --usage=low --footprint=low
 
 # Create a dedicated NGINX config
 ynh_add_nginx_config
