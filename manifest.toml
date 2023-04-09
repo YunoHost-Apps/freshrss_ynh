@@ -17,7 +17,7 @@ admindoc = "https://freshrss.github.io/FreshRSS/"
 code = "https://github.com/FreshRSS/FreshRSS"
 
 [integration]
-yunohost = ">= 11.1.15"
+yunohost = ">= 11.1.17"
 architectures = "all"
 multi_instance = true
 ldap = false
@@ -49,9 +49,13 @@ ram.runtime = "50M"
     type = "user"
 
 [resources]
+
+    [resources.sources]
+
         [resources.sources.main]
         url = "https://github.com/FreshRSS/FreshRSS/archive/1.21.0.tar.gz"
         sha256 = "86d9f5953fbe5bd04aee105d7c92272055e6816ba893b9a153a575e7535c7d78"
+        autoupdate.strategy = "latest_github_tag"
 
     [resources.system_user]
 
