@@ -16,7 +16,7 @@ Si vous n’avez pas YunoHost, regardez [ici](https://yunohost.org/#/install) po
 
 ## Vue d’ensemble
 
-Agrégateur de flux RSS avec une interface adaptée au mobile
+Agrégateur de flux RSS avec une interface adaptée au mobile.
 
 
 **Version incluse :** 1.21.0~ynh2
