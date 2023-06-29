@@ -17,7 +17,7 @@ admindoc = "https://freshrss.github.io/FreshRSS/"
 code = "https://github.com/FreshRSS/FreshRSS"
 
 [integration]
-yunohost = ">= 11.1.17"
+yunohost = ">= 11.1.21"
 architectures = "all"
 multi_instance = true
 ldap = false
@@ -71,7 +71,7 @@ ram.runtime = "50M"
     api.protected = true
 
     [resources.apt]
-    packages = "mariadb-server acl php8.1-gd php8.1-zip php8.1-dom php8.1-mbstring php8.1-gmp php8.1-mysql php8.1-sqlite3 php8.1-curl php8.1-intl php8.1-xml"
+    packages = "mariadb-server acl php8.2-gd php8.2-zip php8.2-dom php8.2-mbstring php8.2-gmp php8.2-mysql php8.2-sqlite3 php8.2-curl php8.2-intl php8.2-xml"
 
     [resources.database]
     type = "mysql"
