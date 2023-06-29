@@ -5,26 +5,27 @@ It shall NOT be edited by hand.
 
 # FreshRSS pour YunoHost
 
-[![Niveau d'intégration](https://dash.yunohost.org/integration/freshrss.svg)](https://dash.yunohost.org/appci/app/freshrss) ![Statut du fonctionnement](https://ci-apps.yunohost.org/ci/badges/freshrss.status.svg) ![Statut de maintenance](https://ci-apps.yunohost.org/ci/badges/freshrss.maintain.svg)  
+[![Niveau d’intégration](https://dash.yunohost.org/integration/freshrss.svg)](https://dash.yunohost.org/appci/app/freshrss) ![Statut du fonctionnement](https://ci-apps.yunohost.org/ci/badges/freshrss.status.svg) ![Statut de maintenance](https://ci-apps.yunohost.org/ci/badges/freshrss.maintain.svg)
+
 [![Installer FreshRSS avec YunoHost](https://install-app.yunohost.org/install-with-yunohost.svg)](https://install-app.yunohost.org/?app=freshrss)
 
 *[Read this readme in english.](./README.md)*
 
-> *Ce package vous permet d'installer FreshRSS rapidement et simplement sur un serveur YunoHost.
-Si vous n'avez pas YunoHost, regardez [ici](https://yunohost.org/#/install) pour savoir comment l'installer et en profiter.*
+> *Ce package vous permet d’installer FreshRSS rapidement et simplement sur un serveur YunoHost.
+Si vous n’avez pas YunoHost, regardez [ici](https://yunohost.org/#/install) pour savoir comment l’installer et en profiter.*
 
-## Vue d'ensemble
+## Vue d’ensemble
 
 Agrégateur de flux RSS avec une interface adaptée au mobile
 
 
-**Version incluse :** 1.20.2~ynh1
+**Version incluse :** 1.21.0~ynh1
 
 **Démo :** https://demo.freshrss.org
 
-## Captures d'écran
+## Captures d’écran
 
-![Capture d'écran de FreshRSS](./doc/screenshots/screenshot.png)
+![Capture d’écran de FreshRSS](./doc/screenshots/screenshot.png)
 
 ## Avertissements / informations importantes
 
@@ -38,9 +39,9 @@ API (mini) Comment faire :
 
 ## Documentations et ressources
 
-* Site officiel de l'app : <http://freshrss.org/>
-* Documentation officielle de l'admin : <https://freshrss.github.io/FreshRSS/>
-* Dépôt de code officiel de l'app : <https://github.com/FreshRSS/FreshRSS>
+* Site officiel de l’app : <http://freshrss.org/>
+* Documentation officielle de l’admin : <https://freshrss.github.io/FreshRSS/>
+* Dépôt de code officiel de l’app : <https://github.com/FreshRSS/FreshRSS>
 * Documentation YunoHost pour cette app : <https://yunohost.org/app_freshrss>
 * Signaler un bug : <https://github.com/YunoHost-Apps/freshrss_ynh/issues>
 
@@ -56,4 +57,4 @@ ou
 sudo yunohost app upgrade freshrss -u https://github.com/YunoHost-Apps/freshrss_ynh/tree/testing --debug
 ```
 
-**Plus d'infos sur le packaging d'applications :** <https://yunohost.org/packaging_apps>
+**Plus d’infos sur le packaging d’applications :** <https://yunohost.org/packaging_apps>
