@@ -4,8 +4,8 @@ set -a
 source /usr/share/yunohost/helpers
 
 app="${0//.\/50-}"
-final_path=$(ynh_app_setting_get --app=$app --key=final_path)
+install_dir=$(ynh_app_setting_get --app=$app --key=install_dir)
 username=$1
 
 user_token=$(ynh_string_random)
-sudo -u $app $final_path/cli/create-user.php --user $username --language en --token $user_token
+sudo -u $app $install_dir/cli/create-user.php --user $username --language en --token $user_token

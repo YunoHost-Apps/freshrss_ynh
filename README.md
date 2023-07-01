@@ -19,23 +19,13 @@ If you don't have YunoHost, please consult [the guide](https://yunohost.org/#/in
 An efficient but powerful RSS aggregator with a nice and mobile-friendly design, as well as extension and themes support.
 
 
-**Shipped version:** 1.21.0~ynh1
+**Shipped version:** 1.21.0~ynh2
 
 **Demo:** https://demo.freshrss.org
 
 ## Screenshots
 
 ![Screenshot of FreshRSS](./doc/screenshots/screenshot.png)
-
-## Disclaimers / important information
-
-## Configuration
-
-API (mini) How To:
-* Into your user profile: Settings > profil
-* Setup an API password
-* Check that the API is working: https://example.net/rss/api/greader.php
-* Setup your client with: username: ynh user, password: the password you just setup, URL https://example.tld/rss/api/greader.php
 
 ## Documentation and resources
 

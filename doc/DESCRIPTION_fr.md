@@ -1,1 +1,1 @@
-Agrégateur de flux RSS avec une interface adaptée au mobile
+Agrégateur de flux RSS avec une interface adaptée au mobile.
