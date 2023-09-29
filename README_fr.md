@@ -32,7 +32,6 @@ Agrégateur de flux RSS avec une interface adaptée au mobile.
 * Site officiel de l’app : <http://freshrss.org/>
 * Documentation officielle de l’admin : <https://freshrss.github.io/FreshRSS/>
 * Dépôt de code officiel de l’app : <https://github.com/FreshRSS/FreshRSS>
-* Documentation YunoHost pour cette app : <https://yunohost.org/app_freshrss>
 * Signaler un bug : <https://github.com/YunoHost-Apps/freshrss_ynh/issues>
 
 ## Informations pour les développeurs
