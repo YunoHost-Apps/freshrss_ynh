@@ -17,7 +17,7 @@ admindoc = "https://freshrss.github.io/FreshRSS/"
 code = "https://github.com/FreshRSS/FreshRSS"
 
 [integration]
-yunohost = ">= 11.1.21"
+yunohost = ">= 11.2"
 architectures = "all"
 multi_instance = true
 ldap = false
@@ -41,7 +41,7 @@ ram.runtime = "50M"
     [install.language]
     ask.en = "Choose the application language"
     ask.fr = "Choisissez la langue de l'application"
-    type = "string"
+    type = "select"
     choices = ["cz", "de", "en", "es", "fr", "he", "it", "kr", "nl", "oc", "pt", "ru", "tr", "zh-cn"]
     default = "fr"
 
@@ -71,7 +71,7 @@ ram.runtime = "50M"
     api.protected = true
 
     [resources.apt]
-    packages = "mariadb-server acl php8.2-gd php8.2-zip php8.2-dom php8.2-mbstring php8.2-gmp php8.2-mysql php8.2-sqlite3 php8.2-curl php8.2-intl php8.2-xml"
+    packages = "mariadb-server, acl, php8.2-gd, php8.2-zip, php8.2-dom, php8.2-mbstring, php8.2-gmp, php8.2-mysql, php8.2-sqlite3, php8.2-curl, php8.2-intl, php8.2-xml"
 
     [resources.database]
     type = "mysql"
