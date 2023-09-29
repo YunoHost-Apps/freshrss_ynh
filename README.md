@@ -32,7 +32,6 @@ An efficient but powerful RSS aggregator with a nice and mobile-friendly design,
 * Official app website: <http://freshrss.org/>
 * Official admin documentation: <https://freshrss.github.io/FreshRSS/>
 * Upstream app code repository: <https://github.com/FreshRSS/FreshRSS>
-* YunoHost documentation for this app: <https://yunohost.org/app_freshrss>
 * Report a bug: <https://github.com/YunoHost-Apps/freshrss_ynh/issues>
 
 ## Developer info
