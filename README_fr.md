@@ -19,7 +19,7 @@ Si vous n’avez pas YunoHost, regardez [ici](https://yunohost.org/#/install) po
 Agrégateur de flux RSS avec une interface adaptée au mobile.
 
 
-**Version incluse :** 1.21.0~ynh2
+**Version incluse :** 1.22.0~ynh1
 
 **Démo :** https://demo.freshrss.org
 
