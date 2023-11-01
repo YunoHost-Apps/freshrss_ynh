@@ -18,14 +18,14 @@ ynh_script_progression --message="Restoring the app main directory..." --weight=
 ynh_restore_file --origin_path="$install_dir"
 
 chmod -R o-rwx "$install_dir"
-chown -R $app:www-data "$install_dir"
+chown -R "$app":www-data "$install_dir"
 
 #=================================================
 # RESTORE THE MYSQL DATABASE
 #=================================================
 ynh_script_progression --message="Restoring the MySQL database..." --weight=1
 
-ynh_mysql_connect_as --user=$db_user --password=$db_pwd --database=$db_name < ./db.sql
+ynh_mysql_connect_as --user="$db_user" --password="$db_pwd" --database="$db_name" < ./db.sql
 
 #=================================================
 # RESTORE SYSTEM CONFIGURATIONS
@@ -36,14 +36,43 @@ ynh_script_progression --message="Restoring system configurations related to $ap
 
 ynh_restore_file --origin_path="/etc/php/$phpversion/fpm/pool.d/$app.conf"
 
+#=================================================
+# RESTORE THE NGINX CONFIGURATION
+#=================================================
+ynh_script_progression --message="Restoring the NGINX configuration..." --weight=1
+
 ynh_restore_file --origin_path="/etc/nginx/conf.d/$domain.d/$app.conf"
+
+#=================================================
+# RESTORE THE CRON CONFIGURATION
+#=================================================
+ynh_script_progression --message="Restoring the Cron configuration..." --weight=1
 
 ynh_restore_file --origin_path="/etc/cron.d/$app"
 
+#=================================================
+# RESTORE THE LOG FILES
+#=================================================
+ynh_script_progression --message="Restoring the log files..." --weight=1
+
 log_path="/var/log/$app"
-mkdir -p $log_path
-chown $app:www-data $log_path
+mkdir -p "$log_path"
+chown "$app":www-data "$log_path"
+
+#=================================================
+# RESTORE THE LOGROTATE CONFIGURATION
+#=================================================
+ynh_script_progression --message="Restoring the logrotate configuration..." --weight=1
+
 ynh_restore_file --origin_path="/etc/logrotate.d/$app"
+
+#=================================================
+# RESTORE THE FAIL2BAN CONFIGURATION
+#=================================================
+
+ynh_restore_file --origin_path="/etc/fail2ban/jail.d/$app.conf"
+ynh_restore_file --origin_path="/etc/fail2ban/filter.d/$app.conf"
+ynh_systemd_action --action=restart --service_name=fail2ban
 
 #=================================================
 # GENERIC FINALIZATION
@@ -52,7 +81,7 @@ ynh_restore_file --origin_path="/etc/logrotate.d/$app"
 #=================================================
 ynh_script_progression --message="Reloading NGINX web server and $app's service..." --weight=1
 
-ynh_systemd_action --service_name=php$phpversion-fpm --action=reload
+ynh_systemd_action --service_name="php$phpversion-fpm" --action=reload
 ynh_systemd_action --service_name=nginx --action=reload
 
 #=================================================
