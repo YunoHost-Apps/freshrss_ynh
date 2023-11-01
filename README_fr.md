@@ -19,7 +19,7 @@ Si vous n’avez pas YunoHost, regardez [ici](https://yunohost.org/#/install) po
 Agrégateur de flux RSS avec une interface adaptée au mobile.
 
 
-**Version incluse :** 1.22.0~ynh1
+**Version incluse :** 1.22.1~ynh1
 
 **Démo :** https://demo.freshrss.org
 
@@ -32,6 +32,7 @@ Agrégateur de flux RSS avec une interface adaptée au mobile.
 * Site officiel de l’app : <http://freshrss.org/>
 * Documentation officielle de l’admin : <https://freshrss.github.io/FreshRSS/>
 * Dépôt de code officiel de l’app : <https://github.com/FreshRSS/FreshRSS>
+* YunoHost Store: <https://apps.yunohost.org/app/freshrss>
 * Signaler un bug : <https://github.com/YunoHost-Apps/freshrss_ynh/issues>
 
 ## Informations pour les développeurs
