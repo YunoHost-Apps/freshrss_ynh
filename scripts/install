@@ -18,7 +18,7 @@ ynh_script_progression --message="Setting up source files..." --weight=1
 ynh_setup_source --dest_dir="$install_dir"
 
 chmod -R o-rwx "$install_dir"
-chown -R $app:www-data "$install_dir"
+chown -R "$app":www-data "$install_dir"
 
 #=================================================
 # SYSTEM CONFIGURATION
@@ -26,7 +26,7 @@ chown -R $app:www-data "$install_dir"
 ynh_script_progression --message="Adding system configurations related to $app..." --weight=1
 
 # Create a dedicated PHP-FPM config
-ynh_add_fpm_config --usage=low --footprint=low
+ynh_add_fpm_config
 
 # Create a dedicated NGINX config
 ynh_add_nginx_config
@@ -36,10 +36,29 @@ chown root: "/etc/cron.d/$app"
 chmod 644 "/etc/cron.d/$app"
 
 log_path="/var/log/$app"
-mkdir -p $log_path
-chown $app:www-data $log_path
+mkdir -p "$log_path"
+chown "$app":www-data "$log_path"
+
+#=================================================
+# GENERIC FINALIZATION
+#=================================================
+# SETUP LOGROTATE
+#=================================================
+ynh_script_progression --message="Configuring log rotation..." --weight=1
+
 # Use logrotate to manage application logfile(s)
 ynh_use_logrotate
+
+#=================================================
+# SETUP FAIL2BAN
+#=================================================
+ynh_script_progression --message="Upgrading fail2ban configuration..."
+
+# Create the logfile, required before configuring fail2ban
+touch "/var/log/${domain}-access.log"
+
+# Create a dedicated Fail2Ban config
+ynh_add_fail2ban_config --logpath="/var/log/${domain}-access.log" --failregex="<HOST> .* \"GET /api/.*\" 401" --max_retry=5
 
 #=================================================
 # SPECIFIC SETUP
@@ -48,12 +67,12 @@ ynh_use_logrotate
 #=================================================
 ynh_script_progression --message="FreshRSS setup..." --weight=1
 
-ynh_exec_as $app $install_dir/cli/do-install.php --default_user $admin --auth_type http_auth --environment production --base_url https://$domain$path --title FreshRSS --api_enabled --db-type mysql --db-host localhost --db-user $db_name --db-password $db_pwd --db-base $db_name
+ynh_exec_warn_less ynh_exec_as "$app" "$install_dir/cli/do-install.php" --default_user "$admin" --auth_type http_auth --environment production --base_url "https://$domain$path" --title FreshRSS --api_enabled --db-type mysql --db-host localhost --db-user "$db_name" --db-password "$db_pwd" --db-base "$db_name"
 
 for myuser in $(ynh_user_list)
 do
     user_token=$(ynh_string_random)
-    ynh_exec_as $app $install_dir/cli/create-user.php --user $myuser --language $language --token $user_token
+    ynh_exec_as "$app" "$install_dir/cli/create-user.php" --user "$myuser" --language "$language" --token "$user_token"
 done
 
 #=================================================

@@ -5,7 +5,7 @@ name = "FreshRSS"
 description.en = "RSS aggregator with a nice and mobile-friendly design"
 description.fr = "Agrégateur de flux RSS avec une interface adaptée au mobile"
 
-version = "1.21.0~ynh2"
+version = "1.22.1~ynh1"
 
 maintainers = ["plopoyop"]
 
@@ -17,7 +17,7 @@ admindoc = "https://freshrss.github.io/FreshRSS/"
 code = "https://github.com/FreshRSS/FreshRSS"
 
 [integration]
-yunohost = ">= 11.1.21"
+yunohost = ">= 11.2"
 architectures = "all"
 multi_instance = true
 ldap = false
@@ -41,7 +41,7 @@ ram.runtime = "50M"
     [install.language]
     ask.en = "Choose the application language"
     ask.fr = "Choisissez la langue de l'application"
-    type = "string"
+    type = "select"
     choices = ["cz", "de", "en", "es", "fr", "he", "it", "kr", "nl", "oc", "pt", "ru", "tr", "zh-cn"]
     default = "fr"
 
@@ -53,8 +53,8 @@ ram.runtime = "50M"
     [resources.sources]
 
         [resources.sources.main]
-        url = "https://github.com/FreshRSS/FreshRSS/archive/1.21.0.tar.gz"
-        sha256 = "86d9f5953fbe5bd04aee105d7c92272055e6816ba893b9a153a575e7535c7d78"
+        url = "https://github.com/FreshRSS/FreshRSS/archive/refs/tags/1.22.1.tar.gz"
+        sha256 = "98cd7dfc06f30d397b1ace4f8c4f9a3a6240ff1ccdeca6487a21cbfe07e025c3"
         autoupdate.strategy = "latest_github_tag"
 
     [resources.system_user]
@@ -71,7 +71,7 @@ ram.runtime = "50M"
     api.protected = true
 
     [resources.apt]
-    packages = "mariadb-server acl php8.2-gd php8.2-zip php8.2-dom php8.2-mbstring php8.2-gmp php8.2-mysql php8.2-sqlite3 php8.2-curl php8.2-intl php8.2-xml"
+    packages = "mariadb-server, acl, php8.2-gd, php8.2-zip, php8.2-dom, php8.2-mbstring, php8.2-gmp, php8.2-mysql, php8.2-sqlite3, php8.2-curl, php8.2-intl, php8.2-xml"
 
     [resources.database]
     type = "mysql"

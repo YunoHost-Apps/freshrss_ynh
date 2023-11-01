@@ -42,6 +42,13 @@ ynh_backup --src_path="/etc/php/$phpversion/fpm/pool.d/$app.conf"
 ynh_backup --src_path="/etc/logrotate.d/$app"
 
 #=================================================
+# BACKUP FAIL2BAN CONFIGURATION
+#=================================================
+
+ynh_backup --src_path="/etc/fail2ban/jail.d/$app.conf"
+ynh_backup --src_path="/etc/fail2ban/filter.d/$app.conf"
+
+#=================================================
 # BACKUP VARIOUS FILES
 #=================================================
 
