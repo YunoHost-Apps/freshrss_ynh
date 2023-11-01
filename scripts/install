@@ -38,6 +38,14 @@ chmod 644 "/etc/cron.d/$app"
 log_path="/var/log/$app"
 mkdir -p "$log_path"
 chown "$app":www-data "$log_path"
+
+#=================================================
+# GENERIC FINALIZATION
+#=================================================
+# SETUP LOGROTATE
+#=================================================
+ynh_script_progression --message="Configuring log rotation..." --weight=1
+
 # Use logrotate to manage application logfile(s)
 ynh_use_logrotate
 

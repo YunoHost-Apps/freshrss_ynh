@@ -36,13 +36,34 @@ ynh_script_progression --message="Restoring system configurations related to $ap
 
 ynh_restore_file --origin_path="/etc/php/$phpversion/fpm/pool.d/$app.conf"
 
+#=================================================
+# RESTORE THE NGINX CONFIGURATION
+#=================================================
+ynh_script_progression --message="Restoring the NGINX configuration..." --weight=1
+
 ynh_restore_file --origin_path="/etc/nginx/conf.d/$domain.d/$app.conf"
 
+#=================================================
+# RESTORE THE CRON CONFIGURATION
+#=================================================
+ynh_script_progression --message="Restoring the Cron configuration..." --weight=1
+
 ynh_restore_file --origin_path="/etc/cron.d/$app"
+
+#=================================================
+# RESTORE THE LOG FILES
+#=================================================
+ynh_script_progression --message="Restoring the log files..." --weight=1
 
 log_path="/var/log/$app"
 mkdir -p "$log_path"
 chown "$app":www-data "$log_path"
+
+#=================================================
+# RESTORE THE LOGROTATE CONFIGURATION
+#=================================================
+ynh_script_progression --message="Restoring the logrotate configuration..." --weight=1
+
 ynh_restore_file --origin_path="/etc/logrotate.d/$app"
 
 #=================================================

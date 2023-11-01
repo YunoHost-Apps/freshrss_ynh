@@ -51,15 +51,34 @@ chown -R "$app":www-data "$install_dir"
 #=================================================
 ynh_script_progression --message="Upgrading system configurations related to $app..." --weight=1
 
+#=================================================
+# PHP CONFIGURATION
+#=================================================
+ynh_script_progression --message="Upgrading PHP configuration..."
+
 # Create a dedicated PHP-FPM config
 ynh_add_fpm_config
+
+#=================================================
+# NGINX CONFIGURATION
+#=================================================
+ynh_script_progression --message="Upgrading NGINX web server configuration..."
 
 # Create a dedicated NGINX config
 ynh_add_nginx_config
 
+#=================================================
+# CRON CONFIGURATION
+#=================================================
+ynh_script_progression --message="Upgrading Cron configuration..."
+
 ynh_add_config --template="../conf/freshrss.cron" --destination="/etc/cron.d/$app"
 chown root: "/etc/cron.d/$app"
 chmod 644 "/etc/cron.d/$app"
+
+#=================================================
+# LOG FILES
+#=================================================
 
 if [ -f /tmp/FreshRSS.log ]; then
 	ynh_secure_remove --file="/tmp/FreshRSS.log"
@@ -72,6 +91,12 @@ fi
 log_path="/var/log/$app"
 mkdir -p "$log_path"
 chown "$app":www-data "$log_path"
+
+#=================================================
+# SETUP LOGROTATE
+#=================================================
+ynh_script_progression --message="Upgrading logrotate configuration..."
+
 # Use logrotate to manage app-specific logfile(s)
 ynh_use_logrotate --non-append
 
