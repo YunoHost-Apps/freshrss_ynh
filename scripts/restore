@@ -18,14 +18,14 @@ ynh_script_progression --message="Restoring the app main directory..." --weight=
 ynh_restore_file --origin_path="$install_dir"
 
 chmod -R o-rwx "$install_dir"
-chown -R $app:www-data "$install_dir"
+chown -R "$app":www-data "$install_dir"
 
 #=================================================
 # RESTORE THE MYSQL DATABASE
 #=================================================
 ynh_script_progression --message="Restoring the MySQL database..." --weight=1
 
-ynh_mysql_connect_as --user=$db_user --password=$db_pwd --database=$db_name < ./db.sql
+ynh_mysql_connect_as --user="$db_user" --password="$db_pwd" --database="$db_name" < ./db.sql
 
 #=================================================
 # RESTORE SYSTEM CONFIGURATIONS
@@ -41,8 +41,8 @@ ynh_restore_file --origin_path="/etc/nginx/conf.d/$domain.d/$app.conf"
 ynh_restore_file --origin_path="/etc/cron.d/$app"
 
 log_path="/var/log/$app"
-mkdir -p $log_path
-chown $app:www-data $log_path
+mkdir -p "$log_path"
+chown "$app":www-data "$log_path"
 ynh_restore_file --origin_path="/etc/logrotate.d/$app"
 
 #=================================================
@@ -52,7 +52,7 @@ ynh_restore_file --origin_path="/etc/logrotate.d/$app"
 #=================================================
 ynh_script_progression --message="Reloading NGINX web server and $app's service..." --weight=1
 
-ynh_systemd_action --service_name=php$phpversion-fpm --action=reload
+ynh_systemd_action --service_name="php$phpversion-fpm" --action=reload
 ynh_systemd_action --service_name=nginx --action=reload
 
 #=================================================

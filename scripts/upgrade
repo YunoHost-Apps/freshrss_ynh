@@ -23,12 +23,12 @@ upgrade_type=$(ynh_check_app_version_changed)
 ynh_script_progression --message="Ensuring downward compatibility..." --weight=1
 
 if [ -z "$admin" ]; then
-	admin=$(ynh_app_setting_get --app=$app --key=admin_user)
-	if [ -z $admin ]; then
+	admin=$(ynh_app_setting_get --app="$app" --key=admin_user)
+	if [ -z "$admin" ]; then
 		ynh_die --message="no admin user found"
 	fi;
-	ynh_app_setting_delete --app=$app --key=admin_user
-	ynh_app_setting_set --app=$app --key=admin --value=$admin
+	ynh_app_setting_delete --app="$app" --key=admin_user
+	ynh_app_setting_set --app="$app" --key=admin --value="$admin"
 fi
 
 #=================================================
@@ -44,7 +44,7 @@ then
 fi
 
 chmod -R o-rwx "$install_dir"
-chown -R $app:www-data "$install_dir"
+chown -R "$app":www-data "$install_dir"
 
 #=================================================
 # REAPPLY SYSTEM CONFIGURATIONS
@@ -65,13 +65,13 @@ if [ -f /tmp/FreshRSS.log ]; then
 	ynh_secure_remove --file="/tmp/FreshRSS.log"
 fi
 
-if [ -f $install_dir/$app.log ]; then
+if [ -f "$install_dir/$app.log" ]; then
 	ynh_secure_remove --file="/var/www/$app/$app.log"
 fi
 
 log_path="/var/log/$app"
-mkdir -p $log_path
-chown $app:www-data "$log_path"
+mkdir -p "$log_path"
+chown "$app":www-data "$log_path"
 # Use logrotate to manage app-specific logfile(s)
 ynh_use_logrotate --non-append
 
@@ -83,7 +83,7 @@ ynh_use_logrotate --non-append
 ynh_script_progression --message="Upgrading FreshRSS..." --weight=1
 
 # reconfigure application with latest parameters
-ynh_exec_as $app $install_dir/cli/reconfigure.php --default_user $admin --auth_type http_auth --environment production --base_url https://$domain$path --title FreshRSS --api_enabled --db-type mysql --db-host localhost --db-user $db_name --db-password $db_pwd --db-base $db_name
+ynh_exec_as "$app" "$install_dir/cli/reconfigure.php" --default_user "$admin" --auth_type http_auth --environment production --base_url "https://$domain$path" --title FreshRSS --api_enabled --db-type mysql --db-host localhost --db-user "$db_name" --db-password "$db_pwd" --db-base "$db_name"
 
 #=================================================
 # END OF SCRIPT
