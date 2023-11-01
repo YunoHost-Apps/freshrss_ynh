@@ -50,6 +50,14 @@ ynh_script_progression --message="Configuring log rotation..." --weight=1
 ynh_use_logrotate
 
 #=================================================
+# SETUP FAIL2BAN
+#=================================================
+ynh_script_progression --message="Upgrading fail2ban configuration..."
+
+# Create a dedicated Fail2Ban config
+ynh_add_fail2ban_config --logpath="/var/log/${domain}-access.log" --failregex="<HOST> .* \"GET /api/.*\" 401" --max_retry=5
+
+#=================================================
 # SPECIFIC SETUP
 #=================================================
 # SETUPING FRESHRSS
