@@ -45,6 +45,7 @@ ynh_backup --src_path="/etc/logrotate.d/$app"
 # BACKUP FAIL2BAN CONFIGURATION
 #=================================================
 
+ynh_backup --src_path="/var/log/nginx/$domain-access.log"
 ynh_backup --src_path="/etc/fail2ban/jail.d/$app.conf"
 ynh_backup --src_path="/etc/fail2ban/filter.d/$app.conf"
 
