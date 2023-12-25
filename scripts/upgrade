@@ -106,12 +106,12 @@ ynh_use_logrotate --non-append
 ynh_script_progression --message="Upgrading fail2ban configuration..."
 
 # If it doesn't exist, create the logfile, required before configuring fail2ban
-if [ ! -f "/var/log/${domain}-access.log" ]; then
-	touch "/var/log/${domain}-access.log"
+if [ ! -f "/var/log/nginx/${domain}-access.log" ]; then
+	touch "/var/log/nginx/${domain}-access.log"
 fi
 
 # Create a dedicated Fail2Ban config
-ynh_add_fail2ban_config --logpath="/var/log/${domain}-access.log" --failregex="<HOST> .* \"GET /api/.*\" 401" --max_retry=5
+ynh_add_fail2ban_config --logpath="/var/log/nginx/${domain}-access.log" --failregex="<HOST> .* \"GET /api/.*\" 401" --max_retry=5
 
 #=================================================
 # SPECIFIC UPGRADE
