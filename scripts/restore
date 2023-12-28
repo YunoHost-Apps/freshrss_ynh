@@ -74,7 +74,7 @@ ynh_script_progression --message="Restoring fail2ban configuration..."
 # If it doesn't exist, create the logfile, required before configuring fail2ban
 log4fail2ban="/var/log/nginx/${domain}-access.log"
 ynh_restore_file --origin_path="${log4fail2ban}"
-if [ ! -f "${log4fail2ban}" ]; then
+if [ ! -f "${log4fail2ban:-}" ]; then
     touch "${log4fail2ban}"
 fi
 
