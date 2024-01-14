@@ -19,7 +19,7 @@ If you don't have YunoHost, please consult [the guide](https://yunohost.org/#/in
 An efficient but powerful RSS aggregator with a nice and mobile-friendly design, as well as extension and themes support.
 
 
-**Shipped version:** 1.22.1~ynh1
+**Shipped version:** 1.23.1~ynh1
 
 **Demo:** https://demo.freshrss.org
 
