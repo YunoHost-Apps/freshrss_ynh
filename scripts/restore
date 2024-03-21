@@ -41,13 +41,13 @@ ynh_restore_file --origin_path="/etc/php/$phpversion/fpm/pool.d/$app.conf"
 #=================================================
 ynh_script_progression --message="Restoring the log files..." --weight=1
 
-ynh_backup --origin_path="/var/log/nginx/$domain-access.log"
+ynh_restore_file --origin_path="/var/log/nginx/$domain-access.log"
 
 log_path="/var/log/$app"
 mkdir -p "$log_path"
 chown "$app":www-data "$log_path"
 
-ynh_backup --origin_path="$log_path/freshrss.log"
+ynh_restore_file --origin_path="$log_path/freshrss.log"
 
 #=================================================
 # RESTORE THE NGINX CONFIGURATION
