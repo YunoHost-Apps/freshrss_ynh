@@ -58,7 +58,7 @@ ram.runtime = "50M"
         [resources.sources.main]
         url = "https://github.com/FreshRSS/FreshRSS/archive/refs/tags/1.23.1.tar.gz"
         sha256 = "29b3dc7ebc0bc7daffebe2ed135196644d4b053df3bfcc9ee1b5c6437bc2d480"
-        autoupdate.strategy = "latest_github_tag"
+        autoupdate.strategy = "latest_github_release"
 
     [resources.system_user]
 
