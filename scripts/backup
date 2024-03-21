@@ -34,6 +34,14 @@ ynh_backup --src_path="/etc/nginx/conf.d/$domain.d/$app.conf"
 ynh_backup --src_path="/etc/php/$phpversion/fpm/pool.d/$app.conf"
 
 #=================================================
+# BACKUP LOGS
+#=================================================
+
+ynh_backup --src_path="/var/log/nginx/$domain-access.log"
+
+ynh_backup --src_path="/var/log/freshrss/freshrss.log"
+
+#=================================================
 # SPECIFIC BACKUP
 #=================================================
 # BACKUP LOGROTATE
