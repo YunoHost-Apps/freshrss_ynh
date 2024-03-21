@@ -39,7 +39,9 @@ ynh_backup --src_path="/etc/php/$phpversion/fpm/pool.d/$app.conf"
 
 ynh_backup --src_path="/var/log/nginx/$domain-access.log"
 
-ynh_backup --src_path="/var/log/$app/freshrss.log"
+if [ -f "/var/log/$app/freshrss.log" ]; then
+    ynh_backup --src_path="/var/log/$app/freshrss.log"
+fi
 
 #=================================================
 # SPECIFIC BACKUP
