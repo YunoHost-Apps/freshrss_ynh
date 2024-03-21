@@ -47,8 +47,6 @@ log_path="/var/log/$app"
 mkdir -p "$log_path"
 chown "$app":www-data "$log_path"
 
-ynh_restore_file --origin_path="$log_path/freshrss.log"
-
 #=================================================
 # RESTORE THE NGINX CONFIGURATION
 #=================================================
