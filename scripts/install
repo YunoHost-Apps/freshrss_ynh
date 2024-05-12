@@ -31,7 +31,7 @@ ynh_add_fpm_config
 # Create a dedicated NGINX config
 ynh_add_nginx_config
 
-ynh_add_config --template="../conf/freshrss.cron" --destination="/etc/cron.d/$app"
+ynh_add_config --template="freshrss.cron" --destination="/etc/cron.d/$app"
 chown root: "/etc/cron.d/$app"
 chmod 644 "/etc/cron.d/$app"
 
@@ -65,7 +65,7 @@ ynh_add_fail2ban_config --logpath="/var/log/${domain}-access.log" --failregex="<
 #=================================================
 # SETUPING FRESHRSS
 #=================================================
-ynh_script_progression --message="FreshRSS setup..." --weight=1
+ynh_script_progression --message="$app setup..." --weight=1
 
 ynh_exec_warn_less ynh_exec_as "$app" "$install_dir/cli/do-install.php" --default_user "$admin" --auth_type http_auth --environment production --base_url "https://$domain$path" --title FreshRSS --api_enabled --db-type mysql --db-host localhost --db-user "$db_name" --db-password "$db_pwd" --db-base "$db_name"
 
