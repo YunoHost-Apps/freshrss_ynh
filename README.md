@@ -9,7 +9,7 @@ It shall NOT be edited by hand.
 
 [![Install FreshRSS with YunoHost](https://install-app.yunohost.org/install-with-yunohost.svg)](https://install-app.yunohost.org/?app=freshrss)
 
-*[Read this README is other languages.](./ALL_README.md)*
+*[Read this README in other languages.](./ALL_README.md)*
 
 > *This package allows you to install FreshRSS quickly and simply on a YunoHost server.*  
 > *If you don't have YunoHost, please consult [the guide](https://yunohost.org/install) to learn how to install it.*
@@ -19,7 +19,7 @@ It shall NOT be edited by hand.
 An efficient but powerful RSS aggregator with a nice and mobile-friendly design, as well as extension and themes support.
 
 
-**Shipped version:** 1.23.1~ynh1
+**Shipped version:** 1.23.1~ynh2
 
 **Demo:** <https://demo.freshrss.org>
 

@@ -19,7 +19,7 @@ Il NE doit PAS être modifié à la main.
 Agrégateur de flux RSS avec une interface adaptée au mobile.
 
 
-**Version incluse :** 1.23.1~ynh1
+**Version incluse :** 1.23.1~ynh2
 
 **Démo :** <https://demo.freshrss.org>
 
