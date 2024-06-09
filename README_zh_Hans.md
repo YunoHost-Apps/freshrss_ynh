@@ -19,7 +19,7 @@
 An efficient but powerful RSS aggregator with a nice and mobile-friendly design, as well as extension and themes support.
 
 
-**分发版本：** 1.24.0~ynh1
+**分发版本：** 1.24.1~ynh1
 
 **演示：** <https://demo.freshrss.org>
 
