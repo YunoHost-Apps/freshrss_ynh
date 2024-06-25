@@ -58,7 +58,7 @@ ynh_script_progression --message="Upgrading fail2ban configuration..."
 touch "/var/log/${domain}-access.log"
 
 # Create a dedicated Fail2Ban config
-ynh_add_fail2ban_config --logpath="/var/log/${domain}-access.log" --failregex="<HOST> .* \"GET /api/.*\" 401" --max_retry=5
+ynh_add_fail2ban_config --logpath="/var/log/nginx/${domain}-access.log" --failregex="<HOST> .* \"GET /api/.*\" 401" --max_retry=5
 
 #=================================================
 # SPECIFIC SETUP
