@@ -5,7 +5,7 @@ No se debe editar a mano.
 
 # FreshRSS para Yunohost
 
-[![Nivel de integración](https://dash.yunohost.org/integration/freshrss.svg)](https://dash.yunohost.org/appci/app/freshrss) ![Estado funcional](https://ci-apps.yunohost.org/ci/badges/freshrss.status.svg) ![Estado En Mantención](https://ci-apps.yunohost.org/ci/badges/freshrss.maintain.svg)
+[![Nivel de integración](https://dash.yunohost.org/integration/freshrss.svg)](https://ci-apps.yunohost.org/ci/apps/freshrss/) ![Estado funcional](https://ci-apps.yunohost.org/ci/badges/freshrss.status.svg) ![Estado En Mantención](https://ci-apps.yunohost.org/ci/badges/freshrss.maintain.svg)
 
 [![Instalar FreshRSS con Yunhost](https://install-app.yunohost.org/install-with-yunohost.svg)](https://install-app.yunohost.org/?app=freshrss)
 

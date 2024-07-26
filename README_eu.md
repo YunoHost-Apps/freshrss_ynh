@@ -5,7 +5,7 @@ EZ editatu eskuz.
 
 # FreshRSS YunoHost-erako
 
-[![Integrazio maila](https://dash.yunohost.org/integration/freshrss.svg)](https://dash.yunohost.org/appci/app/freshrss) ![Funtzionamendu egoera](https://ci-apps.yunohost.org/ci/badges/freshrss.status.svg) ![Mantentze egoera](https://ci-apps.yunohost.org/ci/badges/freshrss.maintain.svg)
+[![Integrazio maila](https://dash.yunohost.org/integration/freshrss.svg)](https://ci-apps.yunohost.org/ci/apps/freshrss/) ![Funtzionamendu egoera](https://ci-apps.yunohost.org/ci/badges/freshrss.status.svg) ![Mantentze egoera](https://ci-apps.yunohost.org/ci/badges/freshrss.maintain.svg)
 
 [![Instalatu FreshRSS YunoHost-ekin](https://install-app.yunohost.org/install-with-yunohost.svg)](https://install-app.yunohost.org/?app=freshrss)
 
