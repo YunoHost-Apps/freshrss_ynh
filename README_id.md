@@ -19,7 +19,7 @@ Ini TIDAK boleh diedit dengan tangan.
 An efficient but powerful RSS aggregator with a nice and mobile-friendly design, as well as extension and themes support.
 
 
-**Versi terkirim:** 1.24.1~ynh1
+**Versi terkirim:** 1.24.2~ynh1
 
 **Demo:** <https://demo.freshrss.org>
 
@@ -31,7 +31,7 @@ An efficient but powerful RSS aggregator with a nice and mobile-friendly design,
 
 - Website aplikasi resmi: <http://freshrss.org/>
 - Dokumentasi admin resmi: <https://freshrss.github.io/FreshRSS/>
-- Repositori kode aplikasi hulu: <https://github.com/FreshRSS/FreshRSS>
+- Depot kode aplikasi hulu: <https://github.com/FreshRSS/FreshRSS>
 - Gudang YunoHost: <https://apps.yunohost.org/app/freshrss>
 - Laporkan bug: <https://github.com/YunoHost-Apps/freshrss_ynh/issues>
 
