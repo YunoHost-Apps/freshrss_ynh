@@ -1,34 +1,26 @@
 #!/bin/bash
 
-#=================================================
-# GENERIC STARTING
-#=================================================
-# IMPORT GENERIC HELPERS
-#=================================================
-
 source _common.sh
 source /usr/share/yunohost/helpers
 
 #=================================================
-# STANDARD MODIFICATIONS
-#=================================================
 # MODIFY URL IN NGINX CONF
 #=================================================
-ynh_script_progression --message="Updating NGINX web server configuration..." --weight=1
+ynh_script_progression "Updating NGINX web server configuration..."
 
-ynh_change_url_nginx_config
+ynh_config_change_url_nginx
 
 #=================================================
 # SPECIFIC MODIFICATIONS
 #=================================================
 # UPGRADING FRESHRSS
 #=================================================
-ynh_script_progression --message="Upgrading $app..." --weight=1
+ynh_script_progression "Upgrading $app..."
 
-ynh_exec_warn_less ynh_exec_as "$app" "$install_dir/cli/reconfigure.php" --auth_type http_auth --environment production --base_url "https://$new_domain$new_path" --title FreshRSS --api_enabled --db-type mysql --db-host localhost --db-user "$db_name" --db-password "$db_pwd" --db-base "$db_name"
+ynh_hide_warnings ynh_exec_as_app "$install_dir/cli/reconfigure.php" --auth_type http_auth --environment production --base_url "https://$new_domain$new_path" --title FreshRSS --api_enabled --db-type mysql --db-host localhost --db-user "$db_name" --db-password "$db_pwd" --db-base "$db_name"
 
 #=================================================
 # END OF SCRIPT
 #=================================================
 
-ynh_script_progression --message="Change of URL completed for $app" --last
+ynh_script_progression "Change of URL completed for $app"
