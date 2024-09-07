@@ -1,2 +1,2 @@
 MAILTO="root"
-*/10 * * * * __APP__ /usr/bin/php__PHPVERSION__ __INSTALL_DIR__/app/actualize_script.php >/var/log/__APP__/__APP__.log 2>&1
+*/10 * * * * __APP__ /usr/bin/php__PHP_VERSION__ __INSTALL_DIR__/app/actualize_script.php >/var/log/__APP__/__APP__.log 2>&1
