@@ -22,20 +22,15 @@ fi
 #=================================================
 ynh_script_progression "Upgrading source files..."
 
-# Download, check integrity, uncompress and patch the source from app.src
 ynh_setup_source --dest_dir="$install_dir" --keep="data/config.php data/users/ extensions/" #--full_replace
 
-#REMOVEME? Assuming the install dir is setup using ynh_setup_source, the proper chmod/chowns are now already applied and it shouldn't be necessary to tweak perms | chmod -R o-rwx "$install_dir"
-#REMOVEME? Assuming the install dir is setup using ynh_setup_source, the proper chmod/chowns are now already applied and it shouldn't be necessary to tweak perms | chown -R "$app":www-data "$install_dir"
 #=================================================
 # UPDATE A CONFIG FILE
 #=================================================
 ynh_script_progression "Updating $app's configuration files..."
 
-# Create a dedicated PHP-FPM config
 ynh_config_add_phpfpm
 
-# Create a dedicated NGINX config
 ynh_config_add_nginx
 
 #=================================================
@@ -44,8 +39,6 @@ ynh_config_add_nginx
 ynh_script_progression "Upgrading Cron configuration..."
 
 ynh_config_add --template="freshrss.cron" --destination="/etc/cron.d/$app"
-#REMOVEME? Assuming the file is setup using ynh_config_add, the proper chmod/chowns are now already applied and it shouldn't be necessary to tweak perms | chown root: "/etc/cron.d/$app"
-#REMOVEME? Assuming the file is setup using ynh_config_add, the proper chmod/chowns are now already applied and it shouldn't be necessary to tweak perms | chmod 644 "/etc/cron.d/$app"
 
 #=================================================
 # LOG FILES
@@ -89,7 +82,6 @@ ynh_config_add_fail2ban --logpath="/var/log/nginx/${domain}-access.log" --failre
 #=================================================
 ynh_script_progression "Upgrading $app..."
 
-# reconfigure application with latest parameters
 ynh_hide_warnings ynh_exec_as_app "$install_dir/cli/reconfigure.php" --default_user "$admin" --auth_type http_auth --environment production --base_url "https://$domain$path" --title FreshRSS --api_enabled --db-type mysql --db-host localhost --db-user "$db_name" --db-password "$db_pwd" --db-base "$db_name"
 
 #=================================================
