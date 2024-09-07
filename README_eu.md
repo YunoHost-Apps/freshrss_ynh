@@ -19,7 +19,7 @@ EZ editatu eskuz.
 An efficient but powerful RSS aggregator with a nice and mobile-friendly design, as well as extension and themes support.
 
 
-**Paketatutako bertsioa:** 1.24.2~ynh1
+**Paketatutako bertsioa:** 1.24.3~ynh1
 
 **Demoa:** <https://demo.freshrss.org>
 

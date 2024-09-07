@@ -19,7 +19,7 @@
 An efficient but powerful RSS aggregator with a nice and mobile-friendly design, as well as extension and themes support.
 
 
-**Поставляемая версия:** 1.24.2~ynh1
+**Поставляемая версия:** 1.24.3~ynh1
 
 **Демо-версия:** <https://demo.freshrss.org>
 
