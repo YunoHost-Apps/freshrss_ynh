@@ -11,8 +11,6 @@ ynh_script_progression "Updating NGINX web server configuration..."
 ynh_config_change_url_nginx
 
 #=================================================
-# SPECIFIC MODIFICATIONS
-#=================================================
 # UPGRADING FRESHRSS
 #=================================================
 ynh_script_progression "Upgrading $app..."
