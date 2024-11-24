@@ -5,7 +5,9 @@
 
 # FreshRSS для YunoHost
 
-[![Уровень интеграции](https://dash.yunohost.org/integration/freshrss.svg)](https://ci-apps.yunohost.org/ci/apps/freshrss/) ![Состояние работы](https://ci-apps.yunohost.org/ci/badges/freshrss.status.svg) ![Состояние сопровождения](https://ci-apps.yunohost.org/ci/badges/freshrss.maintain.svg)
+[![Уровень интеграции](https://apps.yunohost.org/badge/integration/freshrss)](https://ci-apps.yunohost.org/ci/apps/freshrss/)
+![Состояние работы](https://apps.yunohost.org/badge/state/freshrss)
+![Состояние сопровождения](https://apps.yunohost.org/badge/maintained/freshrss)
 
 [![Установите FreshRSS с YunoHost](https://install-app.yunohost.org/install-with-yunohost.svg)](https://install-app.yunohost.org/?app=freshrss)
 
