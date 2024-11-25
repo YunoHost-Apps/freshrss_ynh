@@ -5,7 +5,9 @@
 
 # YunoHost 上的 FreshRSS
 
-[![集成程度](https://dash.yunohost.org/integration/freshrss.svg)](https://ci-apps.yunohost.org/ci/apps/freshrss/) ![工作状态](https://ci-apps.yunohost.org/ci/badges/freshrss.status.svg) ![维护状态](https://ci-apps.yunohost.org/ci/badges/freshrss.maintain.svg)
+[![集成程度](https://apps.yunohost.org/badge/integration/freshrss)](https://ci-apps.yunohost.org/ci/apps/freshrss/)
+![工作状态](https://apps.yunohost.org/badge/state/freshrss)
+![维护状态](https://apps.yunohost.org/badge/maintained/freshrss)
 
 [![使用 YunoHost 安装 FreshRSS](https://install-app.yunohost.org/install-with-yunohost.svg)](https://install-app.yunohost.org/?app=freshrss)
 
@@ -19,7 +21,7 @@
 An efficient but powerful RSS aggregator with a nice and mobile-friendly design, as well as extension and themes support.
 
 
-**分发版本：** 1.24.2~ynh1
+**分发版本：** 1.24.3~ynh1
 
 **演示：** <https://demo.freshrss.org>
 

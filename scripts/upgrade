@@ -1,71 +1,55 @@
 #!/bin/bash
 
-#=================================================
-# GENERIC START
-#=================================================
-# IMPORT GENERIC HELPERS
-#=================================================
-
 source _common.sh
 source /usr/share/yunohost/helpers
 
 #=================================================
-# STANDARD UPGRADE STEPS
-#=================================================
 # ENSURE DOWNWARD COMPATIBILITY
 #=================================================
-ynh_script_progression --message="Ensuring downward compatibility..." --weight=1
+ynh_script_progression "Ensuring downward compatibility..."
 
 if [ -z "$admin" ]; then
-	admin=$(ynh_app_setting_get --app="$app" --key=admin_user)
+	admin=$(ynh_app_setting_get --key=admin_user)
 	if [ -z "$admin" ]; then
-		ynh_die --message="no admin user found"
+		ynh_die "no admin user found"
 	fi;
-	ynh_app_setting_delete --app="$app" --key=admin_user
-	ynh_app_setting_set --app="$app" --key=admin --value="$admin"
+	ynh_app_setting_delete --key=admin_user
+	ynh_app_setting_set --key=admin --value="$admin"
 fi
 
 #=================================================
 # DOWNLOAD, CHECK AND UNPACK SOURCE
 #=================================================
-ynh_script_progression --message="Upgrading source files..." --weight=1
+ynh_script_progression "Upgrading source files..."
 
-# Download, check integrity, uncompress and patch the source from app.src
-ynh_setup_source --dest_dir="$install_dir" --keep="data/config.php data/users/ extensions/" #--full_replace=1 
-
-chmod -R o-rwx "$install_dir"
-chown -R "$app":www-data "$install_dir"
+ynh_setup_source --dest_dir="$install_dir" --keep="data/config.php data/users/ extensions/" #--full_replace
 
 #=================================================
 # UPDATE A CONFIG FILE
 #=================================================
-ynh_script_progression --message="Updating $app's configuration files..." --weight=1
+ynh_script_progression "Updating $app's configuration files..."
 
-# Create a dedicated PHP-FPM config
-ynh_add_fpm_config
+ynh_config_add_phpfpm
 
-# Create a dedicated NGINX config
-ynh_add_nginx_config
+ynh_config_add_nginx
 
 #=================================================
 # CRON CONFIGURATION
 #=================================================
-ynh_script_progression --message="Upgrading Cron configuration..."
+ynh_script_progression "Upgrading Cron configuration..."
 
-ynh_add_config --template="freshrss.cron" --destination="/etc/cron.d/$app"
-chown root: "/etc/cron.d/$app"
-chmod 644 "/etc/cron.d/$app"
+ynh_config_add --template="freshrss.cron" --destination="/etc/cron.d/$app"
 
 #=================================================
 # LOG FILES
 #=================================================
 
 if [ -f /tmp/FreshRSS.log ]; then
-	ynh_secure_remove --file="/tmp/FreshRSS.log"
+	ynh_safe_rm "/tmp/FreshRSS.log"
 fi
 
 if [ -f "$install_dir/$app.log" ]; then
-	ynh_secure_remove --file="/var/www/$app/$app.log"
+	ynh_safe_rm "/var/www/$app/$app.log"
 fi
 
 log_path="/var/log/$app"
@@ -75,15 +59,15 @@ chown "$app":www-data "$log_path"
 #=================================================
 # SETUP LOGROTATE
 #=================================================
-ynh_script_progression --message="Upgrading logrotate configuration..."
+ynh_script_progression "Upgrading logrotate configuration..."
 
 # Use logrotate to manage app-specific logfile(s)
-ynh_use_logrotate --non-append
+ynh_config_add_logrotate
 
 #=================================================
 # SETUP FAIL2BAN
 #=================================================
-ynh_script_progression --message="Upgrading Fail2Ban configuration..."
+ynh_script_progression "Upgrading Fail2Ban configuration..."
 
 # If it doesn't exist, create the logfile, required before configuring fail2ban
 if [ ! -f "/var/log/${domain}-access.log" ]; then
@@ -91,20 +75,17 @@ if [ ! -f "/var/log/${domain}-access.log" ]; then
 fi
 
 # Create a dedicated Fail2Ban config
-ynh_add_fail2ban_config --logpath="/var/log/nginx/${domain}-access.log" --failregex="<HOST> .* \"GET /api/.*\" 401" --max_retry=5
+ynh_config_add_fail2ban --logpath="/var/log/nginx/${domain}-access.log" --failregex="<HOST> .* \"GET /api/.*\" 401"
 
-#=================================================
-# SPECIFIC UPGRADE
 #=================================================
 # UPGRADING FRESHRSS
 #=================================================
-ynh_script_progression --message="Upgrading $app..." --weight=1
+ynh_script_progression "Upgrading $app..."
 
-# reconfigure application with latest parameters
-ynh_exec_warn_less ynh_exec_as "$app" "$install_dir/cli/reconfigure.php" --default_user "$admin" --auth_type http_auth --environment production --base_url "https://$domain$path" --title FreshRSS --api_enabled --db-type mysql --db-host localhost --db-user "$db_name" --db-password "$db_pwd" --db-base "$db_name"
+ynh_hide_warnings ynh_exec_as_app "$install_dir/cli/reconfigure.php" --default_user "$admin" --auth_type http_auth --environment production --base_url "https://$domain$path" --title FreshRSS --api_enabled --db-type mysql --db-host localhost --db-user "$db_name" --db-password "$db_pwd" --db-base "$db_name"
 
 #=================================================
 # END OF SCRIPT
 #=================================================
 
-ynh_script_progression --message="Upgrade of $app completed" --last
+ynh_script_progression "Upgrade of $app completed"

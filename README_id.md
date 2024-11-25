@@ -5,7 +5,9 @@ Ini TIDAK boleh diedit dengan tangan.
 
 # FreshRSS untuk YunoHost
 
-[![Tingkat integrasi](https://dash.yunohost.org/integration/freshrss.svg)](https://ci-apps.yunohost.org/ci/apps/freshrss/) ![Status kerja](https://ci-apps.yunohost.org/ci/badges/freshrss.status.svg) ![Status pemeliharaan](https://ci-apps.yunohost.org/ci/badges/freshrss.maintain.svg)
+[![Tingkat integrasi](https://apps.yunohost.org/badge/integration/freshrss)](https://ci-apps.yunohost.org/ci/apps/freshrss/)
+![Status kerja](https://apps.yunohost.org/badge/state/freshrss)
+![Status pemeliharaan](https://apps.yunohost.org/badge/maintained/freshrss)
 
 [![Pasang FreshRSS dengan YunoHost](https://install-app.yunohost.org/install-with-yunohost.svg)](https://install-app.yunohost.org/?app=freshrss)
 
@@ -19,7 +21,7 @@ Ini TIDAK boleh diedit dengan tangan.
 An efficient but powerful RSS aggregator with a nice and mobile-friendly design, as well as extension and themes support.
 
 
-**Versi terkirim:** 1.24.2~ynh1
+**Versi terkirim:** 1.24.3~ynh1
 
 **Demo:** <https://demo.freshrss.org>
 

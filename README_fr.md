@@ -5,7 +5,9 @@ Il NE doit PAS être modifié à la main.
 
 # FreshRSS pour YunoHost
 
-[![Niveau d’intégration](https://dash.yunohost.org/integration/freshrss.svg)](https://ci-apps.yunohost.org/ci/apps/freshrss/) ![Statut du fonctionnement](https://ci-apps.yunohost.org/ci/badges/freshrss.status.svg) ![Statut de maintenance](https://ci-apps.yunohost.org/ci/badges/freshrss.maintain.svg)
+[![Niveau d’intégration](https://apps.yunohost.org/badge/integration/freshrss)](https://ci-apps.yunohost.org/ci/apps/freshrss/)
+![Statut du fonctionnement](https://apps.yunohost.org/badge/state/freshrss)
+![Statut de maintenance](https://apps.yunohost.org/badge/maintained/freshrss)
 
 [![Installer FreshRSS avec YunoHost](https://install-app.yunohost.org/install-with-yunohost.svg)](https://install-app.yunohost.org/?app=freshrss)
 
@@ -19,7 +21,7 @@ Il NE doit PAS être modifié à la main.
 Agrégateur de flux RSS avec une interface adaptée au mobile.
 
 
-**Version incluse :** 1.24.2~ynh1
+**Version incluse :** 1.24.3~ynh1
 
 **Démo :** <https://demo.freshrss.org>
 

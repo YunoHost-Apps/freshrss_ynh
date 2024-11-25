@@ -5,7 +5,9 @@
 
 # FreshRSS для YunoHost
 
-[![Уровень интеграции](https://dash.yunohost.org/integration/freshrss.svg)](https://ci-apps.yunohost.org/ci/apps/freshrss/) ![Состояние работы](https://ci-apps.yunohost.org/ci/badges/freshrss.status.svg) ![Состояние сопровождения](https://ci-apps.yunohost.org/ci/badges/freshrss.maintain.svg)
+[![Уровень интеграции](https://apps.yunohost.org/badge/integration/freshrss)](https://ci-apps.yunohost.org/ci/apps/freshrss/)
+![Состояние работы](https://apps.yunohost.org/badge/state/freshrss)
+![Состояние сопровождения](https://apps.yunohost.org/badge/maintained/freshrss)
 
 [![Установите FreshRSS с YunoHost](https://install-app.yunohost.org/install-with-yunohost.svg)](https://install-app.yunohost.org/?app=freshrss)
 
@@ -19,7 +21,7 @@
 An efficient but powerful RSS aggregator with a nice and mobile-friendly design, as well as extension and themes support.
 
 
-**Поставляемая версия:** 1.24.2~ynh1
+**Поставляемая версия:** 1.24.3~ynh1
 
 **Демо-версия:** <https://demo.freshrss.org>
 

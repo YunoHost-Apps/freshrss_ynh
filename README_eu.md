@@ -5,7 +5,9 @@ EZ editatu eskuz.
 
 # FreshRSS YunoHost-erako
 
-[![Integrazio maila](https://dash.yunohost.org/integration/freshrss.svg)](https://ci-apps.yunohost.org/ci/apps/freshrss/) ![Funtzionamendu egoera](https://ci-apps.yunohost.org/ci/badges/freshrss.status.svg) ![Mantentze egoera](https://ci-apps.yunohost.org/ci/badges/freshrss.maintain.svg)
+[![Integrazio maila](https://apps.yunohost.org/badge/integration/freshrss)](https://ci-apps.yunohost.org/ci/apps/freshrss/)
+![Funtzionamendu egoera](https://apps.yunohost.org/badge/state/freshrss)
+![Mantentze egoera](https://apps.yunohost.org/badge/maintained/freshrss)
 
 [![Instalatu FreshRSS YunoHost-ekin](https://install-app.yunohost.org/install-with-yunohost.svg)](https://install-app.yunohost.org/?app=freshrss)
 
@@ -19,7 +21,7 @@ EZ editatu eskuz.
 An efficient but powerful RSS aggregator with a nice and mobile-friendly design, as well as extension and themes support.
 
 
-**Paketatutako bertsioa:** 1.24.2~ynh1
+**Paketatutako bertsioa:** 1.24.3~ynh1
 
 **Demoa:** <https://demo.freshrss.org>
 

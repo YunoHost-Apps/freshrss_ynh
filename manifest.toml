@@ -5,7 +5,7 @@ name = "FreshRSS"
 description.en = "RSS aggregator with a nice and mobile-friendly design"
 description.fr = "Agrégateur de flux RSS avec une interface adaptée au mobile"
 
-version = "1.24.2~ynh1"
+version = "1.24.3~ynh1"
 
 maintainers = ["plopoyop"]
 
@@ -17,12 +17,12 @@ admindoc = "https://freshrss.github.io/FreshRSS/"
 code = "https://github.com/FreshRSS/FreshRSS"
 
 [integration]
-yunohost = ">= 11.2.8"
+yunohost = ">= 11.2.30"
+helpers_version = "2.1"
 architectures = "all"
 multi_instance = true
 
 ldap = false
-
 sso = false
 
 disk = "50M"
@@ -56,13 +56,14 @@ ram.runtime = "50M"
     [resources.sources]
 
         [resources.sources.main]
-        url = "https://github.com/FreshRSS/FreshRSS/archive/refs/tags/1.24.2.tar.gz"
-        sha256 = "fcd61935839c7d3782a5f7fe2aab3e78426073dd8fd222a3f3fb8c440f0704e1"
+        url = "https://github.com/FreshRSS/FreshRSS/archive/refs/tags/1.24.3.tar.gz"
+        sha256 = "74a926eee3d253c24893492b43957e4b184f99c6421458e5cbc08c57723bcba4"
         autoupdate.strategy = "latest_github_release"
 
     [resources.system_user]
 
     [resources.install_dir]
+    group = "www-data:r-x"
 
     [resources.permissions]
     main.url = "/"

@@ -5,7 +5,9 @@ No se debe editar a mano.
 
 # FreshRSS para Yunohost
 
-[![Nivel de integración](https://dash.yunohost.org/integration/freshrss.svg)](https://ci-apps.yunohost.org/ci/apps/freshrss/) ![Estado funcional](https://ci-apps.yunohost.org/ci/badges/freshrss.status.svg) ![Estado En Mantención](https://ci-apps.yunohost.org/ci/badges/freshrss.maintain.svg)
+[![Nivel de integración](https://apps.yunohost.org/badge/integration/freshrss)](https://ci-apps.yunohost.org/ci/apps/freshrss/)
+![Estado funcional](https://apps.yunohost.org/badge/state/freshrss)
+![Estado En Mantención](https://apps.yunohost.org/badge/maintained/freshrss)
 
 [![Instalar FreshRSS con Yunhost](https://install-app.yunohost.org/install-with-yunohost.svg)](https://install-app.yunohost.org/?app=freshrss)
 
@@ -19,7 +21,7 @@ No se debe editar a mano.
 An efficient but powerful RSS aggregator with a nice and mobile-friendly design, as well as extension and themes support.
 
 
-**Versión actual:** 1.24.2~ynh1
+**Versión actual:** 1.24.3~ynh1
 
 **Demo:** <https://demo.freshrss.org>
 
@@ -37,7 +39,7 @@ An efficient but powerful RSS aggregator with a nice and mobile-friendly design,
 
 ## Información para desarrolladores
 
-Por favor enviar sus correcciones a la [`branch testing`](https://github.com/YunoHost-Apps/freshrss_ynh/tree/testing
+Por favor enviar sus correcciones a la [rama `testing`](https://github.com/YunoHost-Apps/freshrss_ynh/tree/testing).
 
 Para probar la rama `testing`, sigue asÍ:
 
