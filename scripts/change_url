@@ -15,7 +15,7 @@ ynh_config_change_url_nginx
 #=================================================
 ynh_script_progression "Upgrading $app..."
 
-ynh_hide_warnings ynh_exec_as_app "$install_dir/cli/reconfigure.php" --auth_type http_auth --environment production --base_url "https://$new_domain$new_path" --title FreshRSS --api_enabled --db-type mysql --db-host localhost --db-user "$db_name" --db-password "$db_pwd" --db-base "$db_name"
+ynh_hide_warnings ynh_exec_as_app php$php_version "$install_dir/cli/reconfigure.php" --auth-type http_auth --environment production --base-url "https://$new_domain$new_path" --title FreshRSS --api-enabled --db-type mysql --db-host localhost --db-user "$db_name" --db-password "$db_pwd" --db-base "$db_name"
 
 #=================================================
 # END OF SCRIPT
