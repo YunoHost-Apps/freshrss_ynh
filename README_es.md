@@ -21,7 +21,7 @@ No se debe editar a mano.
 An efficient but powerful RSS aggregator with a nice and mobile-friendly design, as well as extension and themes support.
 
 
-**Versión actual:** 1.24.3~ynh1
+**Versión actual:** 1.25.0~ynh1
 
 **Demo:** <https://demo.freshrss.org>
 
