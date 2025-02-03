@@ -8,6 +8,9 @@ source /usr/share/yunohost/helpers
 #=================================================
 ynh_script_progression "Ensuring downward compatibility..."
 
+ynh_app_setting_set_default --key=php_upload_max_filesize --value=50M
+ynh_app_setting_set_default --key=php_post_max_filesize --value=50M
+
 if [ -z "$admin" ]; then
 	admin=$(ynh_app_setting_get --key=admin_user)
 	if [ -z "$admin" ]; then
