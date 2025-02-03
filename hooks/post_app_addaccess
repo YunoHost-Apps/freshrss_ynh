@@ -12,6 +12,6 @@ if [[ "${0//.\/50-}" = "$app" ]]; then
     for user in $(echo "$new_users" | sed "s/,/ /g")
     do
         user_token=$(ynh_string_random)
-        sudo -u $app $install_dir/cli/create-user.php --user $user --language en --token $user_token
+        sudo -u $app php${php_version} $install_dir/cli/create-user.php --user $user --language en --token $user_token
     done
 fi
