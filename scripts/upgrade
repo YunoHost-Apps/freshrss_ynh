@@ -61,7 +61,6 @@ chown "$app":www-data "$log_path"
 #=================================================
 ynh_script_progression "Upgrading logrotate configuration..."
 
-# Use logrotate to manage app-specific logfile(s)
 ynh_config_add_logrotate
 
 #=================================================
@@ -69,12 +68,11 @@ ynh_config_add_logrotate
 #=================================================
 ynh_script_progression "Upgrading Fail2Ban configuration..."
 
-# If it doesn't exist, create the logfile, required before configuring fail2ban
+# If it doesn't exist, create the logfile, required before configuring Fail2Ban
 if [ ! -f "/var/log/${domain}-access.log" ]; then
 	touch "/var/log/${domain}-access.log"
 fi
 
-# Create a dedicated Fail2Ban config
 ynh_config_add_fail2ban --logpath="/var/log/nginx/${domain}-access.log" --failregex="<HOST> .* \"GET /api/.*\" 401"
 
 #=================================================
