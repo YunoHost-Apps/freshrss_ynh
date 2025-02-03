@@ -7,4 +7,4 @@ app="${0//.\/50-}"
 install_dir=$(ynh_app_setting_get --app=$app --key=install_dir)
 username=$1
 
-sudo -u $app $install_dir/cli/delete-user.php --user $username
+sudo -u $app php${php_version} $install_dir/cli/delete-user.php --user $username
