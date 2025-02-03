@@ -8,4 +8,4 @@ install_dir=$(ynh_app_setting_get --app=$app --key=install_dir)
 username=$1
 
 user_token=$(ynh_string_random)
-sudo -u $app $install_dir/cli/create-user.php --user $username --language en --token $user_token
+sudo -u $app php${php_version} $install_dir/cli/create-user.php --user $username --language en --token $user_token
