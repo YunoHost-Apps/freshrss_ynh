@@ -16,6 +16,8 @@ ynh_safe_rm "/etc/cron.d/$app"
 
 ynh_config_remove_logrotate
 
+ynh_config_remove_fail2ban
+
 #=================================================
 # END OF SCRIPT
 #=================================================

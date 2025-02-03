@@ -26,10 +26,14 @@ ynh_config_add_nginx
 ynh_config_add --template="freshrss.cron" --destination="/etc/cron.d/$app"
 
 log_path="/var/log/$app"
-mkdir -p "/var/log/$app"
-chown "$app":www-data "/var/log/$app"
+mkdir -p "$log_path"
+chown "$app":www-data "$log_path"
 
 ynh_config_add_logrotate
+
+touch "/var/log/${domain}-access.log"
+
+ynh_config_add_fail2ban --logpath="/var/log/nginx/${domain}-access.log" --failregex="<HOST> .* \"GET /api/.*\" 401"
 
 #=================================================
 # SETUPING FRESHRSS
