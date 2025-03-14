@@ -1,5 +1,9 @@
 #!/bin/bash
 
+#=================================================
+# IMPORT GENERIC HELPERS
+#=================================================
+
 source _common.sh
 source /usr/share/yunohost/helpers
 
@@ -8,6 +12,7 @@ source /usr/share/yunohost/helpers
 #=================================================
 ynh_script_progression "Setting up source files..."
 
+# Download, check integrity, uncompress and patch the source from manifest.toml
 ynh_setup_source --dest_dir="$install_dir"
 
 #=================================================
@@ -15,8 +20,10 @@ ynh_setup_source --dest_dir="$install_dir"
 #=================================================
 ynh_script_progression "Adding system configurations related to $app..."
 
+# Create a PHP-FPM config (with conf/extra_php-fpm.conf being appended to it)
 ynh_config_add_phpfpm
 
+# Create a dedicated NGINX config using the conf/nginx.conf template
 ynh_config_add_nginx
 
 ynh_config_add --template="freshrss.cron" --destination="/etc/cron.d/$app"
@@ -25,10 +32,11 @@ log_path="/var/log/$app"
 mkdir -p "$log_path"
 chown "$app":www-data "$log_path"
 
+# Use logrotate to manage application logfile(s)
 ynh_config_add_logrotate
-
 touch "/var/log/${domain}-access.log"
 
+# Create a dedicated Fail2Ban config
 ynh_config_add_fail2ban --logpath="/var/log/nginx/${domain}-access.log" --failregex="<HOST> .* \"GET /api/.*\" 401"
 
 #=================================================

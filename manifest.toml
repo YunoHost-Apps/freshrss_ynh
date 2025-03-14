@@ -1,3 +1,5 @@
+#:schema https://raw.githubusercontent.com/YunoHost/apps/master/schemas/manifest.v2.schema.json
+
 packaging_format = 2
 
 id = "freshrss"
@@ -23,6 +25,7 @@ architectures = "all"
 multi_instance = true
 
 ldap = false
+
 sso = false
 
 disk = "50M"
@@ -55,10 +58,10 @@ ram.runtime = "50M"
 
     [resources.sources]
 
-        [resources.sources.main]
-        url = "https://github.com/FreshRSS/FreshRSS/archive/refs/tags/1.26.1.tar.gz"
-        sha256 = "6c42d1cbcf89d8cf97951a10e73f4984383e513c757b4ce0677cb60c25c235ac"
-        autoupdate.strategy = "latest_github_release"
+    [resources.sources.main]
+    url = "https://github.com/FreshRSS/FreshRSS/archive/refs/tags/1.26.1.tar.gz"
+    sha256 = "6c42d1cbcf89d8cf97951a10e73f4984383e513c757b4ce0677cb60c25c235ac"
+    autoupdate.strategy = "latest_github_release"
 
     [resources.system_user]
 
