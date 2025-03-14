@@ -32,7 +32,7 @@ ynh_setup_source --dest_dir="$install_dir" --keep="data/config.php data/users/ e
 #=================================================
 # REAPPLY SYSTEM CONFIGURATIONS
 #=================================================
-ynh_script_progression "Upgrading system configurations related to $app...""
+ynh_script_progression "Upgrading system configurations related to $app..."
 
 ynh_config_add_phpfpm
 
