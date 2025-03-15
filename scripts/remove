@@ -1,5 +1,9 @@
 #!/bin/bash
 
+#=================================================
+# IMPORT GENERIC HELPERS
+#=================================================
+
 source _common.sh
 source /usr/share/yunohost/helpers
 
@@ -8,15 +12,15 @@ source /usr/share/yunohost/helpers
 #=================================================
 ynh_script_progression "Removing system configurations related to $app..."
 
+ynh_config_remove_fail2ban
+
+ynh_config_remove_logrotate
+
 ynh_config_remove_nginx
 
 ynh_config_remove_phpfpm
 
 ynh_safe_rm "/etc/cron.d/$app"
-
-ynh_config_remove_logrotate
-
-ynh_config_remove_fail2ban
 
 #=================================================
 # END OF SCRIPT
