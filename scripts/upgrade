@@ -1,5 +1,9 @@
 #!/bin/bash
 
+#=================================================
+# IMPORT GENERIC HELPERS
+#=================================================
+
 source _common.sh
 source /usr/share/yunohost/helpers
 
@@ -22,27 +26,19 @@ fi
 #=================================================
 ynh_script_progression "Upgrading source files..."
 
+# Download, check integrity, uncompress and patch the source from manifest.toml
 ynh_setup_source --dest_dir="$install_dir" --keep="data/config.php data/users/ extensions/" #--full_replace
 
 #=================================================
-# UPDATE A CONFIG FILE
+# REAPPLY SYSTEM CONFIGURATIONS
 #=================================================
-ynh_script_progression "Updating $app's configuration files..."
+ynh_script_progression "Upgrading system configurations related to $app..."
 
 ynh_config_add_phpfpm
 
 ynh_config_add_nginx
 
-#=================================================
-# CRON CONFIGURATION
-#=================================================
-ynh_script_progression "Upgrading Cron configuration..."
-
 ynh_config_add --template="freshrss.cron" --destination="/etc/cron.d/$app"
-
-#=================================================
-# LOG FILES
-#=================================================
 
 if [ -f /tmp/FreshRSS.log ]; then
 	ynh_safe_rm "/tmp/FreshRSS.log"
@@ -56,17 +52,7 @@ log_path="/var/log/$app"
 mkdir -p "$log_path"
 chown "$app":www-data "$log_path"
 
-#=================================================
-# SETUP LOGROTATE
-#=================================================
-ynh_script_progression "Upgrading logrotate configuration..."
-
 ynh_config_add_logrotate
-
-#=================================================
-# SETUP FAIL2BAN
-#=================================================
-ynh_script_progression "Upgrading Fail2Ban configuration..."
 
 # If it doesn't exist, create the logfile, required before configuring Fail2Ban
 if [ ! -f "/var/log/${domain}-access.log" ]; then
