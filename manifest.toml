@@ -7,7 +7,7 @@ name = "FreshRSS"
 description.en = "RSS aggregator with a nice and mobile-friendly design"
 description.fr = "Agrégateur de flux RSS avec une interface adaptée au mobile"
 
-version = "1.27.0~ynh1"
+version = "1.27.1~ynh1"
 
 maintainers = ["plopoyop"]
 
@@ -58,8 +58,8 @@ ram.runtime = "50M"
     [resources.sources]
 
     [resources.sources.main]
-    url = "https://github.com/FreshRSS/FreshRSS/archive/refs/tags/1.27.0.tar.gz"
-    sha256 = "c7850e2f72a36c95cd41d672c3f68d228b45f7200b56ff040f3bc1045bf0cb3b"
+    url = "https://github.com/FreshRSS/FreshRSS/archive/refs/tags/1.27.1.tar.gz"
+    sha256 = "99fd1d0e6f506832e6600c98e4c9369edad6bfec715df9b1b7c8c3eb6a455c22"
     autoupdate.strategy = "latest_github_release"
 
     [resources.system_user]
