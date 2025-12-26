@@ -5,6 +5,7 @@ source /usr/share/yunohost/helpers
 
 app="${0//.\/50-}"
 install_dir=$(ynh_app_setting_get --app=$app --key=install_dir)
+php_version=$(ynh_app_setting_get --app=$app --key=php_version)
 username=$1
 
 sudo -u $app php${php_version} $install_dir/cli/delete-user.php --user $username
