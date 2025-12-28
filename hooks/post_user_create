@@ -4,6 +4,7 @@ set -a
 source /usr/share/yunohost/helpers
 
 app="${0//.\/50-}"
+php_version=$(ynh_app_setting_get --app=$app --key=php_version)
 install_dir=$(ynh_app_setting_get --app=$app --key=install_dir)
 username=$1
 
